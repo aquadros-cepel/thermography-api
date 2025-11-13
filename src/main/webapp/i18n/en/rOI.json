@@ -1,0 +1,27 @@
+{
+  "thermographyApiApp": {
+    "rOI": {
+      "home": {
+        "title": "ROIS",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new ROI",
+        "createOrEditLabel": "Create or edit a ROI",
+        "notFound": "No ROIS found"
+      },
+      "created": "A new ROI is created with identifier {{ param }}",
+      "updated": "A ROI is updated with identifier {{ param }}",
+      "deleted": "A ROI is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete ROI {{ id }}?"
+      },
+      "detail": {
+        "title": "ROI"
+      },
+      "id": "Id",
+      "type": "Type",
+      "label": "Label",
+      "maxTemp": "Max Temp",
+      "thermogram": "Thermogram"
+    }
+  }
+}

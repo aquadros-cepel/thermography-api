@@ -1,0 +1,43 @@
+{
+  "annotations": {
+    "changelogDate": "20251107125635"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "title",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "name": "EquipmentComponent",
+  "relationships": [
+    {
+      "otherEntityName": "equipmentComponentTemperatureLimits",
+      "relationshipName": "componentTemperatureLimits",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "equipment",
+      "otherEntityRelationshipName": "components",
+      "relationshipName": "equipments",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no"
+}

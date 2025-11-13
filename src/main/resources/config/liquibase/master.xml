@@ -12,7 +12,35 @@
     <property name="timeType" value="time(6)" dbms="postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125627_added_entity_Company.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125628_added_entity_Plant.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125629_added_entity_BusinessUnit.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125630_added_entity_Equipment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125631_added_entity_EquipmentGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125632_added_entity_InspectionRoute.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125633_added_entity_InspectionRouteGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125634_added_entity_EquipmentTypeTranslation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125635_added_entity_EquipmentComponent.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125636_added_entity_EquipmentComponentTemperatureLimits.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125637_added_entity_RiskPeriodicityDeadline.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125638_added_entity_RiskRecommendationTranslation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125639_added_entity_Thermogram.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125640_added_entity_ROI.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125641_added_entity_ThermographicInspectionRecord.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107135704_added_entity_UserInfo.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20251107125628_added_entity_constraints_Plant.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125629_added_entity_constraints_BusinessUnit.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125630_added_entity_constraints_Equipment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125631_added_entity_constraints_EquipmentGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125632_added_entity_constraints_InspectionRoute.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125633_added_entity_constraints_InspectionRouteGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125635_added_entity_constraints_EquipmentComponent.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125638_added_entity_constraints_RiskRecommendationTranslation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125639_added_entity_constraints_Thermogram.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125640_added_entity_constraints_ROI.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107125641_added_entity_constraints_ThermographicInspectionRecord.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251107135704_added_entity_constraints_UserInfo.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

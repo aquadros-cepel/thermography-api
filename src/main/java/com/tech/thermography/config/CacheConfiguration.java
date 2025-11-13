@@ -46,6 +46,28 @@ public class CacheConfiguration {
             createCache(cm, com.tech.thermography.domain.User.class.getName());
             createCache(cm, com.tech.thermography.domain.Authority.class.getName());
             createCache(cm, com.tech.thermography.domain.User.class.getName() + ".authorities");
+            createCache(cm, com.tech.thermography.domain.Company.class.getName());
+            createCache(cm, com.tech.thermography.domain.Plant.class.getName());
+            createCache(cm, com.tech.thermography.domain.BusinessUnit.class.getName());
+            createCache(cm, com.tech.thermography.domain.Equipment.class.getName());
+            createCache(cm, com.tech.thermography.domain.Equipment.class.getName() + ".inspectionRouteGroups");
+            createCache(cm, com.tech.thermography.domain.Equipment.class.getName() + ".components");
+            createCache(cm, com.tech.thermography.domain.EquipmentGroup.class.getName());
+            createCache(cm, com.tech.thermography.domain.EquipmentGroup.class.getName() + ".parentGroups");
+            createCache(cm, com.tech.thermography.domain.InspectionRoute.class.getName());
+            createCache(cm, com.tech.thermography.domain.InspectionRouteGroup.class.getName());
+            createCache(cm, com.tech.thermography.domain.InspectionRouteGroup.class.getName() + ".equipments");
+            createCache(cm, com.tech.thermography.domain.InspectionRouteGroup.class.getName() + ".parentGroups");
+            createCache(cm, com.tech.thermography.domain.EquipmentTypeTranslation.class.getName());
+            createCache(cm, com.tech.thermography.domain.EquipmentComponent.class.getName());
+            createCache(cm, com.tech.thermography.domain.EquipmentComponent.class.getName() + ".equipments");
+            createCache(cm, com.tech.thermography.domain.EquipmentComponentTemperatureLimits.class.getName());
+            createCache(cm, com.tech.thermography.domain.RiskPeriodicityDeadline.class.getName());
+            createCache(cm, com.tech.thermography.domain.RiskRecommendationTranslation.class.getName());
+            createCache(cm, com.tech.thermography.domain.Thermogram.class.getName());
+            createCache(cm, com.tech.thermography.domain.ROI.class.getName());
+            createCache(cm, com.tech.thermography.domain.ThermographicInspectionRecord.class.getName());
+            createCache(cm, com.tech.thermography.domain.UserInfo.class.getName());
             // jhipster-needle-caffeine-add-entry
         };
     }

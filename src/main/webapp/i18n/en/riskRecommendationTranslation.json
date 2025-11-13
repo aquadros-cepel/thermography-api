@@ -1,0 +1,26 @@
+{
+  "thermographyApiApp": {
+    "riskRecommendationTranslation": {
+      "home": {
+        "title": "Risk Recommendation Translations",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Risk Recommendation Translation",
+        "createOrEditLabel": "Create or edit a Risk Recommendation Translation",
+        "notFound": "No Risk Recommendation Translations found"
+      },
+      "created": "A new Risk Recommendation Translation is created with identifier {{ param }}",
+      "updated": "A Risk Recommendation Translation is updated with identifier {{ param }}",
+      "deleted": "A Risk Recommendation Translation is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Risk Recommendation Translation {{ id }}?"
+      },
+      "detail": {
+        "title": "Risk Recommendation Translation"
+      },
+      "id": "Id",
+      "language": "Language",
+      "name": "Name",
+      "riskPeriodicityDeadline": "Risk Periodicity Deadline"
+    }
+  }
+}

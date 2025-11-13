@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity InspectionRouteGroup.
+    -->
+    <changeSet id="20251107125633-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="inspection_route_id"
+                                 baseTableName="inspection_route_group"
+                                 constraintName="fk_inspection_route_group__inspection_route_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="inspection_route"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="sub_group_id"
+                                 baseTableName="inspection_route_group"
+                                 constraintName="fk_inspection_route_group__sub_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="inspection_route_group"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="inspection_route_group_id"
+                                 baseTableName="rel_inspection_route_group__equipments"
+                                 constraintName="fk_rel_inspection_route_group____inspection_route_group_bf_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="inspection_route_group"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="equipments_id"
+                                 baseTableName="rel_inspection_route_group__equipments"
+                                 constraintName="fk_rel_inspection_route_group__equipments__equipments_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="equipment"
+                                 />
+    </changeSet>
+</databaseChangeLog>

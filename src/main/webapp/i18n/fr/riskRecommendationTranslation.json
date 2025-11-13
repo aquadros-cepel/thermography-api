@@ -1,0 +1,26 @@
+{
+  "thermographyApiApp": {
+    "riskRecommendationTranslation": {
+      "home": {
+        "title": "RiskRecommendationTranslations",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Risk Recommendation Translation",
+        "createOrEditLabel": "Créer ou éditer un Risk Recommendation Translation",
+        "notFound": "Aucun Risk Recommendation Translation trouvé"
+      },
+      "created": "Un nouveau Risk Recommendation Translation a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Risk Recommendation Translation avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Risk Recommendation Translation avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Risk Recommendation Translation {{ id }} ?"
+      },
+      "detail": {
+        "title": "Risk Recommendation Translation"
+      },
+      "id": "Id",
+      "language": "Language",
+      "name": "Name",
+      "riskPeriodicityDeadline": "Risk Periodicity Deadline"
+    }
+  }
+}

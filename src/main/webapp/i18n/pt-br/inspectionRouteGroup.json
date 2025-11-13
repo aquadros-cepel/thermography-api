@@ -1,0 +1,30 @@
+{
+  "thermographyApiApp": {
+    "inspectionRouteGroup": {
+      "home": {
+        "title": "Inspection Route Groups",
+        "refreshListLabel": "Atualizar lista",
+        "createLabel": "Criar novo Inspection Route Group",
+        "createOrEditLabel": "Criar ou editar Inspection Route Group",
+        "notFound": "Nenhum Inspection Route Group encontrado"
+      },
+      "created": "Um novo Inspection Route Group foi criado com o identificador {{ param }}",
+      "updated": "Um Inspection Route Group foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Inspection Route Group foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Inspection Route Group {{ id }}?"
+      },
+      "detail": {
+        "title": "Inspection Route Group"
+      },
+      "id": "Id",
+      "name": "Name",
+      "title": "Title",
+      "description": "Description",
+      "inspectionRoute": "Inspection Route",
+      "subGroup": "Sub Group",
+      "equipments": "Equipments",
+      "parentGroup": "Parent Group"
+    }
+  }
+}

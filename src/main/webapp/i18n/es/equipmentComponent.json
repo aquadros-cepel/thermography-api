@@ -1,0 +1,28 @@
+{
+  "thermographyApiApp": {
+    "equipmentComponent": {
+      "home": {
+        "title": "Equipment Components",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Equipment Component",
+        "createOrEditLabel": "Crear o editar Equipment Component",
+        "notFound": "Ningún Equipment Components encontrado"
+      },
+      "created": "Un nuevo Equipment Component ha sido creado con el identificador {{ param }}",
+      "updated": "Un Equipment Component ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Equipment Component ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Equipment Component {{ id }}?"
+      },
+      "detail": {
+        "title": "Equipment Component"
+      },
+      "id": "Id",
+      "name": "Name",
+      "title": "Title",
+      "description": "Description",
+      "componentTemperatureLimits": "Component Temperature Limits",
+      "equipments": "Equipments"
+    }
+  }
+}

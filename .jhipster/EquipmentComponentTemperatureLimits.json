@@ -1,0 +1,40 @@
+{
+  "annotations": {
+    "changelogDate": "20251107125636"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "normal",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "lowRisk",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "mediumRisk",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "highRisk",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "imminentHighRisk",
+      "fieldType": "String"
+    }
+  ],
+  "name": "EquipmentComponentTemperatureLimits",
+  "relationships": [],
+  "searchEngine": "no"
+}

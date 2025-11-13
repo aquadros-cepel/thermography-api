@@ -1,0 +1,57 @@
+{
+  "annotations": {
+    "changelogDate": "20251107125633"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "title",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "name": "InspectionRouteGroup",
+  "relationships": [
+    {
+      "otherEntityName": "inspectionRoute",
+      "relationshipName": "inspectionRoute",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "inspectionRouteGroup",
+      "otherEntityRelationshipName": "parentGroup",
+      "relationshipName": "subGroup",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "equipment",
+      "otherEntityRelationshipName": "inspectionRouteGroups",
+      "relationshipName": "equipments",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "inspectionRouteGroup",
+      "otherEntityRelationshipName": "subGroup",
+      "relationshipName": "parentGroup",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no"
+}

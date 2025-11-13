@@ -1,0 +1,42 @@
+{
+  "annotations": {
+    "changelogDate": "20251107125637"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "deadline",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "deadlineUnit",
+      "fieldType": "DatetimeUnit",
+      "fieldValues": "HOUR,DAY,WEEK,MONTH,YEAR"
+    },
+    {
+      "fieldName": "periodicity",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "periodicityUnit",
+      "fieldType": "DatetimeUnit",
+      "fieldValues": "HOUR,DAY,WEEK,MONTH,YEAR"
+    },
+    {
+      "fieldName": "recommendations",
+      "fieldType": "String"
+    }
+  ],
+  "name": "RiskPeriodicityDeadline",
+  "relationships": [],
+  "searchEngine": "no"
+}

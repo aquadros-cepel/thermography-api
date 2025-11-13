@@ -1,0 +1,11 @@
+export enum ConditionType {
+  NORMAL = 'NORMAL',
+
+  LOW_RISK = 'LOW_RISK',
+
+  MEDIUM_RISK = 'MEDIUM_RISK',
+
+  HIGH_RISK = 'HIGH_RISK',
+
+  IMMINENT_HIGH_RISK = 'IMMINENT_HIGH_RISK',
+}

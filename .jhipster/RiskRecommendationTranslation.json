@@ -1,0 +1,33 @@
+{
+  "annotations": {
+    "changelogDate": "20251107125638"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "language",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "RiskRecommendationTranslation",
+  "relationships": [
+    {
+      "otherEntityName": "riskPeriodicityDeadline",
+      "relationshipName": "riskPeriodicityDeadline",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no"
+}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity RiskRecommendationTranslation.
+    -->
+    <changeSet id="20251107125638-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="risk_periodicity_deadline_id"
+                                 baseTableName="risk_recommendation_translation"
+                                 constraintName="fk_risk_recommendation_translat__risk_periodicity_deadlin_c6_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="risk_periodicity_deadline"
+                                 />
+    </changeSet>
+</databaseChangeLog>

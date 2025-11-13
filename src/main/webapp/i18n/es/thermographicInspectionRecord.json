@@ -1,0 +1,44 @@
+{
+  "thermographyApiApp": {
+    "thermographicInspectionRecord": {
+      "home": {
+        "title": "Thermographic Inspection Records",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Thermographic Inspection Record",
+        "createOrEditLabel": "Crear o editar Thermographic Inspection Record",
+        "notFound": "Ningún Thermographic Inspection Records encontrado"
+      },
+      "created": "Un nuevo Thermographic Inspection Record ha sido creado con el identificador {{ param }}",
+      "updated": "Un Thermographic Inspection Record ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Thermographic Inspection Record ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Thermographic Inspection Record {{ id }}?"
+      },
+      "detail": {
+        "title": "Thermographic Inspection Record"
+      },
+      "id": "Id",
+      "name": "Name",
+      "type": "Type",
+      "serviceOrder": "Service Order",
+      "createdAt": "Created At",
+      "analysisDescription": "Analysis Description",
+      "condition": "Condition",
+      "deltaT": "Delta T",
+      "periodicity": "Periodicity",
+      "deadlineExecution": "Deadline Execution",
+      "nextMonitoring": "Next Monitoring",
+      "recommendations": "Recommendations",
+      "finished": "Finished",
+      "finishedAt": "Finished At",
+      "plant": "Plant",
+      "route": "Route",
+      "equipment": "Equipment",
+      "component": "Component",
+      "createdBy": "Created By",
+      "finishedBy": "Finished By",
+      "thermogram": "Thermogram",
+      "thermogramRef": "Thermogram Ref"
+    }
+  }
+}

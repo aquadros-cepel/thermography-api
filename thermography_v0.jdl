@@ -1,0 +1,225 @@
+entity Company {
+    id UUID required
+    name String required
+    title String
+    description String
+    address String
+    primaryPhoneNumber String
+    secondaryPhoneNumber String
+    taxIdNumber String // CNPJ
+}
+entity Plant {
+    id UUID required
+    name String required
+    title String
+    description String
+    latitude Double
+    longitude Double
+    startDate LocalDate
+}
+entity BusinessUnit {
+    id UUID required
+    name String required
+    title String
+    description String
+}
+entity Equipment {
+    id UUID required
+    name String required
+    title String
+    description String
+    type EquipmentType required
+    manufacturer String
+    model String
+    serialNumber String
+    voltageClass Float
+    phaseType PhaseType
+    startDate LocalDate
+    latitude Double
+    longitude Double
+}
+entity EquipmentGroup {
+    id UUID required
+    name String required
+    title String
+    description String
+}
+entity InspectionRoute {
+    id UUID required
+    name String required
+    title String
+    description String
+    planNote String
+
+    createdAt Instant required
+
+    startDate LocalDate required
+    started Boolean
+    startedAt Instant
+
+    endDate LocalDate required
+	finished Boolean
+	finishedAt Instant
+}
+entity InspectionRouteGroup {
+    id UUID required
+    name String required
+    title String
+    description String
+}
+enum PhaseType {
+    PHASE_A, PHASE_B, PHASE_C, NEUTRAL, GROUND, THREE_PHASE
+}
+enum EquipmentType {
+    AUTOTRANSFORMER, CURRENT_TRANSFORMER, VOLTAGE_TRANSFORMER, POTENTIAL_TRANSFORMER, CAPACITIVE_DIVIDER, CAPACITIVE_VOLTAGE_TRANSFORMER, SURGE_ARRESTER, CIRCUIT_BREAKER, DISCONNECT_SWITCH, CAPACITOR_BANK, FUSE_SWITCH, BATTERY_BANK, METAL_CLAD_SWITCHGEAR, ELECTRICAL_PANEL, BLOCKING_COIL, RECTIFIER, SERIES_COMPENSATOR, STATIC_COMPENSATOR, SYNCHRONOUS_CONDENSER, PROTECTION_CONTROL_PANEL
+}
+entity EquipmentTypeTranslation {
+    id UUID required
+	code EquipmentType required
+    language String required
+    name String required
+}
+entity EquipmentComponent{
+    id UUID required
+    name String required
+    title String
+    description String
+}
+entity EquipmentComponentTemperatureLimits{
+    id UUID required
+    name String
+    normal String
+    lowRisk String
+    mediumRisk String
+    highRisk String
+    imminentHighRisk String
+}
+entity RiskPeriodicityDeadline {
+    id UUID required
+    name String
+    deadline Integer
+    deadlineUnit DatetimeUnit
+    periodicity Integer
+    periodicityUnit DatetimeUnit
+    recommendations String
+}
+entity RiskRecommendationTranslation {
+    id UUID required
+    language String required
+    name String required
+}
+enum DatetimeUnit {
+    HOUR, DAY, WEEK, MONTH, YEAR
+}
+entity Thermogram {
+    id UUID required
+	imagePath String required
+  	audioPath String
+
+    imageRefPath String required
+
+  	minTemp Double
+  	avgTemp Double
+  	maxTemp Double
+
+	emissivity Double
+  	subjectDistance Double
+  	atmosphericTemp Double
+  	reflectedTemp Double
+  	relativeHumidity Double
+  	cameraLens String
+  	cameraModel String
+  	imageResolution String
+
+	selectedRoiId UUID
+  	maxTempRoi Double
+
+    createdAt Instant
+
+    latitude Double
+  	longitude Double
+}
+entity ROI {
+    id UUID required
+  	type String required
+  	label String required
+  	maxTemp Double required
+}
+enum ThermographicInspectionRecordType {
+    NO_ANOMALY
+    ANOMALY_INITIAL
+    ANOMALY_MONITORING
+    ANOMALY_SOLVED
+}
+enum ConditionType {
+    NORMAL
+    LOW_RISK
+    MEDIUM_RISK
+    HIGH_RISK
+    IMMINENT_HIGH_RISK
+}
+entity ThermographicInspectionRecord {
+    id UUID required
+    name String required
+  	type ThermographicInspectionRecordType required
+  	serviceOrder String
+
+    createdAt Instant required
+
+    analysisDescription String
+
+  	condition ConditionType required
+  	deltaT Double required
+  	periodicity Integer
+    deadlineExecution LocalDate
+    nextMonitoring LocalDate
+
+  	recommendations String
+
+  	finished Boolean
+	finishedAt Instant
+}
+relationship OneToOne {
+    EquipmentComponent{componentTemperatureLimits} to EquipmentComponentTemperatureLimits
+}
+relationship ManyToMany{
+    InspectionRouteGroup{equipments} to Equipment{inspectionRouteGroups}
+    EquipmentComponent{equipments} to Equipment{components}
+}
+relationship ManyToOne {
+Plant {company } to Company			        //FK Optional
+    Equipment {plant required } to Plant
+	EquipmentGroup {plant} to Plant		      //FK Optional
+	Equipment {group} to EquipmentGroup     //FK Optional
+
+    // Auto-relacionamento (um grupo pode conter subgrupos)
+  	EquipmentGroup{subGroup} to EquipmentGroup{parentGroup} //FK Optional
+
+	InspectionRoute {plant required } to Plant
+    InspectionRoute {createdBy required } to User with builtInEntity
+  	InspectionRoute {startedBy } to User with builtInEntity          //FK Optional (Quando ainda não iniciou a rota)
+  	InspectionRoute {finishedBy } to User with builtInEntity         //FK Optional (Quando ainda não finalizou a rota)
+
+    InspectionRouteGroup{inspectionRoute} to InspectionRoute          //FK Optional
+    // Auto-relacionamento (um grupo pode conter subgrupos)
+	InspectionRouteGroup{subGroup} to InspectionRouteGroup{parentGroup} //FK Optional
+
+    Thermogram {equipment required } to Equipment
+    Thermogram {createdBy required } to User with builtInEntity
+    ROI {thermogram required } to Thermogram
+
+    ThermographicInspectionRecord {plant required } to Plant
+    ThermographicInspectionRecord {route } to InspectionRoute			    //FK optional
+    ThermographicInspectionRecord {equipment required } to Equipment
+    ThermographicInspectionRecord {component } to EquipmentComponent	//FK optional
+    ThermographicInspectionRecord {createdBy required } to User with builtInEntity
+    ThermographicInspectionRecord {finishedBy required } to User with builtInEntity
+    ThermographicInspectionRecord {thermogram required} to Thermogram
+  	ThermographicInspectionRecord {thermogramRef} to Thermogram			  //FK optional
+
+	User {company(name)} to Company     // FK optional
+    BusinessUnit {company} to Company		        //FK optional
+    Plant {businessUnit} to BusinessUnit	        //FK optional
+
+    RiskRecommendationTranslation{riskPeriodicityDeadline} to RiskPeriodicityDeadline
+}

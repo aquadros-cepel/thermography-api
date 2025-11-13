@@ -1,0 +1,29 @@
+{
+  "thermographyApiApp": {
+    "equipmentGroup": {
+      "home": {
+        "title": "Equipment Groups",
+        "refreshListLabel": "Atualizar lista",
+        "createLabel": "Criar novo Equipment Group",
+        "createOrEditLabel": "Criar ou editar Equipment Group",
+        "notFound": "Nenhum Equipment Group encontrado"
+      },
+      "created": "Um novo Equipment Group foi criado com o identificador {{ param }}",
+      "updated": "Um Equipment Group foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Equipment Group foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Equipment Group {{ id }}?"
+      },
+      "detail": {
+        "title": "Equipment Group"
+      },
+      "id": "Id",
+      "name": "Name",
+      "title": "Title",
+      "description": "Description",
+      "plant": "Plant",
+      "subGroup": "Sub Group",
+      "parentGroup": "Parent Group"
+    }
+  }
+}

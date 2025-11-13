@@ -1,0 +1,129 @@
+{
+  "annotations": {
+    "changelogDate": "20251107125641"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "ThermographicInspectionRecordType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "NO_ANOMALY,ANOMALY_INITIAL,ANOMALY_MONITORING,ANOMALY_SOLVED"
+    },
+    {
+      "fieldName": "serviceOrder",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "analysisDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "condition",
+      "fieldType": "ConditionType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "NORMAL,LOW_RISK,MEDIUM_RISK,HIGH_RISK,IMMINENT_HIGH_RISK"
+    },
+    {
+      "fieldName": "deltaT",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "periodicity",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "deadlineExecution",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "nextMonitoring",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "recommendations",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "finished",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "finishedAt",
+      "fieldType": "Instant"
+    }
+  ],
+  "name": "ThermographicInspectionRecord",
+  "relationships": [
+    {
+      "otherEntityName": "plant",
+      "relationshipName": "plant",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "inspectionRoute",
+      "relationshipName": "route",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "equipment",
+      "relationshipName": "equipment",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "equipmentComponent",
+      "relationshipName": "component",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "userInfo",
+      "relationshipName": "createdBy",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "userInfo",
+      "relationshipName": "finishedBy",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "thermogram",
+      "relationshipName": "thermogram",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "thermogram",
+      "relationshipName": "thermogramRef",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no"
+}

@@ -1,0 +1,26 @@
+{
+  "thermographyApiApp": {
+    "equipmentTypeTranslation": {
+      "home": {
+        "title": "Equipment Type Translations",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Equipment Type Translation",
+        "createOrEditLabel": "Crear o editar Equipment Type Translation",
+        "notFound": "Ningún Equipment Type Translations encontrado"
+      },
+      "created": "Un nuevo Equipment Type Translation ha sido creado con el identificador {{ param }}",
+      "updated": "Un Equipment Type Translation ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Equipment Type Translation ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Equipment Type Translation {{ id }}?"
+      },
+      "detail": {
+        "title": "Equipment Type Translation"
+      },
+      "id": "Id",
+      "code": "Code",
+      "language": "Language",
+      "name": "Name"
+    }
+  }
+}

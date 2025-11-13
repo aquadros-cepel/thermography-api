@@ -1,0 +1,30 @@
+{
+  "thermographyApiApp": {
+    "equipmentComponentTemperatureLimits": {
+      "home": {
+        "title": "Equipment Component Temperature Limits",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Equipment Component Temperature Limits",
+        "createOrEditLabel": "Crear o editar Equipment Component Temperature Limits",
+        "notFound": "Ningún Equipment Component Temperature Limits encontrado"
+      },
+      "created": "Un nuevo Equipment Component Temperature Limits ha sido creado con el identificador {{ param }}",
+      "updated": "Un Equipment Component Temperature Limits ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Equipment Component Temperature Limits ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Equipment Component Temperature Limits {{ id }}?"
+      },
+      "detail": {
+        "title": "Equipment Component Temperature Limits"
+      },
+      "id": "Id",
+      "name": "Name",
+      "normal": "Normal",
+      "lowRisk": "Low Risk",
+      "mediumRisk": "Medium Risk",
+      "highRisk": "High Risk",
+      "imminentHighRisk": "Imminent High Risk",
+      "equipmentComponent": "Equipment Component"
+    }
+  }
+}

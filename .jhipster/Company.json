@@ -1,0 +1,45 @@
+{
+  "annotations": {
+    "changelogDate": "20251107125627"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "title",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "address",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "primaryPhoneNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "secondaryPhoneNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "taxIdNumber",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Company",
+  "relationships": [],
+  "searchEngine": "no"
+}

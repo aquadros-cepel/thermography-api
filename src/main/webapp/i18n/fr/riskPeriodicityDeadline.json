@@ -1,0 +1,29 @@
+{
+  "thermographyApiApp": {
+    "riskPeriodicityDeadline": {
+      "home": {
+        "title": "RiskPeriodicityDeadlines",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Risk Periodicity Deadline",
+        "createOrEditLabel": "Créer ou éditer un Risk Periodicity Deadline",
+        "notFound": "Aucun Risk Periodicity Deadline trouvé"
+      },
+      "created": "Un nouveau Risk Periodicity Deadline a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Risk Periodicity Deadline avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Risk Periodicity Deadline avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Risk Periodicity Deadline {{ id }} ?"
+      },
+      "detail": {
+        "title": "Risk Periodicity Deadline"
+      },
+      "id": "Id",
+      "name": "Name",
+      "deadline": "Deadline",
+      "deadlineUnit": "Deadline Unit",
+      "periodicity": "Periodicity",
+      "periodicityUnit": "Periodicity Unit",
+      "recommendations": "Recommendations"
+    }
+  }
+}

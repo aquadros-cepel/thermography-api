@@ -1,0 +1,9 @@
+export enum ThermographicInspectionRecordType {
+  NO_ANOMALY = 'NO_ANOMALY',
+
+  ANOMALY_INITIAL = 'ANOMALY_INITIAL',
+
+  ANOMALY_MONITORING = 'ANOMALY_MONITORING',
+
+  ANOMALY_SOLVED = 'ANOMALY_SOLVED',
+}

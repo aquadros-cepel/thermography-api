@@ -1,0 +1,50 @@
+{
+  "annotations": {
+    "changelogDate": "20251107125631"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "title",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "name": "EquipmentGroup",
+  "relationships": [
+    {
+      "otherEntityName": "plant",
+      "relationshipName": "plant",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "equipmentGroup",
+      "otherEntityRelationshipName": "parentGroup",
+      "relationshipName": "subGroup",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "equipmentGroup",
+      "otherEntityRelationshipName": "subGroup",
+      "relationshipName": "parentGroup",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no"
+}

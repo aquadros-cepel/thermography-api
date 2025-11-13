@@ -1,0 +1,109 @@
+{
+  "annotations": {
+    "changelogDate": "20251107125639"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "imagePath",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "audioPath",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "imageRefPath",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "minTemp",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "avgTemp",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "maxTemp",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "emissivity",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "subjectDistance",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "atmosphericTemp",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "reflectedTemp",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "relativeHumidity",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "cameraLens",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "cameraModel",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "imageResolution",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "selectedRoiId",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "maxTempRoi",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "latitude",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "longitude",
+      "fieldType": "Double"
+    }
+  ],
+  "name": "Thermogram",
+  "relationships": [
+    {
+      "otherEntityName": "equipment",
+      "relationshipName": "equipment",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "userInfo",
+      "relationshipName": "createdBy",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no"
+}

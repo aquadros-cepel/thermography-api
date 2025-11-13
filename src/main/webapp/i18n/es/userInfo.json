@@ -1,0 +1,27 @@
+{
+  "thermographyApiApp": {
+    "userInfo": {
+      "home": {
+        "title": "User Infos",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo User Info",
+        "createOrEditLabel": "Crear o editar User Info",
+        "notFound": "Ningún User Infos encontrado"
+      },
+      "created": "Un nuevo User Info ha sido creado con el identificador {{ param }}",
+      "updated": "Un User Info ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un User Info ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar User Info {{ id }}?"
+      },
+      "detail": {
+        "title": "User Info"
+      },
+      "id": "Id",
+      "position": "Position",
+      "phoneNumber": "Phone Number",
+      "user": "User",
+      "company": "Company"
+    }
+  }
+}

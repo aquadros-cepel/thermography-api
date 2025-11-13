@@ -7,7 +7,23 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entités",
-        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+        "company": "Company",
+        "plant": "Plant",
+        "businessUnit": "Business Unit",
+        "equipment": "Equipment",
+        "equipmentGroup": "Equipment Group",
+        "inspectionRoute": "Inspection Route",
+        "inspectionRouteGroup": "Inspection Route Group",
+        "equipmentTypeTranslation": "Equipment Type Translation",
+        "equipmentComponent": "Equipment Component",
+        "equipmentComponentTemperatureLimits": "Equipment Component Temperature Limits",
+        "riskPeriodicityDeadline": "Risk Periodicity Deadline",
+        "riskRecommendationTranslation": "Risk Recommendation Translation",
+        "thermogram": "Thermogram",
+        "roi": "ROI",
+        "thermographicInspectionRecord": "Thermographic Inspection Record",
+        "userInfo": "User Info"
       },
       "account": {
         "main": "Compte",

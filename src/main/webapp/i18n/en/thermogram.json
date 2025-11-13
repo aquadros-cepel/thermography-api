@@ -1,0 +1,44 @@
+{
+  "thermographyApiApp": {
+    "thermogram": {
+      "home": {
+        "title": "Thermograms",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Thermogram",
+        "createOrEditLabel": "Create or edit a Thermogram",
+        "notFound": "No Thermograms found"
+      },
+      "created": "A new Thermogram is created with identifier {{ param }}",
+      "updated": "A Thermogram is updated with identifier {{ param }}",
+      "deleted": "A Thermogram is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Thermogram {{ id }}?"
+      },
+      "detail": {
+        "title": "Thermogram"
+      },
+      "id": "Id",
+      "imagePath": "Image Path",
+      "audioPath": "Audio Path",
+      "imageRefPath": "Image Ref Path",
+      "minTemp": "Min Temp",
+      "avgTemp": "Avg Temp",
+      "maxTemp": "Max Temp",
+      "emissivity": "Emissivity",
+      "subjectDistance": "Subject Distance",
+      "atmosphericTemp": "Atmospheric Temp",
+      "reflectedTemp": "Reflected Temp",
+      "relativeHumidity": "Relative Humidity",
+      "cameraLens": "Camera Lens",
+      "cameraModel": "Camera Model",
+      "imageResolution": "Image Resolution",
+      "selectedRoiId": "Selected Roi Id",
+      "maxTempRoi": "Max Temp Roi",
+      "createdAt": "Created At",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "equipment": "Equipment",
+      "createdBy": "Created By"
+    }
+  }
+}

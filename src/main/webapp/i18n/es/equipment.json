@@ -1,0 +1,39 @@
+{
+  "thermographyApiApp": {
+    "equipment": {
+      "home": {
+        "title": "Equipment",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Equipment",
+        "createOrEditLabel": "Crear o editar Equipment",
+        "notFound": "Ningún Equipment encontrado"
+      },
+      "created": "Un nuevo Equipment ha sido creado con el identificador {{ param }}",
+      "updated": "Un Equipment ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Equipment ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Equipment {{ id }}?"
+      },
+      "detail": {
+        "title": "Equipment"
+      },
+      "id": "Id",
+      "name": "Name",
+      "title": "Title",
+      "description": "Description",
+      "type": "Type",
+      "manufacturer": "Manufacturer",
+      "model": "Model",
+      "serialNumber": "Serial Number",
+      "voltageClass": "Voltage Class",
+      "phaseType": "Phase Type",
+      "startDate": "Start Date",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "plant": "Plant",
+      "group": "Group",
+      "inspectionRouteGroups": "Inspection Route Groups",
+      "components": "Components"
+    }
+  }
+}

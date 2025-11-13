@@ -1,0 +1,31 @@
+{
+  "thermographyApiApp": {
+    "plant": {
+      "home": {
+        "title": "Plants",
+        "refreshListLabel": "Atualizar lista",
+        "createLabel": "Criar novo Plant",
+        "createOrEditLabel": "Criar ou editar Plant",
+        "notFound": "Nenhum Plant encontrado"
+      },
+      "created": "Um novo Plant foi criado com o identificador {{ param }}",
+      "updated": "Um Plant foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Plant foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Plant {{ id }}?"
+      },
+      "detail": {
+        "title": "Plant"
+      },
+      "id": "Id",
+      "name": "Name",
+      "title": "Title",
+      "description": "Description",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "startDate": "Start Date",
+      "company": "Company",
+      "businessUnit": "Business Unit"
+    }
+  }
+}
