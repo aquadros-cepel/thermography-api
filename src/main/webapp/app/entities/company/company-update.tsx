@@ -85,6 +85,13 @@ export const CompanyUpdate = () => {
                 />
               ) : null}
               <ValidatedField
+                label={translate('thermographyApiApp.company.code')}
+                id="company-code"
+                name="code"
+                data-cy="code"
+                type="text"
+              />
+              <ValidatedField
                 label={translate('thermographyApiApp.company.name')}
                 id="company-name"
                 name="name"
@@ -93,13 +100,6 @@ export const CompanyUpdate = () => {
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
                 }}
-              />
-              <ValidatedField
-                label={translate('thermographyApiApp.company.title')}
-                id="company-title"
-                name="title"
-                data-cy="title"
-                type="text"
               />
               <ValidatedField
                 label={translate('thermographyApiApp.company.description')}

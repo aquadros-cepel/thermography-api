@@ -320,7 +320,7 @@ class EquipmentTypeTranslationResourceIT {
         EquipmentTypeTranslation partialUpdatedEquipmentTypeTranslation = new EquipmentTypeTranslation();
         partialUpdatedEquipmentTypeTranslation.setId(equipmentTypeTranslation.getId());
 
-        partialUpdatedEquipmentTypeTranslation.name(UPDATED_NAME);
+        partialUpdatedEquipmentTypeTranslation.code(UPDATED_CODE).name(UPDATED_NAME);
 
         restEquipmentTypeTranslationMockMvc
             .perform(

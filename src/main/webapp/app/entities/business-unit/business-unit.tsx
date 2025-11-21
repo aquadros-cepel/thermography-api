@@ -87,13 +87,13 @@ export const BusinessUnit = () => {
                   <Translate contentKey="thermographyApiApp.businessUnit.id">Id</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
+                <th className="hand" onClick={sort('code')}>
+                  <Translate contentKey="thermographyApiApp.businessUnit.code">Code</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('code')} />
+                </th>
                 <th className="hand" onClick={sort('name')}>
                   <Translate contentKey="thermographyApiApp.businessUnit.name">Name</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('name')} />
-                </th>
-                <th className="hand" onClick={sort('title')}>
-                  <Translate contentKey="thermographyApiApp.businessUnit.title">Title</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('title')} />
                 </th>
                 <th className="hand" onClick={sort('description')}>
                   <Translate contentKey="thermographyApiApp.businessUnit.description">Description</Translate>{' '}
@@ -113,8 +113,8 @@ export const BusinessUnit = () => {
                       {businessUnit.id}
                     </Button>
                   </td>
+                  <td>{businessUnit.code}</td>
                   <td>{businessUnit.name}</td>
-                  <td>{businessUnit.title}</td>
                   <td>{businessUnit.description}</td>
                   <td>{businessUnit.company ? <Link to={`/company/${businessUnit.company.id}`}>{businessUnit.company.id}</Link> : ''}</td>
                   <td className="text-end">

@@ -325,7 +325,7 @@ class ROIResourceIT {
         ROI partialUpdatedROI = new ROI();
         partialUpdatedROI.setId(rOI.getId());
 
-        partialUpdatedROI.type(UPDATED_TYPE);
+        partialUpdatedROI.type(UPDATED_TYPE).label(UPDATED_LABEL);
 
         restROIMockMvc
             .perform(

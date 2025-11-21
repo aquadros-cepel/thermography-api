@@ -310,7 +310,7 @@ class RiskRecommendationTranslationResourceIT {
         RiskRecommendationTranslation partialUpdatedRiskRecommendationTranslation = new RiskRecommendationTranslation();
         partialUpdatedRiskRecommendationTranslation.setId(riskRecommendationTranslation.getId());
 
-        partialUpdatedRiskRecommendationTranslation.language(UPDATED_LANGUAGE).name(UPDATED_NAME);
+        partialUpdatedRiskRecommendationTranslation.name(UPDATED_NAME);
 
         restRiskRecommendationTranslationMockMvc
             .perform(

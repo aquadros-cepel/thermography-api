@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntities as getPlants } from 'app/entities/plant/plant.reducer';
 import { getEntities as getUserInfos } from 'app/entities/user-info/user-info.reducer';
+import { Periodicity } from 'app/shared/model/enumerations/periodicity.model';
 import { createEntity, getEntity, reset, updateEntity } from './inspection-route.reducer';
 
 export const InspectionRouteUpdate = () => {
@@ -25,6 +26,7 @@ export const InspectionRouteUpdate = () => {
   const loading = useAppSelector(state => state.inspectionRoute.loading);
   const updating = useAppSelector(state => state.inspectionRoute.updating);
   const updateSuccess = useAppSelector(state => state.inspectionRoute.updateSuccess);
+  const periodicityValues = Object.keys(Periodicity);
 
   const handleClose = () => {
     navigate('/inspection-route');
@@ -48,17 +50,16 @@ export const InspectionRouteUpdate = () => {
   }, [updateSuccess]);
 
   const saveEntity = values => {
+    if (values.duration !== undefined && typeof values.duration !== 'number') {
+      values.duration = Number(values.duration);
+    }
     values.createdAt = convertDateTimeToServer(values.createdAt);
-    values.startedAt = convertDateTimeToServer(values.startedAt);
-    values.finishedAt = convertDateTimeToServer(values.finishedAt);
 
     const entity = {
       ...inspectionRouteEntity,
       ...values,
       plant: plants.find(it => it.id.toString() === values.plant?.toString()),
       createdBy: userInfos.find(it => it.id.toString() === values.createdBy?.toString()),
-      startedBy: userInfos.find(it => it.id.toString() === values.startedBy?.toString()),
-      finishedBy: userInfos.find(it => it.id.toString() === values.finishedBy?.toString()),
     };
 
     if (isNew) {
@@ -72,18 +73,13 @@ export const InspectionRouteUpdate = () => {
     isNew
       ? {
           createdAt: displayDefaultDateTime(),
-          startedAt: displayDefaultDateTime(),
-          finishedAt: displayDefaultDateTime(),
         }
       : {
+          periodicity: 'MONTHLY',
           ...inspectionRouteEntity,
           createdAt: convertDateTimeFromServer(inspectionRouteEntity.createdAt),
-          startedAt: convertDateTimeFromServer(inspectionRouteEntity.startedAt),
-          finishedAt: convertDateTimeFromServer(inspectionRouteEntity.finishedAt),
           plant: inspectionRouteEntity?.plant?.id,
           createdBy: inspectionRouteEntity?.createdBy?.id,
-          startedBy: inspectionRouteEntity?.startedBy?.id,
-          finishedBy: inspectionRouteEntity?.finishedBy?.id,
         };
 
   return (
@@ -112,6 +108,13 @@ export const InspectionRouteUpdate = () => {
                 />
               ) : null}
               <ValidatedField
+                label={translate('thermographyApiApp.inspectionRoute.code')}
+                id="inspection-route-code"
+                name="code"
+                data-cy="code"
+                type="text"
+              />
+              <ValidatedField
                 label={translate('thermographyApiApp.inspectionRoute.name')}
                 id="inspection-route-name"
                 name="name"
@@ -122,13 +125,6 @@ export const InspectionRouteUpdate = () => {
                 }}
               />
               <ValidatedField
-                label={translate('thermographyApiApp.inspectionRoute.title')}
-                id="inspection-route-title"
-                name="title"
-                data-cy="title"
-                type="text"
-              />
-              <ValidatedField
                 label={translate('thermographyApiApp.inspectionRoute.description')}
                 id="inspection-route-description"
                 name="description"
@@ -136,11 +132,38 @@ export const InspectionRouteUpdate = () => {
                 type="text"
               />
               <ValidatedField
-                label={translate('thermographyApiApp.inspectionRoute.planNote')}
-                id="inspection-route-planNote"
-                name="planNote"
-                data-cy="planNote"
+                label={translate('thermographyApiApp.inspectionRoute.maintenancePlan')}
+                id="inspection-route-maintenancePlan"
+                name="maintenancePlan"
+                data-cy="maintenancePlan"
                 type="text"
+              />
+              <ValidatedField
+                label={translate('thermographyApiApp.inspectionRoute.periodicity')}
+                id="inspection-route-periodicity"
+                name="periodicity"
+                data-cy="periodicity"
+                type="select"
+              >
+                {periodicityValues.map(periodicity => (
+                  <option value={periodicity} key={periodicity}>
+                    {translate(`thermographyApiApp.Periodicity.${periodicity}`)}
+                  </option>
+                ))}
+              </ValidatedField>
+              <ValidatedField
+                label={translate('thermographyApiApp.inspectionRoute.duration')}
+                id="inspection-route-duration"
+                name="duration"
+                data-cy="duration"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('thermographyApiApp.inspectionRoute.expectedStartDate')}
+                id="inspection-route-expectedStartDate"
+                name="expectedStartDate"
+                data-cy="expectedStartDate"
+                type="date"
               />
               <ValidatedField
                 label={translate('thermographyApiApp.inspectionRoute.createdAt')}
@@ -152,58 +175,6 @@ export const InspectionRouteUpdate = () => {
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
                 }}
-              />
-              <ValidatedField
-                label={translate('thermographyApiApp.inspectionRoute.startDate')}
-                id="inspection-route-startDate"
-                name="startDate"
-                data-cy="startDate"
-                type="date"
-                validate={{
-                  required: { value: true, message: translate('entity.validation.required') },
-                }}
-              />
-              <ValidatedField
-                label={translate('thermographyApiApp.inspectionRoute.started')}
-                id="inspection-route-started"
-                name="started"
-                data-cy="started"
-                check
-                type="checkbox"
-              />
-              <ValidatedField
-                label={translate('thermographyApiApp.inspectionRoute.startedAt')}
-                id="inspection-route-startedAt"
-                name="startedAt"
-                data-cy="startedAt"
-                type="datetime-local"
-                placeholder="YYYY-MM-DD HH:mm"
-              />
-              <ValidatedField
-                label={translate('thermographyApiApp.inspectionRoute.endDate')}
-                id="inspection-route-endDate"
-                name="endDate"
-                data-cy="endDate"
-                type="date"
-                validate={{
-                  required: { value: true, message: translate('entity.validation.required') },
-                }}
-              />
-              <ValidatedField
-                label={translate('thermographyApiApp.inspectionRoute.finished')}
-                id="inspection-route-finished"
-                name="finished"
-                data-cy="finished"
-                check
-                type="checkbox"
-              />
-              <ValidatedField
-                label={translate('thermographyApiApp.inspectionRoute.finishedAt')}
-                id="inspection-route-finishedAt"
-                name="finishedAt"
-                data-cy="finishedAt"
-                type="datetime-local"
-                placeholder="YYYY-MM-DD HH:mm"
               />
               <ValidatedField
                 id="inspection-route-plant"
@@ -245,38 +216,6 @@ export const InspectionRouteUpdate = () => {
               <FormText>
                 <Translate contentKey="entity.validation.required">This field is required.</Translate>
               </FormText>
-              <ValidatedField
-                id="inspection-route-startedBy"
-                name="startedBy"
-                data-cy="startedBy"
-                label={translate('thermographyApiApp.inspectionRoute.startedBy')}
-                type="select"
-              >
-                <option value="" key="0" />
-                {userInfos
-                  ? userInfos.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
-              <ValidatedField
-                id="inspection-route-finishedBy"
-                name="finishedBy"
-                data-cy="finishedBy"
-                label={translate('thermographyApiApp.inspectionRoute.finishedBy')}
-                type="select"
-              >
-                <option value="" key="0" />
-                {userInfos
-                  ? userInfos.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/inspection-route" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;

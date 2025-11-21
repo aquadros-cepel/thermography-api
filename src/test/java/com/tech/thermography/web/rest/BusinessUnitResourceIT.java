@@ -31,11 +31,11 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class BusinessUnitResourceIT {
 
+    private static final String DEFAULT_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_CODE = "BBBBBBBBBB";
+
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
-
-    private static final String DEFAULT_TITLE = "AAAAAAAAAA";
-    private static final String UPDATED_TITLE = "BBBBBBBBBB";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -66,7 +66,7 @@ class BusinessUnitResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static BusinessUnit createEntity() {
-        return new BusinessUnit().name(DEFAULT_NAME).title(DEFAULT_TITLE).description(DEFAULT_DESCRIPTION);
+        return new BusinessUnit().code(DEFAULT_CODE).name(DEFAULT_NAME).description(DEFAULT_DESCRIPTION);
     }
 
     /**
@@ -76,7 +76,7 @@ class BusinessUnitResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static BusinessUnit createUpdatedEntity() {
-        return new BusinessUnit().name(UPDATED_NAME).title(UPDATED_TITLE).description(UPDATED_DESCRIPTION);
+        return new BusinessUnit().code(UPDATED_CODE).name(UPDATED_NAME).description(UPDATED_DESCRIPTION);
     }
 
     @BeforeEach
@@ -159,8 +159,8 @@ class BusinessUnitResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(businessUnit.getId().toString())))
+            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
     }
 
@@ -176,8 +176,8 @@ class BusinessUnitResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(businessUnit.getId().toString()))
+            .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION));
     }
 
@@ -200,7 +200,7 @@ class BusinessUnitResourceIT {
         BusinessUnit updatedBusinessUnit = businessUnitRepository.findById(businessUnit.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedBusinessUnit are not directly saved in db
         em.detach(updatedBusinessUnit);
-        updatedBusinessUnit.name(UPDATED_NAME).title(UPDATED_TITLE).description(UPDATED_DESCRIPTION);
+        updatedBusinessUnit.code(UPDATED_CODE).name(UPDATED_NAME).description(UPDATED_DESCRIPTION);
 
         restBusinessUnitMockMvc
             .perform(
@@ -280,7 +280,7 @@ class BusinessUnitResourceIT {
         BusinessUnit partialUpdatedBusinessUnit = new BusinessUnit();
         partialUpdatedBusinessUnit.setId(businessUnit.getId());
 
-        partialUpdatedBusinessUnit.description(UPDATED_DESCRIPTION);
+        partialUpdatedBusinessUnit.code(UPDATED_CODE);
 
         restBusinessUnitMockMvc
             .perform(
@@ -311,7 +311,7 @@ class BusinessUnitResourceIT {
         BusinessUnit partialUpdatedBusinessUnit = new BusinessUnit();
         partialUpdatedBusinessUnit.setId(businessUnit.getId());
 
-        partialUpdatedBusinessUnit.name(UPDATED_NAME).title(UPDATED_TITLE).description(UPDATED_DESCRIPTION);
+        partialUpdatedBusinessUnit.code(UPDATED_CODE).name(UPDATED_NAME).description(UPDATED_DESCRIPTION);
 
         restBusinessUnitMockMvc
             .perform(

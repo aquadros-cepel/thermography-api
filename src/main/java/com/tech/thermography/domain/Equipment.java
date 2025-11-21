@@ -24,18 +24,17 @@ public class Equipment implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)
     private UUID id;
 
+    @Column(name = "code")
+    private String code;
+
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
-
-    @Column(name = "title")
-    private String title;
 
     @Column(name = "description")
     private String description;
@@ -81,11 +80,6 @@ public class Equipment implements Serializable {
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "equipments")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "inspectionRoute", "subGroup", "equipments", "parentGroups" }, allowSetters = true)
-    private Set<InspectionRouteGroup> inspectionRouteGroups = new HashSet<>();
-
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "equipments")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "componentTemperatureLimits", "equipments" }, allowSetters = true)
     private Set<EquipmentComponent> components = new HashSet<>();
 
@@ -104,6 +98,19 @@ public class Equipment implements Serializable {
         this.id = id;
     }
 
+    public String getCode() {
+        return this.code;
+    }
+
+    public Equipment code(String code) {
+        this.setCode(code);
+        return this;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getName() {
         return this.name;
     }
@@ -115,19 +122,6 @@ public class Equipment implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public Equipment title(String title) {
-        this.setTitle(title);
-        return this;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getDescription() {
@@ -286,37 +280,6 @@ public class Equipment implements Serializable {
         return this;
     }
 
-    public Set<InspectionRouteGroup> getInspectionRouteGroups() {
-        return this.inspectionRouteGroups;
-    }
-
-    public void setInspectionRouteGroups(Set<InspectionRouteGroup> inspectionRouteGroups) {
-        if (this.inspectionRouteGroups != null) {
-            this.inspectionRouteGroups.forEach(i -> i.removeEquipments(this));
-        }
-        if (inspectionRouteGroups != null) {
-            inspectionRouteGroups.forEach(i -> i.addEquipments(this));
-        }
-        this.inspectionRouteGroups = inspectionRouteGroups;
-    }
-
-    public Equipment inspectionRouteGroups(Set<InspectionRouteGroup> inspectionRouteGroups) {
-        this.setInspectionRouteGroups(inspectionRouteGroups);
-        return this;
-    }
-
-    public Equipment addInspectionRouteGroups(InspectionRouteGroup inspectionRouteGroup) {
-        this.inspectionRouteGroups.add(inspectionRouteGroup);
-        inspectionRouteGroup.getEquipments().add(this);
-        return this;
-    }
-
-    public Equipment removeInspectionRouteGroups(InspectionRouteGroup inspectionRouteGroup) {
-        this.inspectionRouteGroups.remove(inspectionRouteGroup);
-        inspectionRouteGroup.getEquipments().remove(this);
-        return this;
-    }
-
     public Set<EquipmentComponent> getComponents() {
         return this.components;
     }
@@ -372,8 +335,8 @@ public class Equipment implements Serializable {
     public String toString() {
         return "Equipment{" +
             "id=" + getId() +
+            ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
-            ", title='" + getTitle() + "'" +
             ", description='" + getDescription() + "'" +
             ", type='" + getType() + "'" +
             ", manufacturer='" + getManufacturer() + "'" +

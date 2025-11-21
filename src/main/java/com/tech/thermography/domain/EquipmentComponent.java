@@ -21,18 +21,17 @@ public class EquipmentComponent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)
     private UUID id;
 
+    @Column(name = "code")
+    private String code;
+
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
-
-    @Column(name = "title")
-    private String title;
 
     @Column(name = "description")
     private String description;
@@ -49,7 +48,7 @@ public class EquipmentComponent implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "equipments_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "plant", "group", "inspectionRouteGroups", "components" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "plant", "group", "components" }, allowSetters = true)
     private Set<Equipment> equipments = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -67,6 +66,19 @@ public class EquipmentComponent implements Serializable {
         this.id = id;
     }
 
+    public String getCode() {
+        return this.code;
+    }
+
+    public EquipmentComponent code(String code) {
+        this.setCode(code);
+        return this;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getName() {
         return this.name;
     }
@@ -78,19 +90,6 @@ public class EquipmentComponent implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public EquipmentComponent title(String title) {
-        this.setTitle(title);
-        return this;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getDescription() {
@@ -166,8 +165,8 @@ public class EquipmentComponent implements Serializable {
     public String toString() {
         return "EquipmentComponent{" +
             "id=" + getId() +
+            ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
-            ", title='" + getTitle() + "'" +
             ", description='" + getDescription() + "'" +
             "}";
     }

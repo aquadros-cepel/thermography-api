@@ -31,11 +31,11 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class EquipmentGroupResourceIT {
 
+    private static final String DEFAULT_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_CODE = "BBBBBBBBBB";
+
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
-
-    private static final String DEFAULT_TITLE = "AAAAAAAAAA";
-    private static final String UPDATED_TITLE = "BBBBBBBBBB";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -66,7 +66,7 @@ class EquipmentGroupResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static EquipmentGroup createEntity() {
-        return new EquipmentGroup().name(DEFAULT_NAME).title(DEFAULT_TITLE).description(DEFAULT_DESCRIPTION);
+        return new EquipmentGroup().code(DEFAULT_CODE).name(DEFAULT_NAME).description(DEFAULT_DESCRIPTION);
     }
 
     /**
@@ -76,7 +76,7 @@ class EquipmentGroupResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static EquipmentGroup createUpdatedEntity() {
-        return new EquipmentGroup().name(UPDATED_NAME).title(UPDATED_TITLE).description(UPDATED_DESCRIPTION);
+        return new EquipmentGroup().code(UPDATED_CODE).name(UPDATED_NAME).description(UPDATED_DESCRIPTION);
     }
 
     @BeforeEach
@@ -159,8 +159,8 @@ class EquipmentGroupResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(equipmentGroup.getId().toString())))
+            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
     }
 
@@ -176,8 +176,8 @@ class EquipmentGroupResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(equipmentGroup.getId().toString()))
+            .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION));
     }
 
@@ -200,7 +200,7 @@ class EquipmentGroupResourceIT {
         EquipmentGroup updatedEquipmentGroup = equipmentGroupRepository.findById(equipmentGroup.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedEquipmentGroup are not directly saved in db
         em.detach(updatedEquipmentGroup);
-        updatedEquipmentGroup.name(UPDATED_NAME).title(UPDATED_TITLE).description(UPDATED_DESCRIPTION);
+        updatedEquipmentGroup.code(UPDATED_CODE).name(UPDATED_NAME).description(UPDATED_DESCRIPTION);
 
         restEquipmentGroupMockMvc
             .perform(
@@ -280,7 +280,7 @@ class EquipmentGroupResourceIT {
         EquipmentGroup partialUpdatedEquipmentGroup = new EquipmentGroup();
         partialUpdatedEquipmentGroup.setId(equipmentGroup.getId());
 
-        partialUpdatedEquipmentGroup.title(UPDATED_TITLE).description(UPDATED_DESCRIPTION);
+        partialUpdatedEquipmentGroup.name(UPDATED_NAME);
 
         restEquipmentGroupMockMvc
             .perform(
@@ -311,7 +311,7 @@ class EquipmentGroupResourceIT {
         EquipmentGroup partialUpdatedEquipmentGroup = new EquipmentGroup();
         partialUpdatedEquipmentGroup.setId(equipmentGroup.getId());
 
-        partialUpdatedEquipmentGroup.name(UPDATED_NAME).title(UPDATED_TITLE).description(UPDATED_DESCRIPTION);
+        partialUpdatedEquipmentGroup.code(UPDATED_CODE).name(UPDATED_NAME).description(UPDATED_DESCRIPTION);
 
         restEquipmentGroupMockMvc
             .perform(

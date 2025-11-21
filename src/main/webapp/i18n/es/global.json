@@ -23,7 +23,9 @@
         "thermogram": "Thermogram",
         "roi": "ROI",
         "thermographicInspectionRecord": "Thermographic Inspection Record",
-        "userInfo": "User Info"
+        "userInfo": "User Info",
+        "inspectionRouteGroupEquipment": "Inspection Route Group Equipment",
+        "inspectionRouteRecord": "Inspection Route Record"
       },
       "account": {
         "main": "Cuenta",

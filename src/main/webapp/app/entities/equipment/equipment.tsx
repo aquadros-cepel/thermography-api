@@ -88,13 +88,13 @@ export const Equipment = () => {
                   <Translate contentKey="thermographyApiApp.equipment.id">Id</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
+                <th className="hand" onClick={sort('code')}>
+                  <Translate contentKey="thermographyApiApp.equipment.code">Code</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('code')} />
+                </th>
                 <th className="hand" onClick={sort('name')}>
                   <Translate contentKey="thermographyApiApp.equipment.name">Name</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('name')} />
-                </th>
-                <th className="hand" onClick={sort('title')}>
-                  <Translate contentKey="thermographyApiApp.equipment.title">Title</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('title')} />
                 </th>
                 <th className="hand" onClick={sort('description')}>
                   <Translate contentKey="thermographyApiApp.equipment.description">Description</Translate>{' '}
@@ -143,10 +143,6 @@ export const Equipment = () => {
                   <Translate contentKey="thermographyApiApp.equipment.group">Group</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
-                  <Translate contentKey="thermographyApiApp.equipment.inspectionRouteGroups">Inspection Route Groups</Translate>{' '}
-                  <FontAwesomeIcon icon="sort" />
-                </th>
-                <th>
                   <Translate contentKey="thermographyApiApp.equipment.components">Components</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
@@ -160,8 +156,8 @@ export const Equipment = () => {
                       {equipment.id}
                     </Button>
                   </td>
+                  <td>{equipment.code}</td>
                   <td>{equipment.name}</td>
-                  <td>{equipment.title}</td>
                   <td>{equipment.description}</td>
                   <td>
                     <Translate contentKey={`thermographyApiApp.EquipmentType.${equipment.type}`} />
@@ -180,16 +176,6 @@ export const Equipment = () => {
                   <td>{equipment.longitude}</td>
                   <td>{equipment.plant ? <Link to={`/plant/${equipment.plant.id}`}>{equipment.plant.id}</Link> : ''}</td>
                   <td>{equipment.group ? <Link to={`/equipment-group/${equipment.group.id}`}>{equipment.group.id}</Link> : ''}</td>
-                  <td>
-                    {equipment.inspectionRouteGroups
-                      ? equipment.inspectionRouteGroups.map((val, j) => (
-                          <span key={j}>
-                            <Link to={`/inspection-route-group/${val.id}`}>{val.id}</Link>
-                            {j === equipment.inspectionRouteGroups.length - 1 ? '' : ', '}
-                          </span>
-                        ))
-                      : null}
-                  </td>
                   <td>
                     {equipment.components
                       ? equipment.components.map((val, j) => (

@@ -30,13 +30,15 @@
       "Thermogram",
       "ROI",
       "ThermographicInspectionRecord",
-      "UserInfo"
+      "UserInfo",
+      "InspectionRouteGroupEquipment",
+      "InspectionRouteRecord"
     ],
     "feignClient": null,
     "jhipsterVersion": "8.11.0",
     "jwtSecretKey": "OWIxNzZkN2JkZjliM2I2MWI2ZmFhNmJkNTJjN2U3ZTI4OTliMGQ4YmQxMGExNDIxMWM1OWUxODY2NGQxMGUwODVlMWM3NTYwYjk2ZDg5YTljZmFkYzM3NTAxMDVkZWFhMDMyMjhlOGU5Yjg4M2YyZjkxY2RjNTI2MDE0YTBkOTk=",
     "languages": ["pt-br", "en", "fr", "es"],
-    "lastLiquibaseTimestamp": 1762523824000,
+    "lastLiquibaseTimestamp": 1763722797000,
     "messageBroker": "kafka",
     "microfrontend": null,
     "microfrontends": [],

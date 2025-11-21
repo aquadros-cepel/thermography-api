@@ -47,8 +47,8 @@ public class CompanyAsserts {
     public static void assertCompanyUpdatableFieldsEquals(Company expected, Company actual) {
         assertThat(actual)
             .as("Verify Company relevant properties")
+            .satisfies(a -> assertThat(a.getCode()).as("check code").isEqualTo(expected.getCode()))
             .satisfies(a -> assertThat(a.getName()).as("check name").isEqualTo(expected.getName()))
-            .satisfies(a -> assertThat(a.getTitle()).as("check title").isEqualTo(expected.getTitle()))
             .satisfies(a -> assertThat(a.getDescription()).as("check description").isEqualTo(expected.getDescription()))
             .satisfies(a -> assertThat(a.getAddress()).as("check address").isEqualTo(expected.getAddress()))
             .satisfies(a -> assertThat(a.getPrimaryPhoneNumber()).as("check primaryPhoneNumber").isEqualTo(expected.getPrimaryPhoneNumber())

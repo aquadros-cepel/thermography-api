@@ -47,28 +47,4 @@ class InspectionRouteTest {
         inspectionRoute.createdBy(null);
         assertThat(inspectionRoute.getCreatedBy()).isNull();
     }
-
-    @Test
-    void startedByTest() {
-        InspectionRoute inspectionRoute = getInspectionRouteRandomSampleGenerator();
-        UserInfo userInfoBack = getUserInfoRandomSampleGenerator();
-
-        inspectionRoute.setStartedBy(userInfoBack);
-        assertThat(inspectionRoute.getStartedBy()).isEqualTo(userInfoBack);
-
-        inspectionRoute.startedBy(null);
-        assertThat(inspectionRoute.getStartedBy()).isNull();
-    }
-
-    @Test
-    void finishedByTest() {
-        InspectionRoute inspectionRoute = getInspectionRouteRandomSampleGenerator();
-        UserInfo userInfoBack = getUserInfoRandomSampleGenerator();
-
-        inspectionRoute.setFinishedBy(userInfoBack);
-        assertThat(inspectionRoute.getFinishedBy()).isEqualTo(userInfoBack);
-
-        inspectionRoute.finishedBy(null);
-        assertThat(inspectionRoute.getFinishedBy()).isNull();
-    }
 }

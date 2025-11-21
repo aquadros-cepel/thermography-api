@@ -124,11 +124,11 @@ public class BusinessUnitResource {
         Optional<BusinessUnit> result = businessUnitRepository
             .findById(businessUnit.getId())
             .map(existingBusinessUnit -> {
+                if (businessUnit.getCode() != null) {
+                    existingBusinessUnit.setCode(businessUnit.getCode());
+                }
                 if (businessUnit.getName() != null) {
                     existingBusinessUnit.setName(businessUnit.getName());
-                }
-                if (businessUnit.getTitle() != null) {
-                    existingBusinessUnit.setTitle(businessUnit.getTitle());
                 }
                 if (businessUnit.getDescription() != null) {
                     existingBusinessUnit.setDescription(businessUnit.getDescription());

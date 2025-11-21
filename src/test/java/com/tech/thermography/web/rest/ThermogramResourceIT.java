@@ -476,13 +476,17 @@ class ThermogramResourceIT {
         partialUpdatedThermogram.setId(thermogram.getId());
 
         partialUpdatedThermogram
-            .minTemp(UPDATED_MIN_TEMP)
+            .imageRefPath(UPDATED_IMAGE_REF_PATH)
             .avgTemp(UPDATED_AVG_TEMP)
+            .maxTemp(UPDATED_MAX_TEMP)
             .emissivity(UPDATED_EMISSIVITY)
+            .subjectDistance(UPDATED_SUBJECT_DISTANCE)
+            .reflectedTemp(UPDATED_REFLECTED_TEMP)
+            .relativeHumidity(UPDATED_RELATIVE_HUMIDITY)
             .cameraModel(UPDATED_CAMERA_MODEL)
-            .maxTempRoi(UPDATED_MAX_TEMP_ROI)
+            .selectedRoiId(UPDATED_SELECTED_ROI_ID)
             .createdAt(UPDATED_CREATED_AT)
-            .longitude(UPDATED_LONGITUDE);
+            .latitude(UPDATED_LATITUDE);
 
         restThermogramMockMvc
             .perform(

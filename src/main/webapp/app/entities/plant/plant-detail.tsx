@@ -33,17 +33,17 @@ export const PlantDetail = () => {
           </dt>
           <dd>{plantEntity.id}</dd>
           <dt>
+            <span id="code">
+              <Translate contentKey="thermographyApiApp.plant.code">Code</Translate>
+            </span>
+          </dt>
+          <dd>{plantEntity.code}</dd>
+          <dt>
             <span id="name">
               <Translate contentKey="thermographyApiApp.plant.name">Name</Translate>
             </span>
           </dt>
           <dd>{plantEntity.name}</dd>
-          <dt>
-            <span id="title">
-              <Translate contentKey="thermographyApiApp.plant.title">Title</Translate>
-            </span>
-          </dt>
-          <dd>{plantEntity.title}</dd>
           <dt>
             <span id="description">
               <Translate contentKey="thermographyApiApp.plant.description">Description</Translate>

@@ -102,6 +102,7 @@ export const PlantUpdate = () => {
                   validate={{ required: true }}
                 />
               ) : null}
+              <ValidatedField label={translate('thermographyApiApp.plant.code')} id="plant-code" name="code" data-cy="code" type="text" />
               <ValidatedField
                 label={translate('thermographyApiApp.plant.name')}
                 id="plant-name"
@@ -111,13 +112,6 @@ export const PlantUpdate = () => {
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
                 }}
-              />
-              <ValidatedField
-                label={translate('thermographyApiApp.plant.title')}
-                id="plant-title"
-                name="title"
-                data-cy="title"
-                type="text"
               />
               <ValidatedField
                 label={translate('thermographyApiApp.plant.description')}

@@ -101,6 +101,13 @@ export const EquipmentComponentUpdate = () => {
                 />
               ) : null}
               <ValidatedField
+                label={translate('thermographyApiApp.equipmentComponent.code')}
+                id="equipment-component-code"
+                name="code"
+                data-cy="code"
+                type="text"
+              />
+              <ValidatedField
                 label={translate('thermographyApiApp.equipmentComponent.name')}
                 id="equipment-component-name"
                 name="name"
@@ -109,13 +116,6 @@ export const EquipmentComponentUpdate = () => {
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
                 }}
-              />
-              <ValidatedField
-                label={translate('thermographyApiApp.equipmentComponent.title')}
-                id="equipment-component-title"
-                name="title"
-                data-cy="title"
-                type="text"
               />
               <ValidatedField
                 label={translate('thermographyApiApp.equipmentComponent.description')}

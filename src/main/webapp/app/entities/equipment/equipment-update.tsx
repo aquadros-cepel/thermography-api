@@ -9,7 +9,6 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntities as getPlants } from 'app/entities/plant/plant.reducer';
 import { getEntities as getEquipmentGroups } from 'app/entities/equipment-group/equipment-group.reducer';
-import { getEntities as getInspectionRouteGroups } from 'app/entities/inspection-route-group/inspection-route-group.reducer';
 import { getEntities as getEquipmentComponents } from 'app/entities/equipment-component/equipment-component.reducer';
 import { EquipmentType } from 'app/shared/model/enumerations/equipment-type.model';
 import { PhaseType } from 'app/shared/model/enumerations/phase-type.model';
@@ -25,7 +24,6 @@ export const EquipmentUpdate = () => {
 
   const plants = useAppSelector(state => state.plant.entities);
   const equipmentGroups = useAppSelector(state => state.equipmentGroup.entities);
-  const inspectionRouteGroups = useAppSelector(state => state.inspectionRouteGroup.entities);
   const equipmentComponents = useAppSelector(state => state.equipmentComponent.entities);
   const equipmentEntity = useAppSelector(state => state.equipment.entity);
   const loading = useAppSelector(state => state.equipment.loading);
@@ -47,7 +45,6 @@ export const EquipmentUpdate = () => {
 
     dispatch(getPlants({}));
     dispatch(getEquipmentGroups({}));
-    dispatch(getInspectionRouteGroups({}));
     dispatch(getEquipmentComponents({}));
   }, []);
 
@@ -73,7 +70,6 @@ export const EquipmentUpdate = () => {
       ...values,
       plant: plants.find(it => it.id.toString() === values.plant?.toString()),
       group: equipmentGroups.find(it => it.id.toString() === values.group?.toString()),
-      inspectionRouteGroups: mapIdList(values.inspectionRouteGroups),
       components: mapIdList(values.components),
     };
 
@@ -93,7 +89,6 @@ export const EquipmentUpdate = () => {
           ...equipmentEntity,
           plant: equipmentEntity?.plant?.id,
           group: equipmentEntity?.group?.id,
-          inspectionRouteGroups: equipmentEntity?.inspectionRouteGroups?.map(e => e.id.toString()),
           components: equipmentEntity?.components?.map(e => e.id.toString()),
         };
 
@@ -123,6 +118,13 @@ export const EquipmentUpdate = () => {
                 />
               ) : null}
               <ValidatedField
+                label={translate('thermographyApiApp.equipment.code')}
+                id="equipment-code"
+                name="code"
+                data-cy="code"
+                type="text"
+              />
+              <ValidatedField
                 label={translate('thermographyApiApp.equipment.name')}
                 id="equipment-name"
                 name="name"
@@ -131,13 +133,6 @@ export const EquipmentUpdate = () => {
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
                 }}
-              />
-              <ValidatedField
-                label={translate('thermographyApiApp.equipment.title')}
-                id="equipment-title"
-                name="title"
-                data-cy="title"
-                type="text"
               />
               <ValidatedField
                 label={translate('thermographyApiApp.equipment.description')}
@@ -251,23 +246,6 @@ export const EquipmentUpdate = () => {
                 <option value="" key="0" />
                 {equipmentGroups
                   ? equipmentGroups.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
-              <ValidatedField
-                label={translate('thermographyApiApp.equipment.inspectionRouteGroups')}
-                id="equipment-inspectionRouteGroups"
-                data-cy="inspectionRouteGroups"
-                type="select"
-                multiple
-                name="inspectionRouteGroups"
-              >
-                <option value="" key="0" />
-                {inspectionRouteGroups
-                  ? inspectionRouteGroups.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
                         {otherEntity.id}
                       </option>

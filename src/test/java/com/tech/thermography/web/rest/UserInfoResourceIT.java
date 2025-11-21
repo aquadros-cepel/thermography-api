@@ -259,8 +259,6 @@ class UserInfoResourceIT {
         UserInfo partialUpdatedUserInfo = new UserInfo();
         partialUpdatedUserInfo.setId(userInfo.getId());
 
-        partialUpdatedUserInfo.phoneNumber(UPDATED_PHONE_NUMBER);
-
         restUserInfoMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedUserInfo.getId())

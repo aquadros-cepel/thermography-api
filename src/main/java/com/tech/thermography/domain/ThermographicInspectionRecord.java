@@ -23,7 +23,6 @@ public class ThermographicInspectionRecord implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)
@@ -81,12 +80,12 @@ public class ThermographicInspectionRecord implements Serializable {
     private Plant plant;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "plant", "createdBy", "startedBy", "finishedBy" }, allowSetters = true)
-    private InspectionRoute route;
+    @JsonIgnoreProperties(value = { "startedBy", "finishedBy" }, allowSetters = true)
+    private InspectionRouteRecord route;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "plant", "group", "inspectionRouteGroups", "components" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "plant", "group", "components" }, allowSetters = true)
     private Equipment equipment;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -309,16 +308,16 @@ public class ThermographicInspectionRecord implements Serializable {
         return this;
     }
 
-    public InspectionRoute getRoute() {
+    public InspectionRouteRecord getRoute() {
         return this.route;
     }
 
-    public void setRoute(InspectionRoute inspectionRoute) {
-        this.route = inspectionRoute;
+    public void setRoute(InspectionRouteRecord inspectionRouteRecord) {
+        this.route = inspectionRouteRecord;
     }
 
-    public ThermographicInspectionRecord route(InspectionRoute inspectionRoute) {
-        this.setRoute(inspectionRoute);
+    public ThermographicInspectionRecord route(InspectionRouteRecord inspectionRouteRecord) {
+        this.setRoute(inspectionRouteRecord);
         return this;
     }
 

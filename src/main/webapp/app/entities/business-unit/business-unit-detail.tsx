@@ -32,17 +32,17 @@ export const BusinessUnitDetail = () => {
           </dt>
           <dd>{businessUnitEntity.id}</dd>
           <dt>
+            <span id="code">
+              <Translate contentKey="thermographyApiApp.businessUnit.code">Code</Translate>
+            </span>
+          </dt>
+          <dd>{businessUnitEntity.code}</dd>
+          <dt>
             <span id="name">
               <Translate contentKey="thermographyApiApp.businessUnit.name">Name</Translate>
             </span>
           </dt>
           <dd>{businessUnitEntity.name}</dd>
-          <dt>
-            <span id="title">
-              <Translate contentKey="thermographyApiApp.businessUnit.title">Title</Translate>
-            </span>
-          </dt>
-          <dd>{businessUnitEntity.title}</dd>
           <dt>
             <span id="description">
               <Translate contentKey="thermographyApiApp.businessUnit.description">Description</Translate>

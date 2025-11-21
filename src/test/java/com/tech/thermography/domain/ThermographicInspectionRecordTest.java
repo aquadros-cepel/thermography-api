@@ -2,7 +2,7 @@ package com.tech.thermography.domain;
 
 import static com.tech.thermography.domain.EquipmentComponentTestSamples.*;
 import static com.tech.thermography.domain.EquipmentTestSamples.*;
-import static com.tech.thermography.domain.InspectionRouteTestSamples.*;
+import static com.tech.thermography.domain.InspectionRouteRecordTestSamples.*;
 import static com.tech.thermography.domain.PlantTestSamples.*;
 import static com.tech.thermography.domain.ThermogramTestSamples.*;
 import static com.tech.thermography.domain.ThermographicInspectionRecordTestSamples.*;
@@ -43,10 +43,10 @@ class ThermographicInspectionRecordTest {
     @Test
     void routeTest() {
         ThermographicInspectionRecord thermographicInspectionRecord = getThermographicInspectionRecordRandomSampleGenerator();
-        InspectionRoute inspectionRouteBack = getInspectionRouteRandomSampleGenerator();
+        InspectionRouteRecord inspectionRouteRecordBack = getInspectionRouteRecordRandomSampleGenerator();
 
-        thermographicInspectionRecord.setRoute(inspectionRouteBack);
-        assertThat(thermographicInspectionRecord.getRoute()).isEqualTo(inspectionRouteBack);
+        thermographicInspectionRecord.setRoute(inspectionRouteRecordBack);
+        assertThat(thermographicInspectionRecord.getRoute()).isEqualTo(inspectionRouteRecordBack);
 
         thermographicInspectionRecord.route(null);
         assertThat(thermographicInspectionRecord.getRoute()).isNull();

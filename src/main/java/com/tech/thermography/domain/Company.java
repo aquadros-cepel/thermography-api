@@ -18,18 +18,17 @@ public class Company implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)
     private UUID id;
 
+    @Column(name = "code")
+    private String code;
+
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
-
-    @Column(name = "title")
-    private String title;
 
     @Column(name = "description")
     private String description;
@@ -61,6 +60,19 @@ public class Company implements Serializable {
         this.id = id;
     }
 
+    public String getCode() {
+        return this.code;
+    }
+
+    public Company code(String code) {
+        this.setCode(code);
+        return this;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getName() {
         return this.name;
     }
@@ -72,19 +84,6 @@ public class Company implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public Company title(String title) {
-        this.setTitle(title);
-        return this;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getDescription() {
@@ -176,8 +175,8 @@ public class Company implements Serializable {
     public String toString() {
         return "Company{" +
             "id=" + getId() +
+            ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
-            ", title='" + getTitle() + "'" +
             ", description='" + getDescription() + "'" +
             ", address='" + getAddress() + "'" +
             ", primaryPhoneNumber='" + getPrimaryPhoneNumber() + "'" +

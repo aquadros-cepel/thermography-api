@@ -1,0 +1,37 @@
+{
+  "annotations": {
+    "changelogDate": "20251121105956"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "included",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "orderIndex",
+      "fieldType": "Integer"
+    }
+  ],
+  "name": "InspectionRouteGroupEquipment",
+  "relationships": [
+    {
+      "otherEntityName": "inspectionRouteGroup",
+      "relationshipName": "inspectionRouteGroup",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "equipment",
+      "relationshipName": "equipment",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no"
+}

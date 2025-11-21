@@ -18,8 +18,8 @@
         "title": "Business Unit"
       },
       "id": "Id",
+      "code": "Code",
       "name": "Name",
-      "title": "Title",
       "description": "Description",
       "company": "Company"
     }

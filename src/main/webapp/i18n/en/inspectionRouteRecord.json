@@ -1,0 +1,36 @@
+{
+  "thermographyApiApp": {
+    "inspectionRouteRecord": {
+      "home": {
+        "title": "Inspection Route Records",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Inspection Route Record",
+        "createOrEditLabel": "Create or edit a Inspection Route Record",
+        "notFound": "No Inspection Route Records found"
+      },
+      "created": "A new Inspection Route Record is created with identifier {{ param }}",
+      "updated": "A Inspection Route Record is updated with identifier {{ param }}",
+      "deleted": "A Inspection Route Record is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Inspection Route Record {{ id }}?"
+      },
+      "detail": {
+        "title": "Inspection Route Record"
+      },
+      "id": "Id",
+      "code": "Code",
+      "name": "Name",
+      "description": "Description",
+      "maintenanceDocument": "Maintenance Document",
+      "createdAt": "Created At",
+      "expectedStartDate": "Expected Start Date",
+      "expectedEndDate": "Expected End Date",
+      "started": "Started",
+      "startedAt": "Started At",
+      "finished": "Finished",
+      "finishedAt": "Finished At",
+      "startedBy": "Started By",
+      "finishedBy": "Finished By"
+    }
+  }
+}

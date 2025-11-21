@@ -556,9 +556,13 @@ class ThermographicInspectionRecordResourceIT {
 
         partialUpdatedThermographicInspectionRecord
             .name(UPDATED_NAME)
-            .createdAt(UPDATED_CREATED_AT)
+            .serviceOrder(UPDATED_SERVICE_ORDER)
+            .condition(UPDATED_CONDITION)
             .deltaT(UPDATED_DELTA_T)
-            .recommendations(UPDATED_RECOMMENDATIONS);
+            .nextMonitoring(UPDATED_NEXT_MONITORING)
+            .recommendations(UPDATED_RECOMMENDATIONS)
+            .finished(UPDATED_FINISHED)
+            .finishedAt(UPDATED_FINISHED_AT);
 
         restThermographicInspectionRecordMockMvc
             .perform(

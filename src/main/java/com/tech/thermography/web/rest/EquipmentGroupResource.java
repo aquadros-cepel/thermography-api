@@ -125,11 +125,11 @@ public class EquipmentGroupResource {
         Optional<EquipmentGroup> result = equipmentGroupRepository
             .findById(equipmentGroup.getId())
             .map(existingEquipmentGroup -> {
+                if (equipmentGroup.getCode() != null) {
+                    existingEquipmentGroup.setCode(equipmentGroup.getCode());
+                }
                 if (equipmentGroup.getName() != null) {
                     existingEquipmentGroup.setName(equipmentGroup.getName());
-                }
-                if (equipmentGroup.getTitle() != null) {
-                    existingEquipmentGroup.setTitle(equipmentGroup.getTitle());
                 }
                 if (equipmentGroup.getDescription() != null) {
                     existingEquipmentGroup.setDescription(equipmentGroup.getDescription());

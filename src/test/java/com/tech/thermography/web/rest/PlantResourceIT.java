@@ -33,11 +33,11 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class PlantResourceIT {
 
+    private static final String DEFAULT_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_CODE = "BBBBBBBBBB";
+
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
-
-    private static final String DEFAULT_TITLE = "AAAAAAAAAA";
-    private static final String UPDATED_TITLE = "BBBBBBBBBB";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -78,8 +78,8 @@ class PlantResourceIT {
      */
     public static Plant createEntity() {
         return new Plant()
+            .code(DEFAULT_CODE)
             .name(DEFAULT_NAME)
-            .title(DEFAULT_TITLE)
             .description(DEFAULT_DESCRIPTION)
             .latitude(DEFAULT_LATITUDE)
             .longitude(DEFAULT_LONGITUDE)
@@ -94,8 +94,8 @@ class PlantResourceIT {
      */
     public static Plant createUpdatedEntity() {
         return new Plant()
+            .code(UPDATED_CODE)
             .name(UPDATED_NAME)
-            .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
             .latitude(UPDATED_LATITUDE)
             .longitude(UPDATED_LONGITUDE)
@@ -182,8 +182,8 @@ class PlantResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(plant.getId().toString())))
+            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE)))
             .andExpect(jsonPath("$.[*].longitude").value(hasItem(DEFAULT_LONGITUDE)))
@@ -202,8 +202,8 @@ class PlantResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(plant.getId().toString()))
+            .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.latitude").value(DEFAULT_LATITUDE))
             .andExpect(jsonPath("$.longitude").value(DEFAULT_LONGITUDE))
@@ -230,8 +230,8 @@ class PlantResourceIT {
         // Disconnect from session so that the updates on updatedPlant are not directly saved in db
         em.detach(updatedPlant);
         updatedPlant
+            .code(UPDATED_CODE)
             .name(UPDATED_NAME)
-            .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
             .latitude(UPDATED_LATITUDE)
             .longitude(UPDATED_LONGITUDE)
@@ -307,7 +307,12 @@ class PlantResourceIT {
         Plant partialUpdatedPlant = new Plant();
         partialUpdatedPlant.setId(plant.getId());
 
-        partialUpdatedPlant.name(UPDATED_NAME).title(UPDATED_TITLE).latitude(UPDATED_LATITUDE).startDate(UPDATED_START_DATE);
+        partialUpdatedPlant
+            .code(UPDATED_CODE)
+            .name(UPDATED_NAME)
+            .latitude(UPDATED_LATITUDE)
+            .longitude(UPDATED_LONGITUDE)
+            .startDate(UPDATED_START_DATE);
 
         restPlantMockMvc
             .perform(
@@ -336,8 +341,8 @@ class PlantResourceIT {
         partialUpdatedPlant.setId(plant.getId());
 
         partialUpdatedPlant
+            .code(UPDATED_CODE)
             .name(UPDATED_NAME)
-            .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
             .latitude(UPDATED_LATITUDE)
             .longitude(UPDATED_LONGITUDE)

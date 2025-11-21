@@ -2,8 +2,8 @@ import { ICompany } from 'app/shared/model/company.model';
 
 export interface IBusinessUnit {
   id?: string;
+  code?: string | null;
   name?: string;
-  title?: string | null;
   description?: string | null;
   company?: ICompany | null;
 }

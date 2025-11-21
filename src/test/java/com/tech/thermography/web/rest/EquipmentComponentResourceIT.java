@@ -39,11 +39,11 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class EquipmentComponentResourceIT {
 
+    private static final String DEFAULT_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_CODE = "BBBBBBBBBB";
+
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
-
-    private static final String DEFAULT_TITLE = "AAAAAAAAAA";
-    private static final String UPDATED_TITLE = "BBBBBBBBBB";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -77,7 +77,7 @@ class EquipmentComponentResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static EquipmentComponent createEntity() {
-        return new EquipmentComponent().name(DEFAULT_NAME).title(DEFAULT_TITLE).description(DEFAULT_DESCRIPTION);
+        return new EquipmentComponent().code(DEFAULT_CODE).name(DEFAULT_NAME).description(DEFAULT_DESCRIPTION);
     }
 
     /**
@@ -87,7 +87,7 @@ class EquipmentComponentResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static EquipmentComponent createUpdatedEntity() {
-        return new EquipmentComponent().name(UPDATED_NAME).title(UPDATED_TITLE).description(UPDATED_DESCRIPTION);
+        return new EquipmentComponent().code(UPDATED_CODE).name(UPDATED_NAME).description(UPDATED_DESCRIPTION);
     }
 
     @BeforeEach
@@ -173,8 +173,8 @@ class EquipmentComponentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(equipmentComponent.getId().toString())))
+            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
     }
 
@@ -207,8 +207,8 @@ class EquipmentComponentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(equipmentComponent.getId().toString()))
+            .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION));
     }
 
@@ -231,7 +231,7 @@ class EquipmentComponentResourceIT {
         EquipmentComponent updatedEquipmentComponent = equipmentComponentRepository.findById(equipmentComponent.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedEquipmentComponent are not directly saved in db
         em.detach(updatedEquipmentComponent);
-        updatedEquipmentComponent.name(UPDATED_NAME).title(UPDATED_TITLE).description(UPDATED_DESCRIPTION);
+        updatedEquipmentComponent.code(UPDATED_CODE).name(UPDATED_NAME).description(UPDATED_DESCRIPTION);
 
         restEquipmentComponentMockMvc
             .perform(
@@ -311,6 +311,8 @@ class EquipmentComponentResourceIT {
         EquipmentComponent partialUpdatedEquipmentComponent = new EquipmentComponent();
         partialUpdatedEquipmentComponent.setId(equipmentComponent.getId());
 
+        partialUpdatedEquipmentComponent.name(UPDATED_NAME).description(UPDATED_DESCRIPTION);
+
         restEquipmentComponentMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedEquipmentComponent.getId())
@@ -340,7 +342,7 @@ class EquipmentComponentResourceIT {
         EquipmentComponent partialUpdatedEquipmentComponent = new EquipmentComponent();
         partialUpdatedEquipmentComponent.setId(equipmentComponent.getId());
 
-        partialUpdatedEquipmentComponent.name(UPDATED_NAME).title(UPDATED_TITLE).description(UPDATED_DESCRIPTION);
+        partialUpdatedEquipmentComponent.code(UPDATED_CODE).name(UPDATED_NAME).description(UPDATED_DESCRIPTION);
 
         restEquipmentComponentMockMvc
             .perform(

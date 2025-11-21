@@ -87,13 +87,13 @@ export const EquipmentGroup = () => {
                   <Translate contentKey="thermographyApiApp.equipmentGroup.id">Id</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
+                <th className="hand" onClick={sort('code')}>
+                  <Translate contentKey="thermographyApiApp.equipmentGroup.code">Code</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('code')} />
+                </th>
                 <th className="hand" onClick={sort('name')}>
                   <Translate contentKey="thermographyApiApp.equipmentGroup.name">Name</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('name')} />
-                </th>
-                <th className="hand" onClick={sort('title')}>
-                  <Translate contentKey="thermographyApiApp.equipmentGroup.title">Title</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('title')} />
                 </th>
                 <th className="hand" onClick={sort('description')}>
                   <Translate contentKey="thermographyApiApp.equipmentGroup.description">Description</Translate>{' '}
@@ -116,8 +116,8 @@ export const EquipmentGroup = () => {
                       {equipmentGroup.id}
                     </Button>
                   </td>
+                  <td>{equipmentGroup.code}</td>
                   <td>{equipmentGroup.name}</td>
-                  <td>{equipmentGroup.title}</td>
                   <td>{equipmentGroup.description}</td>
                   <td>{equipmentGroup.plant ? <Link to={`/plant/${equipmentGroup.plant.id}`}>{equipmentGroup.plant.id}</Link> : ''}</td>
                   <td>

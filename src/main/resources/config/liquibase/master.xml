@@ -28,6 +28,8 @@
     <include file="config/liquibase/changelog/20251107125640_added_entity_ROI.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251107125641_added_entity_ThermographicInspectionRecord.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251107135704_added_entity_UserInfo.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251121105956_added_entity_InspectionRouteGroupEquipment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251121105957_added_entity_InspectionRouteRecord.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20251107125628_added_entity_constraints_Plant.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251107125629_added_entity_constraints_BusinessUnit.xml" relativeToChangelogFile="false"/>
@@ -41,6 +43,8 @@
     <include file="config/liquibase/changelog/20251107125640_added_entity_constraints_ROI.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251107125641_added_entity_constraints_ThermographicInspectionRecord.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251107135704_added_entity_constraints_UserInfo.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251121105956_added_entity_constraints_InspectionRouteGroupEquipment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251121105957_added_entity_constraints_InspectionRouteRecord.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

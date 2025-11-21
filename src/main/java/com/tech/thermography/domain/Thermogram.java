@@ -20,7 +20,6 @@ public class Thermogram implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)
@@ -87,7 +86,7 @@ public class Thermogram implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "plant", "group", "inspectionRouteGroups", "components" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "plant", "group", "components" }, allowSetters = true)
     private Equipment equipment;
 
     @ManyToOne(optional = false)

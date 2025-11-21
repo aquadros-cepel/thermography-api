@@ -47,8 +47,8 @@ public class BusinessUnitAsserts {
     public static void assertBusinessUnitUpdatableFieldsEquals(BusinessUnit expected, BusinessUnit actual) {
         assertThat(actual)
             .as("Verify BusinessUnit relevant properties")
+            .satisfies(a -> assertThat(a.getCode()).as("check code").isEqualTo(expected.getCode()))
             .satisfies(a -> assertThat(a.getName()).as("check name").isEqualTo(expected.getName()))
-            .satisfies(a -> assertThat(a.getTitle()).as("check title").isEqualTo(expected.getTitle()))
             .satisfies(a -> assertThat(a.getDescription()).as("check description").isEqualTo(expected.getDescription()));
     }
 

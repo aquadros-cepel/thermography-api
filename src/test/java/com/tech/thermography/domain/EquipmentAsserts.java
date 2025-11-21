@@ -47,8 +47,8 @@ public class EquipmentAsserts {
     public static void assertEquipmentUpdatableFieldsEquals(Equipment expected, Equipment actual) {
         assertThat(actual)
             .as("Verify Equipment relevant properties")
+            .satisfies(a -> assertThat(a.getCode()).as("check code").isEqualTo(expected.getCode()))
             .satisfies(a -> assertThat(a.getName()).as("check name").isEqualTo(expected.getName()))
-            .satisfies(a -> assertThat(a.getTitle()).as("check title").isEqualTo(expected.getTitle()))
             .satisfies(a -> assertThat(a.getDescription()).as("check description").isEqualTo(expected.getDescription()))
             .satisfies(a -> assertThat(a.getType()).as("check type").isEqualTo(expected.getType()))
             .satisfies(a -> assertThat(a.getManufacturer()).as("check manufacturer").isEqualTo(expected.getManufacturer()))
@@ -72,9 +72,6 @@ public class EquipmentAsserts {
             .as("Verify Equipment relationships")
             .satisfies(a -> assertThat(a.getPlant()).as("check plant").isEqualTo(expected.getPlant()))
             .satisfies(a -> assertThat(a.getGroup()).as("check group").isEqualTo(expected.getGroup()))
-            .satisfies(a ->
-                assertThat(a.getInspectionRouteGroups()).as("check inspectionRouteGroups").isEqualTo(expected.getInspectionRouteGroups())
-            )
             .satisfies(a -> assertThat(a.getComponents()).as("check components").isEqualTo(expected.getComponents()));
     }
 }

@@ -92,13 +92,13 @@ export const EquipmentComponent = () => {
                   <Translate contentKey="thermographyApiApp.equipmentComponent.id">Id</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
+                <th className="hand" onClick={sort('code')}>
+                  <Translate contentKey="thermographyApiApp.equipmentComponent.code">Code</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('code')} />
+                </th>
                 <th className="hand" onClick={sort('name')}>
                   <Translate contentKey="thermographyApiApp.equipmentComponent.name">Name</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('name')} />
-                </th>
-                <th className="hand" onClick={sort('title')}>
-                  <Translate contentKey="thermographyApiApp.equipmentComponent.title">Title</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('title')} />
                 </th>
                 <th className="hand" onClick={sort('description')}>
                   <Translate contentKey="thermographyApiApp.equipmentComponent.description">Description</Translate>{' '}
@@ -125,8 +125,8 @@ export const EquipmentComponent = () => {
                       {equipmentComponent.id}
                     </Button>
                   </td>
+                  <td>{equipmentComponent.code}</td>
                   <td>{equipmentComponent.name}</td>
-                  <td>{equipmentComponent.title}</td>
                   <td>{equipmentComponent.description}</td>
                   <td>
                     {equipmentComponent.componentTemperatureLimits ? (

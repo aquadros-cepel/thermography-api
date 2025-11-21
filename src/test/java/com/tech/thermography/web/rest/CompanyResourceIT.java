@@ -31,11 +31,11 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class CompanyResourceIT {
 
+    private static final String DEFAULT_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_CODE = "BBBBBBBBBB";
+
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
-
-    private static final String DEFAULT_TITLE = "AAAAAAAAAA";
-    private static final String UPDATED_TITLE = "BBBBBBBBBB";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -79,8 +79,8 @@ class CompanyResourceIT {
      */
     public static Company createEntity() {
         return new Company()
+            .code(DEFAULT_CODE)
             .name(DEFAULT_NAME)
-            .title(DEFAULT_TITLE)
             .description(DEFAULT_DESCRIPTION)
             .address(DEFAULT_ADDRESS)
             .primaryPhoneNumber(DEFAULT_PRIMARY_PHONE_NUMBER)
@@ -96,8 +96,8 @@ class CompanyResourceIT {
      */
     public static Company createUpdatedEntity() {
         return new Company()
+            .code(UPDATED_CODE)
             .name(UPDATED_NAME)
-            .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
             .address(UPDATED_ADDRESS)
             .primaryPhoneNumber(UPDATED_PRIMARY_PHONE_NUMBER)
@@ -185,8 +185,8 @@ class CompanyResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(company.getId().toString())))
+            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
             .andExpect(jsonPath("$.[*].primaryPhoneNumber").value(hasItem(DEFAULT_PRIMARY_PHONE_NUMBER)))
@@ -206,8 +206,8 @@ class CompanyResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(company.getId().toString()))
+            .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS))
             .andExpect(jsonPath("$.primaryPhoneNumber").value(DEFAULT_PRIMARY_PHONE_NUMBER))
@@ -235,8 +235,8 @@ class CompanyResourceIT {
         // Disconnect from session so that the updates on updatedCompany are not directly saved in db
         em.detach(updatedCompany);
         updatedCompany
+            .code(UPDATED_CODE)
             .name(UPDATED_NAME)
-            .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
             .address(UPDATED_ADDRESS)
             .primaryPhoneNumber(UPDATED_PRIMARY_PHONE_NUMBER)
@@ -315,7 +315,12 @@ class CompanyResourceIT {
         Company partialUpdatedCompany = new Company();
         partialUpdatedCompany.setId(company.getId());
 
-        partialUpdatedCompany.name(UPDATED_NAME).title(UPDATED_TITLE).address(UPDATED_ADDRESS);
+        partialUpdatedCompany
+            .description(UPDATED_DESCRIPTION)
+            .address(UPDATED_ADDRESS)
+            .primaryPhoneNumber(UPDATED_PRIMARY_PHONE_NUMBER)
+            .secondaryPhoneNumber(UPDATED_SECONDARY_PHONE_NUMBER)
+            .taxIdNumber(UPDATED_TAX_ID_NUMBER);
 
         restCompanyMockMvc
             .perform(
@@ -344,8 +349,8 @@ class CompanyResourceIT {
         partialUpdatedCompany.setId(company.getId());
 
         partialUpdatedCompany
+            .code(UPDATED_CODE)
             .name(UPDATED_NAME)
-            .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
             .address(UPDATED_ADDRESS)
             .primaryPhoneNumber(UPDATED_PRIMARY_PHONE_NUMBER)

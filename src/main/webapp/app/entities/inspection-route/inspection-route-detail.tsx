@@ -33,17 +33,17 @@ export const InspectionRouteDetail = () => {
           </dt>
           <dd>{inspectionRouteEntity.id}</dd>
           <dt>
+            <span id="code">
+              <Translate contentKey="thermographyApiApp.inspectionRoute.code">Code</Translate>
+            </span>
+          </dt>
+          <dd>{inspectionRouteEntity.code}</dd>
+          <dt>
             <span id="name">
               <Translate contentKey="thermographyApiApp.inspectionRoute.name">Name</Translate>
             </span>
           </dt>
           <dd>{inspectionRouteEntity.name}</dd>
-          <dt>
-            <span id="title">
-              <Translate contentKey="thermographyApiApp.inspectionRoute.title">Title</Translate>
-            </span>
-          </dt>
-          <dd>{inspectionRouteEntity.title}</dd>
           <dt>
             <span id="description">
               <Translate contentKey="thermographyApiApp.inspectionRoute.description">Description</Translate>
@@ -51,11 +51,33 @@ export const InspectionRouteDetail = () => {
           </dt>
           <dd>{inspectionRouteEntity.description}</dd>
           <dt>
-            <span id="planNote">
-              <Translate contentKey="thermographyApiApp.inspectionRoute.planNote">Plan Note</Translate>
+            <span id="maintenancePlan">
+              <Translate contentKey="thermographyApiApp.inspectionRoute.maintenancePlan">Maintenance Plan</Translate>
             </span>
           </dt>
-          <dd>{inspectionRouteEntity.planNote}</dd>
+          <dd>{inspectionRouteEntity.maintenancePlan}</dd>
+          <dt>
+            <span id="periodicity">
+              <Translate contentKey="thermographyApiApp.inspectionRoute.periodicity">Periodicity</Translate>
+            </span>
+          </dt>
+          <dd>{inspectionRouteEntity.periodicity}</dd>
+          <dt>
+            <span id="duration">
+              <Translate contentKey="thermographyApiApp.inspectionRoute.duration">Duration</Translate>
+            </span>
+          </dt>
+          <dd>{inspectionRouteEntity.duration}</dd>
+          <dt>
+            <span id="expectedStartDate">
+              <Translate contentKey="thermographyApiApp.inspectionRoute.expectedStartDate">Expected Start Date</Translate>
+            </span>
+          </dt>
+          <dd>
+            {inspectionRouteEntity.expectedStartDate ? (
+              <TextFormat value={inspectionRouteEntity.expectedStartDate} type="date" format={APP_LOCAL_DATE_FORMAT} />
+            ) : null}
+          </dd>
           <dt>
             <span id="createdAt">
               <Translate contentKey="thermographyApiApp.inspectionRoute.createdAt">Created At</Translate>
@@ -67,58 +89,6 @@ export const InspectionRouteDetail = () => {
             ) : null}
           </dd>
           <dt>
-            <span id="startDate">
-              <Translate contentKey="thermographyApiApp.inspectionRoute.startDate">Start Date</Translate>
-            </span>
-          </dt>
-          <dd>
-            {inspectionRouteEntity.startDate ? (
-              <TextFormat value={inspectionRouteEntity.startDate} type="date" format={APP_LOCAL_DATE_FORMAT} />
-            ) : null}
-          </dd>
-          <dt>
-            <span id="started">
-              <Translate contentKey="thermographyApiApp.inspectionRoute.started">Started</Translate>
-            </span>
-          </dt>
-          <dd>{inspectionRouteEntity.started ? 'true' : 'false'}</dd>
-          <dt>
-            <span id="startedAt">
-              <Translate contentKey="thermographyApiApp.inspectionRoute.startedAt">Started At</Translate>
-            </span>
-          </dt>
-          <dd>
-            {inspectionRouteEntity.startedAt ? (
-              <TextFormat value={inspectionRouteEntity.startedAt} type="date" format={APP_DATE_FORMAT} />
-            ) : null}
-          </dd>
-          <dt>
-            <span id="endDate">
-              <Translate contentKey="thermographyApiApp.inspectionRoute.endDate">End Date</Translate>
-            </span>
-          </dt>
-          <dd>
-            {inspectionRouteEntity.endDate ? (
-              <TextFormat value={inspectionRouteEntity.endDate} type="date" format={APP_LOCAL_DATE_FORMAT} />
-            ) : null}
-          </dd>
-          <dt>
-            <span id="finished">
-              <Translate contentKey="thermographyApiApp.inspectionRoute.finished">Finished</Translate>
-            </span>
-          </dt>
-          <dd>{inspectionRouteEntity.finished ? 'true' : 'false'}</dd>
-          <dt>
-            <span id="finishedAt">
-              <Translate contentKey="thermographyApiApp.inspectionRoute.finishedAt">Finished At</Translate>
-            </span>
-          </dt>
-          <dd>
-            {inspectionRouteEntity.finishedAt ? (
-              <TextFormat value={inspectionRouteEntity.finishedAt} type="date" format={APP_DATE_FORMAT} />
-            ) : null}
-          </dd>
-          <dt>
             <Translate contentKey="thermographyApiApp.inspectionRoute.plant">Plant</Translate>
           </dt>
           <dd>{inspectionRouteEntity.plant ? inspectionRouteEntity.plant.id : ''}</dd>
@@ -126,14 +96,6 @@ export const InspectionRouteDetail = () => {
             <Translate contentKey="thermographyApiApp.inspectionRoute.createdBy">Created By</Translate>
           </dt>
           <dd>{inspectionRouteEntity.createdBy ? inspectionRouteEntity.createdBy.id : ''}</dd>
-          <dt>
-            <Translate contentKey="thermographyApiApp.inspectionRoute.startedBy">Started By</Translate>
-          </dt>
-          <dd>{inspectionRouteEntity.startedBy ? inspectionRouteEntity.startedBy.id : ''}</dd>
-          <dt>
-            <Translate contentKey="thermographyApiApp.inspectionRoute.finishedBy">Finished By</Translate>
-          </dt>
-          <dd>{inspectionRouteEntity.finishedBy ? inspectionRouteEntity.finishedBy.id : ''}</dd>
         </dl>
         <Button tag={Link} to="/inspection-route" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

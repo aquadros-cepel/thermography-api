@@ -32,17 +32,17 @@ export const EquipmentComponentDetail = () => {
           </dt>
           <dd>{equipmentComponentEntity.id}</dd>
           <dt>
+            <span id="code">
+              <Translate contentKey="thermographyApiApp.equipmentComponent.code">Code</Translate>
+            </span>
+          </dt>
+          <dd>{equipmentComponentEntity.code}</dd>
+          <dt>
             <span id="name">
               <Translate contentKey="thermographyApiApp.equipmentComponent.name">Name</Translate>
             </span>
           </dt>
           <dd>{equipmentComponentEntity.name}</dd>
-          <dt>
-            <span id="title">
-              <Translate contentKey="thermographyApiApp.equipmentComponent.title">Title</Translate>
-            </span>
-          </dt>
-          <dd>{equipmentComponentEntity.title}</dd>
           <dt>
             <span id="description">
               <Translate contentKey="thermographyApiApp.equipmentComponent.description">Description</Translate>

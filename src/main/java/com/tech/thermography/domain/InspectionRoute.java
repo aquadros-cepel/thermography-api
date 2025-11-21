@@ -1,6 +1,7 @@
 package com.tech.thermography.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.tech.thermography.domain.enumeration.Periodicity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -21,48 +22,37 @@ public class InspectionRoute implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)
     private UUID id;
 
+    @Column(name = "code")
+    private String code;
+
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "title")
-    private String title;
-
     @Column(name = "description")
     private String description;
 
-    @Column(name = "plan_note")
-    private String planNote;
+    @Column(name = "maintenance_plan")
+    private String maintenancePlan;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "periodicity")
+    private Periodicity periodicity;
+
+    @Column(name = "duration")
+    private Integer duration;
+
+    @Column(name = "expected_start_date")
+    private LocalDate expectedStartDate;
 
     @NotNull
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
-
-    @NotNull
-    @Column(name = "start_date", nullable = false)
-    private LocalDate startDate;
-
-    @Column(name = "started")
-    private Boolean started;
-
-    @Column(name = "started_at")
-    private Instant startedAt;
-
-    @NotNull
-    @Column(name = "end_date", nullable = false)
-    private LocalDate endDate;
-
-    @Column(name = "finished")
-    private Boolean finished;
-
-    @Column(name = "finished_at")
-    private Instant finishedAt;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -73,14 +63,6 @@ public class InspectionRoute implements Serializable {
     @NotNull
     @JsonIgnoreProperties(value = { "user", "company" }, allowSetters = true)
     private UserInfo createdBy;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "user", "company" }, allowSetters = true)
-    private UserInfo startedBy;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "user", "company" }, allowSetters = true)
-    private UserInfo finishedBy;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -97,6 +79,19 @@ public class InspectionRoute implements Serializable {
         this.id = id;
     }
 
+    public String getCode() {
+        return this.code;
+    }
+
+    public InspectionRoute code(String code) {
+        this.setCode(code);
+        return this;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getName() {
         return this.name;
     }
@@ -108,19 +103,6 @@ public class InspectionRoute implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public InspectionRoute title(String title) {
-        this.setTitle(title);
-        return this;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getDescription() {
@@ -136,17 +118,56 @@ public class InspectionRoute implements Serializable {
         this.description = description;
     }
 
-    public String getPlanNote() {
-        return this.planNote;
+    public String getMaintenancePlan() {
+        return this.maintenancePlan;
     }
 
-    public InspectionRoute planNote(String planNote) {
-        this.setPlanNote(planNote);
+    public InspectionRoute maintenancePlan(String maintenancePlan) {
+        this.setMaintenancePlan(maintenancePlan);
         return this;
     }
 
-    public void setPlanNote(String planNote) {
-        this.planNote = planNote;
+    public void setMaintenancePlan(String maintenancePlan) {
+        this.maintenancePlan = maintenancePlan;
+    }
+
+    public Periodicity getPeriodicity() {
+        return this.periodicity;
+    }
+
+    public InspectionRoute periodicity(Periodicity periodicity) {
+        this.setPeriodicity(periodicity);
+        return this;
+    }
+
+    public void setPeriodicity(Periodicity periodicity) {
+        this.periodicity = periodicity;
+    }
+
+    public Integer getDuration() {
+        return this.duration;
+    }
+
+    public InspectionRoute duration(Integer duration) {
+        this.setDuration(duration);
+        return this;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public LocalDate getExpectedStartDate() {
+        return this.expectedStartDate;
+    }
+
+    public InspectionRoute expectedStartDate(LocalDate expectedStartDate) {
+        this.setExpectedStartDate(expectedStartDate);
+        return this;
+    }
+
+    public void setExpectedStartDate(LocalDate expectedStartDate) {
+        this.expectedStartDate = expectedStartDate;
     }
 
     public Instant getCreatedAt() {
@@ -160,84 +181,6 @@ public class InspectionRoute implements Serializable {
 
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public LocalDate getStartDate() {
-        return this.startDate;
-    }
-
-    public InspectionRoute startDate(LocalDate startDate) {
-        this.setStartDate(startDate);
-        return this;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public Boolean getStarted() {
-        return this.started;
-    }
-
-    public InspectionRoute started(Boolean started) {
-        this.setStarted(started);
-        return this;
-    }
-
-    public void setStarted(Boolean started) {
-        this.started = started;
-    }
-
-    public Instant getStartedAt() {
-        return this.startedAt;
-    }
-
-    public InspectionRoute startedAt(Instant startedAt) {
-        this.setStartedAt(startedAt);
-        return this;
-    }
-
-    public void setStartedAt(Instant startedAt) {
-        this.startedAt = startedAt;
-    }
-
-    public LocalDate getEndDate() {
-        return this.endDate;
-    }
-
-    public InspectionRoute endDate(LocalDate endDate) {
-        this.setEndDate(endDate);
-        return this;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public Boolean getFinished() {
-        return this.finished;
-    }
-
-    public InspectionRoute finished(Boolean finished) {
-        this.setFinished(finished);
-        return this;
-    }
-
-    public void setFinished(Boolean finished) {
-        this.finished = finished;
-    }
-
-    public Instant getFinishedAt() {
-        return this.finishedAt;
-    }
-
-    public InspectionRoute finishedAt(Instant finishedAt) {
-        this.setFinishedAt(finishedAt);
-        return this;
-    }
-
-    public void setFinishedAt(Instant finishedAt) {
-        this.finishedAt = finishedAt;
     }
 
     public Plant getPlant() {
@@ -266,32 +209,6 @@ public class InspectionRoute implements Serializable {
         return this;
     }
 
-    public UserInfo getStartedBy() {
-        return this.startedBy;
-    }
-
-    public void setStartedBy(UserInfo userInfo) {
-        this.startedBy = userInfo;
-    }
-
-    public InspectionRoute startedBy(UserInfo userInfo) {
-        this.setStartedBy(userInfo);
-        return this;
-    }
-
-    public UserInfo getFinishedBy() {
-        return this.finishedBy;
-    }
-
-    public void setFinishedBy(UserInfo userInfo) {
-        this.finishedBy = userInfo;
-    }
-
-    public InspectionRoute finishedBy(UserInfo userInfo) {
-        this.setFinishedBy(userInfo);
-        return this;
-    }
-
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -316,17 +233,14 @@ public class InspectionRoute implements Serializable {
     public String toString() {
         return "InspectionRoute{" +
             "id=" + getId() +
+            ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
-            ", title='" + getTitle() + "'" +
             ", description='" + getDescription() + "'" +
-            ", planNote='" + getPlanNote() + "'" +
+            ", maintenancePlan='" + getMaintenancePlan() + "'" +
+            ", periodicity='" + getPeriodicity() + "'" +
+            ", duration=" + getDuration() +
+            ", expectedStartDate='" + getExpectedStartDate() + "'" +
             ", createdAt='" + getCreatedAt() + "'" +
-            ", startDate='" + getStartDate() + "'" +
-            ", started='" + getStarted() + "'" +
-            ", startedAt='" + getStartedAt() + "'" +
-            ", endDate='" + getEndDate() + "'" +
-            ", finished='" + getFinished() + "'" +
-            ", finishedAt='" + getFinishedAt() + "'" +
             "}";
     }
 }

@@ -4,12 +4,10 @@ import { Button, Col, Row } from 'reactstrap';
 import { Translate, ValidatedField, ValidatedForm, translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntities as getInspectionRoutes } from 'app/entities/inspection-route/inspection-route.reducer';
 import { getEntities as getInspectionRouteGroups } from 'app/entities/inspection-route-group/inspection-route-group.reducer';
-import { getEntities as getEquipment } from 'app/entities/equipment/equipment.reducer';
 import { createEntity, getEntity, reset, updateEntity } from './inspection-route-group.reducer';
 
 export const InspectionRouteGroupUpdate = () => {
@@ -22,7 +20,6 @@ export const InspectionRouteGroupUpdate = () => {
 
   const inspectionRoutes = useAppSelector(state => state.inspectionRoute.entities);
   const inspectionRouteGroups = useAppSelector(state => state.inspectionRouteGroup.entities);
-  const equipment = useAppSelector(state => state.equipment.entities);
   const inspectionRouteGroupEntity = useAppSelector(state => state.inspectionRouteGroup.entity);
   const loading = useAppSelector(state => state.inspectionRouteGroup.loading);
   const updating = useAppSelector(state => state.inspectionRouteGroup.updating);
@@ -41,7 +38,6 @@ export const InspectionRouteGroupUpdate = () => {
 
     dispatch(getInspectionRoutes({}));
     dispatch(getInspectionRouteGroups({}));
-    dispatch(getEquipment({}));
   }, []);
 
   useEffect(() => {
@@ -51,12 +47,15 @@ export const InspectionRouteGroupUpdate = () => {
   }, [updateSuccess]);
 
   const saveEntity = values => {
+    if (values.orderIndex !== undefined && typeof values.orderIndex !== 'number') {
+      values.orderIndex = Number(values.orderIndex);
+    }
+
     const entity = {
       ...inspectionRouteGroupEntity,
       ...values,
       inspectionRoute: inspectionRoutes.find(it => it.id.toString() === values.inspectionRoute?.toString()),
       subGroup: inspectionRouteGroups.find(it => it.id.toString() === values.subGroup?.toString()),
-      equipments: mapIdList(values.equipments),
     };
 
     if (isNew) {
@@ -73,7 +72,6 @@ export const InspectionRouteGroupUpdate = () => {
           ...inspectionRouteGroupEntity,
           inspectionRoute: inspectionRouteGroupEntity?.inspectionRoute?.id,
           subGroup: inspectionRouteGroupEntity?.subGroup?.id,
-          equipments: inspectionRouteGroupEntity?.equipments?.map(e => e.id.toString()),
         };
 
   return (
@@ -104,6 +102,13 @@ export const InspectionRouteGroupUpdate = () => {
                 />
               ) : null}
               <ValidatedField
+                label={translate('thermographyApiApp.inspectionRouteGroup.code')}
+                id="inspection-route-group-code"
+                name="code"
+                data-cy="code"
+                type="text"
+              />
+              <ValidatedField
                 label={translate('thermographyApiApp.inspectionRouteGroup.name')}
                 id="inspection-route-group-name"
                 name="name"
@@ -114,17 +119,25 @@ export const InspectionRouteGroupUpdate = () => {
                 }}
               />
               <ValidatedField
-                label={translate('thermographyApiApp.inspectionRouteGroup.title')}
-                id="inspection-route-group-title"
-                name="title"
-                data-cy="title"
-                type="text"
-              />
-              <ValidatedField
                 label={translate('thermographyApiApp.inspectionRouteGroup.description')}
                 id="inspection-route-group-description"
                 name="description"
                 data-cy="description"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('thermographyApiApp.inspectionRouteGroup.included')}
+                id="inspection-route-group-included"
+                name="included"
+                data-cy="included"
+                check
+                type="checkbox"
+              />
+              <ValidatedField
+                label={translate('thermographyApiApp.inspectionRouteGroup.orderIndex')}
+                id="inspection-route-group-orderIndex"
+                name="orderIndex"
+                data-cy="orderIndex"
                 type="text"
               />
               <ValidatedField
@@ -153,23 +166,6 @@ export const InspectionRouteGroupUpdate = () => {
                 <option value="" key="0" />
                 {inspectionRouteGroups
                   ? inspectionRouteGroups.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
-              <ValidatedField
-                label={translate('thermographyApiApp.inspectionRouteGroup.equipments')}
-                id="inspection-route-group-equipments"
-                data-cy="equipments"
-                type="select"
-                multiple
-                name="equipments"
-              >
-                <option value="" key="0" />
-                {equipment
-                  ? equipment.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
                         {otherEntity.id}
                       </option>

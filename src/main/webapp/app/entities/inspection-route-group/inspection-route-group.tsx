@@ -92,17 +92,25 @@ export const InspectionRouteGroup = () => {
                   <Translate contentKey="thermographyApiApp.inspectionRouteGroup.id">Id</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
+                <th className="hand" onClick={sort('code')}>
+                  <Translate contentKey="thermographyApiApp.inspectionRouteGroup.code">Code</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('code')} />
+                </th>
                 <th className="hand" onClick={sort('name')}>
                   <Translate contentKey="thermographyApiApp.inspectionRouteGroup.name">Name</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('name')} />
                 </th>
-                <th className="hand" onClick={sort('title')}>
-                  <Translate contentKey="thermographyApiApp.inspectionRouteGroup.title">Title</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('title')} />
-                </th>
                 <th className="hand" onClick={sort('description')}>
                   <Translate contentKey="thermographyApiApp.inspectionRouteGroup.description">Description</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('description')} />
+                </th>
+                <th className="hand" onClick={sort('included')}>
+                  <Translate contentKey="thermographyApiApp.inspectionRouteGroup.included">Included</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('included')} />
+                </th>
+                <th className="hand" onClick={sort('orderIndex')}>
+                  <Translate contentKey="thermographyApiApp.inspectionRouteGroup.orderIndex">Order Index</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('orderIndex')} />
                 </th>
                 <th>
                   <Translate contentKey="thermographyApiApp.inspectionRouteGroup.inspectionRoute">Inspection Route</Translate>{' '}
@@ -110,10 +118,6 @@ export const InspectionRouteGroup = () => {
                 </th>
                 <th>
                   <Translate contentKey="thermographyApiApp.inspectionRouteGroup.subGroup">Sub Group</Translate>{' '}
-                  <FontAwesomeIcon icon="sort" />
-                </th>
-                <th>
-                  <Translate contentKey="thermographyApiApp.inspectionRouteGroup.equipments">Equipments</Translate>{' '}
                   <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
@@ -127,9 +131,11 @@ export const InspectionRouteGroup = () => {
                       {inspectionRouteGroup.id}
                     </Button>
                   </td>
+                  <td>{inspectionRouteGroup.code}</td>
                   <td>{inspectionRouteGroup.name}</td>
-                  <td>{inspectionRouteGroup.title}</td>
                   <td>{inspectionRouteGroup.description}</td>
+                  <td>{inspectionRouteGroup.included ? 'true' : 'false'}</td>
+                  <td>{inspectionRouteGroup.orderIndex}</td>
                   <td>
                     {inspectionRouteGroup.inspectionRoute ? (
                       <Link to={`/inspection-route/${inspectionRouteGroup.inspectionRoute.id}`}>
@@ -145,16 +151,6 @@ export const InspectionRouteGroup = () => {
                     ) : (
                       ''
                     )}
-                  </td>
-                  <td>
-                    {inspectionRouteGroup.equipments
-                      ? inspectionRouteGroup.equipments.map((val, j) => (
-                          <span key={j}>
-                            <Link to={`/equipment/${val.id}`}>{val.id}</Link>
-                            {j === inspectionRouteGroup.equipments.length - 1 ? '' : ', '}
-                          </span>
-                        ))
-                      : null}
                   </td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">

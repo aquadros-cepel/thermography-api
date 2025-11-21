@@ -124,11 +124,11 @@ public class CompanyResource {
         Optional<Company> result = companyRepository
             .findById(company.getId())
             .map(existingCompany -> {
+                if (company.getCode() != null) {
+                    existingCompany.setCode(company.getCode());
+                }
                 if (company.getName() != null) {
                     existingCompany.setName(company.getName());
-                }
-                if (company.getTitle() != null) {
-                    existingCompany.setTitle(company.getTitle());
                 }
                 if (company.getDescription() != null) {
                     existingCompany.setDescription(company.getDescription());

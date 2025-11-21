@@ -1,4 +1,4 @@
-name,title,description,latitude,longitude,start_date
+code,name,description,latitude,longitude,start_date
 N-S-PAAT,SE Altamira,SUBESTAÇÃO ALTAMIRA,-3.13688171,-52.17962128,1998-06-01
 N-S-MABS,SE Balsas,SUBESTAÇÃO BALSAS,-7.559382927,-46.01802629,2002-10-01
 N-S-MACH,SE Coelho Neto,SUBESTAÇÃO COELHO NETO,-4.298133846,-42.98671356,2002-10-01

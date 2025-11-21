@@ -36,11 +36,11 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class EquipmentResourceIT {
 
+    private static final String DEFAULT_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_CODE = "BBBBBBBBBB";
+
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
-
-    private static final String DEFAULT_TITLE = "AAAAAAAAAA";
-    private static final String UPDATED_TITLE = "BBBBBBBBBB";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -99,8 +99,8 @@ class EquipmentResourceIT {
      */
     public static Equipment createEntity(EntityManager em) {
         Equipment equipment = new Equipment()
+            .code(DEFAULT_CODE)
             .name(DEFAULT_NAME)
-            .title(DEFAULT_TITLE)
             .description(DEFAULT_DESCRIPTION)
             .type(DEFAULT_TYPE)
             .manufacturer(DEFAULT_MANUFACTURER)
@@ -132,8 +132,8 @@ class EquipmentResourceIT {
      */
     public static Equipment createUpdatedEntity(EntityManager em) {
         Equipment updatedEquipment = new Equipment()
+            .code(UPDATED_CODE)
             .name(UPDATED_NAME)
-            .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
             .type(UPDATED_TYPE)
             .manufacturer(UPDATED_MANUFACTURER)
@@ -253,8 +253,8 @@ class EquipmentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(equipment.getId().toString())))
+            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].manufacturer").value(hasItem(DEFAULT_MANUFACTURER)))
@@ -279,8 +279,8 @@ class EquipmentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(equipment.getId().toString()))
+            .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
             .andExpect(jsonPath("$.manufacturer").value(DEFAULT_MANUFACTURER))
@@ -313,8 +313,8 @@ class EquipmentResourceIT {
         // Disconnect from session so that the updates on updatedEquipment are not directly saved in db
         em.detach(updatedEquipment);
         updatedEquipment
+            .code(UPDATED_CODE)
             .name(UPDATED_NAME)
-            .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
             .type(UPDATED_TYPE)
             .manufacturer(UPDATED_MANUFACTURER)
@@ -401,11 +401,11 @@ class EquipmentResourceIT {
         partialUpdatedEquipment.setId(equipment.getId());
 
         partialUpdatedEquipment
-            .title(UPDATED_TITLE)
-            .model(UPDATED_MODEL)
-            .serialNumber(UPDATED_SERIAL_NUMBER)
-            .voltageClass(UPDATED_VOLTAGE_CLASS)
-            .phaseType(UPDATED_PHASE_TYPE)
+            .code(UPDATED_CODE)
+            .name(UPDATED_NAME)
+            .description(UPDATED_DESCRIPTION)
+            .manufacturer(UPDATED_MANUFACTURER)
+            .startDate(UPDATED_START_DATE)
             .longitude(UPDATED_LONGITUDE);
 
         restEquipmentMockMvc
@@ -438,8 +438,8 @@ class EquipmentResourceIT {
         partialUpdatedEquipment.setId(equipment.getId());
 
         partialUpdatedEquipment
+            .code(UPDATED_CODE)
             .name(UPDATED_NAME)
-            .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
             .type(UPDATED_TYPE)
             .manufacturer(UPDATED_MANUFACTURER)

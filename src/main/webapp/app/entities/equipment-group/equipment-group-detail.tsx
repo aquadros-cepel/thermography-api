@@ -32,17 +32,17 @@ export const EquipmentGroupDetail = () => {
           </dt>
           <dd>{equipmentGroupEntity.id}</dd>
           <dt>
+            <span id="code">
+              <Translate contentKey="thermographyApiApp.equipmentGroup.code">Code</Translate>
+            </span>
+          </dt>
+          <dd>{equipmentGroupEntity.code}</dd>
+          <dt>
             <span id="name">
               <Translate contentKey="thermographyApiApp.equipmentGroup.name">Name</Translate>
             </span>
           </dt>
           <dd>{equipmentGroupEntity.name}</dd>
-          <dt>
-            <span id="title">
-              <Translate contentKey="thermographyApiApp.equipmentGroup.title">Title</Translate>
-            </span>
-          </dt>
-          <dd>{equipmentGroupEntity.title}</dd>
           <dt>
             <span id="description">
               <Translate contentKey="thermographyApiApp.equipmentGroup.description">Description</Translate>

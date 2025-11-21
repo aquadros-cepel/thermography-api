@@ -18,8 +18,8 @@
         "title": "Company"
       },
       "id": "Id",
+      "code": "Code",
       "name": "Name",
-      "title": "Title",
       "description": "Description",
       "address": "Address",
       "primaryPhoneNumber": "Primary Phone Number",

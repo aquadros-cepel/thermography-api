@@ -87,13 +87,13 @@ export const Company = () => {
                   <Translate contentKey="thermographyApiApp.company.id">Id</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
+                <th className="hand" onClick={sort('code')}>
+                  <Translate contentKey="thermographyApiApp.company.code">Code</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('code')} />
+                </th>
                 <th className="hand" onClick={sort('name')}>
                   <Translate contentKey="thermographyApiApp.company.name">Name</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('name')} />
-                </th>
-                <th className="hand" onClick={sort('title')}>
-                  <Translate contentKey="thermographyApiApp.company.title">Title</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('title')} />
                 </th>
                 <th className="hand" onClick={sort('description')}>
                   <Translate contentKey="thermographyApiApp.company.description">Description</Translate>{' '}
@@ -126,8 +126,8 @@ export const Company = () => {
                       {company.id}
                     </Button>
                   </td>
+                  <td>{company.code}</td>
                   <td>{company.name}</td>
-                  <td>{company.title}</td>
                   <td>{company.description}</td>
                   <td>{company.address}</td>
                   <td>{company.primaryPhoneNumber}</td>

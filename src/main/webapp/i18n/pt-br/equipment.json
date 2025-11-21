@@ -18,8 +18,8 @@
         "title": "Equipment"
       },
       "id": "Id",
+      "code": "Code",
       "name": "Name",
-      "title": "Title",
       "description": "Description",
       "type": "Type",
       "manufacturer": "Manufacturer",
@@ -32,7 +32,6 @@
       "longitude": "Longitude",
       "plant": "Plant",
       "group": "Group",
-      "inspectionRouteGroups": "Inspection Route Groups",
       "components": "Components"
     }
   }

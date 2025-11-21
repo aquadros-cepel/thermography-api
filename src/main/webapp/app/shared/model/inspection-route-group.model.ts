@@ -1,14 +1,16 @@
 import { IInspectionRoute } from 'app/shared/model/inspection-route.model';
-import { IEquipment } from 'app/shared/model/equipment.model';
 
 export interface IInspectionRouteGroup {
   id?: string;
+  code?: string | null;
   name?: string;
-  title?: string | null;
   description?: string | null;
+  included?: boolean | null;
+  orderIndex?: number | null;
   inspectionRoute?: IInspectionRoute | null;
   subGroup?: IInspectionRouteGroup | null;
-  equipments?: IEquipment[] | null;
 }
 
-export const defaultValue: Readonly<IInspectionRouteGroup> = {};
+export const defaultValue: Readonly<IInspectionRouteGroup> = {
+  included: false,
+};

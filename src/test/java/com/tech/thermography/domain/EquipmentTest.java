@@ -3,7 +3,6 @@ package com.tech.thermography.domain;
 import static com.tech.thermography.domain.EquipmentComponentTestSamples.*;
 import static com.tech.thermography.domain.EquipmentGroupTestSamples.*;
 import static com.tech.thermography.domain.EquipmentTestSamples.*;
-import static com.tech.thermography.domain.InspectionRouteGroupTestSamples.*;
 import static com.tech.thermography.domain.PlantTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -50,28 +49,6 @@ class EquipmentTest {
 
         equipment.group(null);
         assertThat(equipment.getGroup()).isNull();
-    }
-
-    @Test
-    void inspectionRouteGroupsTest() {
-        Equipment equipment = getEquipmentRandomSampleGenerator();
-        InspectionRouteGroup inspectionRouteGroupBack = getInspectionRouteGroupRandomSampleGenerator();
-
-        equipment.addInspectionRouteGroups(inspectionRouteGroupBack);
-        assertThat(equipment.getInspectionRouteGroups()).containsOnly(inspectionRouteGroupBack);
-        assertThat(inspectionRouteGroupBack.getEquipments()).containsOnly(equipment);
-
-        equipment.removeInspectionRouteGroups(inspectionRouteGroupBack);
-        assertThat(equipment.getInspectionRouteGroups()).doesNotContain(inspectionRouteGroupBack);
-        assertThat(inspectionRouteGroupBack.getEquipments()).doesNotContain(equipment);
-
-        equipment.inspectionRouteGroups(new HashSet<>(Set.of(inspectionRouteGroupBack)));
-        assertThat(equipment.getInspectionRouteGroups()).containsOnly(inspectionRouteGroupBack);
-        assertThat(inspectionRouteGroupBack.getEquipments()).containsOnly(equipment);
-
-        equipment.setInspectionRouteGroups(new HashSet<>());
-        assertThat(equipment.getInspectionRouteGroups()).doesNotContain(inspectionRouteGroupBack);
-        assertThat(inspectionRouteGroupBack.getEquipments()).doesNotContain(equipment);
     }
 
     @Test

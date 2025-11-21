@@ -18,21 +18,16 @@
         "title": "Inspection Route"
       },
       "id": "Id",
+      "code": "Code",
       "name": "Name",
-      "title": "Title",
       "description": "Description",
-      "planNote": "Plan Note",
+      "maintenancePlan": "Maintenance Plan",
+      "periodicity": "Periodicity",
+      "duration": "Duration",
+      "expectedStartDate": "Expected Start Date",
       "createdAt": "Created At",
-      "startDate": "Start Date",
-      "started": "Started",
-      "startedAt": "Started At",
-      "endDate": "End Date",
-      "finished": "Finished",
-      "finishedAt": "Finished At",
       "plant": "Plant",
-      "createdBy": "Created By",
-      "startedBy": "Started By",
-      "finishedBy": "Finished By"
+      "createdBy": "Created By"
     }
   }
 }

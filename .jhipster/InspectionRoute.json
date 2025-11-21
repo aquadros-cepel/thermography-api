@@ -10,52 +10,39 @@
       "fieldValidateRules": ["required"]
     },
     {
+      "fieldName": "code",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "name",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "title",
-      "fieldType": "String"
     },
     {
       "fieldName": "description",
       "fieldType": "String"
     },
     {
-      "fieldName": "planNote",
+      "fieldName": "maintenancePlan",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "periodicity",
+      "fieldType": "Periodicity",
+      "fieldValues": "MONTHLY,QUARTERLY,SEMI_ANNUAL,ANNUAL,APERIODIC"
+    },
+    {
+      "fieldName": "duration",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "expectedStartDate",
+      "fieldType": "LocalDate"
     },
     {
       "fieldName": "createdAt",
       "fieldType": "Instant",
       "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "startDate",
-      "fieldType": "LocalDate",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "started",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "startedAt",
-      "fieldType": "Instant"
-    },
-    {
-      "fieldName": "endDate",
-      "fieldType": "LocalDate",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "finished",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "finishedAt",
-      "fieldType": "Instant"
     }
   ],
   "name": "InspectionRoute",
@@ -73,18 +60,6 @@
       "relationshipSide": "left",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": "required"
-    },
-    {
-      "otherEntityName": "userInfo",
-      "relationshipName": "startedBy",
-      "relationshipSide": "left",
-      "relationshipType": "many-to-one"
-    },
-    {
-      "otherEntityName": "userInfo",
-      "relationshipName": "finishedBy",
-      "relationshipSide": "left",
-      "relationshipType": "many-to-one"
     }
   ],
   "searchEngine": "no"

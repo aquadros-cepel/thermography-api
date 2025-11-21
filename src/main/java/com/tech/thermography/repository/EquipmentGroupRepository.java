@@ -14,4 +14,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EquipmentGroupRepository extends JpaRepository<EquipmentGroup, UUID> {
     Optional<EquipmentGroup> findByNameAndPlant(String name, Plant plant);
+    Optional<EquipmentGroup> findByCodeAndPlant(String code, Plant plant);
 }

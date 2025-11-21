@@ -12,6 +12,7 @@ import com.tech.thermography.IntegrationTest;
 import com.tech.thermography.domain.InspectionRoute;
 import com.tech.thermography.domain.Plant;
 import com.tech.thermography.domain.UserInfo;
+import com.tech.thermography.domain.enumeration.Periodicity;
 import com.tech.thermography.repository.InspectionRouteRepository;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
@@ -37,38 +38,29 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class InspectionRouteResourceIT {
 
+    private static final String DEFAULT_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_CODE = "BBBBBBBBBB";
+
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
-
-    private static final String DEFAULT_TITLE = "AAAAAAAAAA";
-    private static final String UPDATED_TITLE = "BBBBBBBBBB";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final String DEFAULT_PLAN_NOTE = "AAAAAAAAAA";
-    private static final String UPDATED_PLAN_NOTE = "BBBBBBBBBB";
+    private static final String DEFAULT_MAINTENANCE_PLAN = "AAAAAAAAAA";
+    private static final String UPDATED_MAINTENANCE_PLAN = "BBBBBBBBBB";
+
+    private static final Periodicity DEFAULT_PERIODICITY = Periodicity.MONTHLY;
+    private static final Periodicity UPDATED_PERIODICITY = Periodicity.QUARTERLY;
+
+    private static final Integer DEFAULT_DURATION = 1;
+    private static final Integer UPDATED_DURATION = 2;
+
+    private static final LocalDate DEFAULT_EXPECTED_START_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_EXPECTED_START_DATE = LocalDate.now(ZoneId.systemDefault());
 
     private static final Instant DEFAULT_CREATED_AT = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_CREATED_AT = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-
-    private static final LocalDate DEFAULT_START_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_START_DATE = LocalDate.now(ZoneId.systemDefault());
-
-    private static final Boolean DEFAULT_STARTED = false;
-    private static final Boolean UPDATED_STARTED = true;
-
-    private static final Instant DEFAULT_STARTED_AT = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_STARTED_AT = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-
-    private static final LocalDate DEFAULT_END_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_END_DATE = LocalDate.now(ZoneId.systemDefault());
-
-    private static final Boolean DEFAULT_FINISHED = false;
-    private static final Boolean UPDATED_FINISHED = true;
-
-    private static final Instant DEFAULT_FINISHED_AT = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_FINISHED_AT = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     private static final String ENTITY_API_URL = "/api/inspection-routes";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -97,17 +89,14 @@ class InspectionRouteResourceIT {
      */
     public static InspectionRoute createEntity(EntityManager em) {
         InspectionRoute inspectionRoute = new InspectionRoute()
+            .code(DEFAULT_CODE)
             .name(DEFAULT_NAME)
-            .title(DEFAULT_TITLE)
             .description(DEFAULT_DESCRIPTION)
-            .planNote(DEFAULT_PLAN_NOTE)
-            .createdAt(DEFAULT_CREATED_AT)
-            .startDate(DEFAULT_START_DATE)
-            .started(DEFAULT_STARTED)
-            .startedAt(DEFAULT_STARTED_AT)
-            .endDate(DEFAULT_END_DATE)
-            .finished(DEFAULT_FINISHED)
-            .finishedAt(DEFAULT_FINISHED_AT);
+            .maintenancePlan(DEFAULT_MAINTENANCE_PLAN)
+            .periodicity(DEFAULT_PERIODICITY)
+            .duration(DEFAULT_DURATION)
+            .expectedStartDate(DEFAULT_EXPECTED_START_DATE)
+            .createdAt(DEFAULT_CREATED_AT);
         // Add required entity
         Plant plant;
         if (TestUtil.findAll(em, Plant.class).isEmpty()) {
@@ -139,17 +128,14 @@ class InspectionRouteResourceIT {
      */
     public static InspectionRoute createUpdatedEntity(EntityManager em) {
         InspectionRoute updatedInspectionRoute = new InspectionRoute()
+            .code(UPDATED_CODE)
             .name(UPDATED_NAME)
-            .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
-            .planNote(UPDATED_PLAN_NOTE)
-            .createdAt(UPDATED_CREATED_AT)
-            .startDate(UPDATED_START_DATE)
-            .started(UPDATED_STARTED)
-            .startedAt(UPDATED_STARTED_AT)
-            .endDate(UPDATED_END_DATE)
-            .finished(UPDATED_FINISHED)
-            .finishedAt(UPDATED_FINISHED_AT);
+            .maintenancePlan(UPDATED_MAINTENANCE_PLAN)
+            .periodicity(UPDATED_PERIODICITY)
+            .duration(UPDATED_DURATION)
+            .expectedStartDate(UPDATED_EXPECTED_START_DATE)
+            .createdAt(UPDATED_CREATED_AT);
         // Add required entity
         Plant plant;
         if (TestUtil.findAll(em, Plant.class).isEmpty()) {
@@ -259,38 +245,6 @@ class InspectionRouteResourceIT {
 
     @Test
     @Transactional
-    void checkStartDateIsRequired() throws Exception {
-        long databaseSizeBeforeTest = getRepositoryCount();
-        // set the field null
-        inspectionRoute.setStartDate(null);
-
-        // Create the InspectionRoute, which fails.
-
-        restInspectionRouteMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(inspectionRoute)))
-            .andExpect(status().isBadRequest());
-
-        assertSameRepositoryCount(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    void checkEndDateIsRequired() throws Exception {
-        long databaseSizeBeforeTest = getRepositoryCount();
-        // set the field null
-        inspectionRoute.setEndDate(null);
-
-        // Create the InspectionRoute, which fails.
-
-        restInspectionRouteMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(inspectionRoute)))
-            .andExpect(status().isBadRequest());
-
-        assertSameRepositoryCount(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllInspectionRoutes() throws Exception {
         // Initialize the database
         insertedInspectionRoute = inspectionRouteRepository.saveAndFlush(inspectionRoute);
@@ -301,17 +255,14 @@ class InspectionRouteResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(inspectionRoute.getId().toString())))
+            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].planNote").value(hasItem(DEFAULT_PLAN_NOTE)))
-            .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())))
-            .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].started").value(hasItem(DEFAULT_STARTED)))
-            .andExpect(jsonPath("$.[*].startedAt").value(hasItem(DEFAULT_STARTED_AT.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
-            .andExpect(jsonPath("$.[*].finished").value(hasItem(DEFAULT_FINISHED)))
-            .andExpect(jsonPath("$.[*].finishedAt").value(hasItem(DEFAULT_FINISHED_AT.toString())));
+            .andExpect(jsonPath("$.[*].maintenancePlan").value(hasItem(DEFAULT_MAINTENANCE_PLAN)))
+            .andExpect(jsonPath("$.[*].periodicity").value(hasItem(DEFAULT_PERIODICITY.toString())))
+            .andExpect(jsonPath("$.[*].duration").value(hasItem(DEFAULT_DURATION)))
+            .andExpect(jsonPath("$.[*].expectedStartDate").value(hasItem(DEFAULT_EXPECTED_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())));
     }
 
     @Test
@@ -326,17 +277,14 @@ class InspectionRouteResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(inspectionRoute.getId().toString()))
+            .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.planNote").value(DEFAULT_PLAN_NOTE))
-            .andExpect(jsonPath("$.createdAt").value(DEFAULT_CREATED_AT.toString()))
-            .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
-            .andExpect(jsonPath("$.started").value(DEFAULT_STARTED))
-            .andExpect(jsonPath("$.startedAt").value(DEFAULT_STARTED_AT.toString()))
-            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()))
-            .andExpect(jsonPath("$.finished").value(DEFAULT_FINISHED))
-            .andExpect(jsonPath("$.finishedAt").value(DEFAULT_FINISHED_AT.toString()));
+            .andExpect(jsonPath("$.maintenancePlan").value(DEFAULT_MAINTENANCE_PLAN))
+            .andExpect(jsonPath("$.periodicity").value(DEFAULT_PERIODICITY.toString()))
+            .andExpect(jsonPath("$.duration").value(DEFAULT_DURATION))
+            .andExpect(jsonPath("$.expectedStartDate").value(DEFAULT_EXPECTED_START_DATE.toString()))
+            .andExpect(jsonPath("$.createdAt").value(DEFAULT_CREATED_AT.toString()));
     }
 
     @Test
@@ -359,17 +307,14 @@ class InspectionRouteResourceIT {
         // Disconnect from session so that the updates on updatedInspectionRoute are not directly saved in db
         em.detach(updatedInspectionRoute);
         updatedInspectionRoute
+            .code(UPDATED_CODE)
             .name(UPDATED_NAME)
-            .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
-            .planNote(UPDATED_PLAN_NOTE)
-            .createdAt(UPDATED_CREATED_AT)
-            .startDate(UPDATED_START_DATE)
-            .started(UPDATED_STARTED)
-            .startedAt(UPDATED_STARTED_AT)
-            .endDate(UPDATED_END_DATE)
-            .finished(UPDATED_FINISHED)
-            .finishedAt(UPDATED_FINISHED_AT);
+            .maintenancePlan(UPDATED_MAINTENANCE_PLAN)
+            .periodicity(UPDATED_PERIODICITY)
+            .duration(UPDATED_DURATION)
+            .expectedStartDate(UPDATED_EXPECTED_START_DATE)
+            .createdAt(UPDATED_CREATED_AT);
 
         restInspectionRouteMockMvc
             .perform(
@@ -449,12 +394,7 @@ class InspectionRouteResourceIT {
         InspectionRoute partialUpdatedInspectionRoute = new InspectionRoute();
         partialUpdatedInspectionRoute.setId(inspectionRoute.getId());
 
-        partialUpdatedInspectionRoute
-            .name(UPDATED_NAME)
-            .title(UPDATED_TITLE)
-            .description(UPDATED_DESCRIPTION)
-            .planNote(UPDATED_PLAN_NOTE)
-            .finishedAt(UPDATED_FINISHED_AT);
+        partialUpdatedInspectionRoute.code(UPDATED_CODE).description(UPDATED_DESCRIPTION).periodicity(UPDATED_PERIODICITY);
 
         restInspectionRouteMockMvc
             .perform(
@@ -486,17 +426,14 @@ class InspectionRouteResourceIT {
         partialUpdatedInspectionRoute.setId(inspectionRoute.getId());
 
         partialUpdatedInspectionRoute
+            .code(UPDATED_CODE)
             .name(UPDATED_NAME)
-            .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
-            .planNote(UPDATED_PLAN_NOTE)
-            .createdAt(UPDATED_CREATED_AT)
-            .startDate(UPDATED_START_DATE)
-            .started(UPDATED_STARTED)
-            .startedAt(UPDATED_STARTED_AT)
-            .endDate(UPDATED_END_DATE)
-            .finished(UPDATED_FINISHED)
-            .finishedAt(UPDATED_FINISHED_AT);
+            .maintenancePlan(UPDATED_MAINTENANCE_PLAN)
+            .periodicity(UPDATED_PERIODICITY)
+            .duration(UPDATED_DURATION)
+            .expectedStartDate(UPDATED_EXPECTED_START_DATE)
+            .createdAt(UPDATED_CREATED_AT);
 
         restInspectionRouteMockMvc
             .perform(

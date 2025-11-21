@@ -33,17 +33,17 @@ export const EquipmentDetail = () => {
           </dt>
           <dd>{equipmentEntity.id}</dd>
           <dt>
+            <span id="code">
+              <Translate contentKey="thermographyApiApp.equipment.code">Code</Translate>
+            </span>
+          </dt>
+          <dd>{equipmentEntity.code}</dd>
+          <dt>
             <span id="name">
               <Translate contentKey="thermographyApiApp.equipment.name">Name</Translate>
             </span>
           </dt>
           <dd>{equipmentEntity.name}</dd>
-          <dt>
-            <span id="title">
-              <Translate contentKey="thermographyApiApp.equipment.title">Title</Translate>
-            </span>
-          </dt>
-          <dd>{equipmentEntity.title}</dd>
           <dt>
             <span id="description">
               <Translate contentKey="thermographyApiApp.equipment.description">Description</Translate>
@@ -114,19 +114,6 @@ export const EquipmentDetail = () => {
             <Translate contentKey="thermographyApiApp.equipment.group">Group</Translate>
           </dt>
           <dd>{equipmentEntity.group ? equipmentEntity.group.id : ''}</dd>
-          <dt>
-            <Translate contentKey="thermographyApiApp.equipment.inspectionRouteGroups">Inspection Route Groups</Translate>
-          </dt>
-          <dd>
-            {equipmentEntity.inspectionRouteGroups
-              ? equipmentEntity.inspectionRouteGroups.map((val, i) => (
-                  <span key={val.id}>
-                    <a>{val.id}</a>
-                    {equipmentEntity.inspectionRouteGroups && i === equipmentEntity.inspectionRouteGroups.length - 1 ? '' : ', '}
-                  </span>
-                ))
-              : null}
-          </dd>
           <dt>
             <Translate contentKey="thermographyApiApp.equipment.components">Components</Translate>
           </dt>

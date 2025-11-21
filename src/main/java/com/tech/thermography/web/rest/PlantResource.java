@@ -122,11 +122,11 @@ public class PlantResource {
         Optional<Plant> result = plantRepository
             .findById(plant.getId())
             .map(existingPlant -> {
+                if (plant.getCode() != null) {
+                    existingPlant.setCode(plant.getCode());
+                }
                 if (plant.getName() != null) {
                     existingPlant.setName(plant.getName());
-                }
-                if (plant.getTitle() != null) {
-                    existingPlant.setTitle(plant.getTitle());
                 }
                 if (plant.getDescription() != null) {
                     existingPlant.setDescription(plant.getDescription());

@@ -116,8 +116,8 @@ public class ImportDataService {
             }
 
             Plant plant = new Plant();
-            plant.setName(fields[0].trim());
-            plant.setTitle(fields[1].trim().isEmpty() ? null : fields[1].trim());
+            plant.setCode(fields[0].trim());
+            plant.setName(fields[1].trim().isEmpty() ? null : fields[1].trim());
             plant.setDescription(fields[2].trim().isEmpty() ? null : fields[2].trim());
 
             try {
@@ -181,7 +181,7 @@ public class ImportDataService {
         int importedCount = 0;
         int totalRecords = 0;
 
-        // Key: plantName + ":" + groupName, Value: EquipmentGroup
+        // Key: plantCode + ":" + groupCode, Value: EquipmentGroup
         Map<String, EquipmentGroup> groupCache = new HashMap<>();
 
         String line;
@@ -203,11 +203,11 @@ public class ImportDataService {
 
             try {
                 // --- PHASE 2: CSV Parsing and Initial Data Extraction ---
-                String plantName = values[0].trim();
-                String groupName = values[1].trim();
-                String groupDescription = values[2].trim();
-                String equipmentName = values[3].trim();
-                String equipmentTitle = values[4].trim();
+                String plantCode = values[0].trim();
+                String groupCode = values[1].trim();
+                String groupName = values[2].trim();
+                String equipmentCode = values[3].trim();
+                String equipmentName = values[4].trim();
                 String equipmentDescription = values[5].trim();
                 String equipmentTypeStr = values[6].trim();
                 String equipmentManufacturer = values[7].trim();
@@ -222,10 +222,10 @@ public class ImportDataService {
                 // --- PHASE 3: Business Logic Implementation ---
 
                 // 1. Plant Existence Check (Rule 1)
-                Optional<Plant> plantOpt = plantRepository.findByName(plantName);
+                Optional<Plant> plantOpt = plantRepository.findByCode(plantCode);
                 if (plantOpt.isEmpty()) {
                     errorMessages.add(
-                        String.format("Linha %d: Planta '%s' não encontrada. Equipamento não importado.", totalRecords + 1, plantName)
+                        String.format("Linha %d: Planta '%s' não encontrada. Equipamento não importado.", totalRecords + 1, plantCode)
                     );
                     continue;
                 }
@@ -233,9 +233,9 @@ public class ImportDataService {
 
                 // 2. EquipmentGroup Handling (Rule 2)
                 EquipmentGroup equipmentGroup = null;
-                String groupCacheKey = plantName + ":" + groupName;
+                String groupCacheKey = plantCode + ":" + groupCode;
 
-                boolean hasGroupData = !groupName.isEmpty() && !groupDescription.isEmpty();
+                boolean hasGroupData = !groupCode.isEmpty() && !groupName.isEmpty();
 
                 if (hasGroupData) {
                     // Check cache first
@@ -243,14 +243,14 @@ public class ImportDataService {
                         equipmentGroup = groupCache.get(groupCacheKey);
                     } else {
                         // Try to find in DB
-                        Optional<EquipmentGroup> groupOpt = equipmentGroupRepository.findByNameAndPlant(groupName, plant);
+                        Optional<EquipmentGroup> groupOpt = equipmentGroupRepository.findByNameAndPlant(groupCode, plant);
                         if (groupOpt.isPresent()) {
                             equipmentGroup = groupOpt.get();
                         } else {
                             // Create and save new group
                             EquipmentGroup newGroup = new EquipmentGroup();
+                            newGroup.setCode(groupCode);
                             newGroup.setName(groupName);
-                            newGroup.setDescription(groupDescription);
                             newGroup.setPlant(plant);
                             equipmentGroup = equipmentGroupRepository.save(newGroup);
                         }
@@ -263,8 +263,8 @@ public class ImportDataService {
 
                 // 3. Equipment Creation (Rule 3)
                 Equipment equipment = new Equipment();
+                equipment.setCode(equipmentCode);
                 equipment.setName(equipmentName);
-                equipment.setTitle(equipmentTitle);
                 equipment.setDescription(equipmentDescription);
                 equipment.setManufacturer(equipmentManufacturer);
                 equipment.setModel(equipmentModel);

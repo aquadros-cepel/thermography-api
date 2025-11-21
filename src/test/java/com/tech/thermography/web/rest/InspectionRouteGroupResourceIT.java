@@ -4,7 +4,6 @@ import static com.tech.thermography.domain.InspectionRouteGroupAsserts.*;
 import static com.tech.thermography.web.rest.TestUtil.createUpdateProxyForBean;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -13,18 +12,12 @@ import com.tech.thermography.IntegrationTest;
 import com.tech.thermography.domain.InspectionRouteGroup;
 import com.tech.thermography.repository.InspectionRouteGroupRepository;
 import jakarta.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,19 +27,24 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link InspectionRouteGroupResource} REST controller.
  */
 @IntegrationTest
-@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class InspectionRouteGroupResourceIT {
 
+    private static final String DEFAULT_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_CODE = "BBBBBBBBBB";
+
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_TITLE = "AAAAAAAAAA";
-    private static final String UPDATED_TITLE = "BBBBBBBBBB";
-
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+
+    private static final Boolean DEFAULT_INCLUDED = false;
+    private static final Boolean UPDATED_INCLUDED = true;
+
+    private static final Integer DEFAULT_ORDER_INDEX = 1;
+    private static final Integer UPDATED_ORDER_INDEX = 2;
 
     private static final String ENTITY_API_URL = "/api/inspection-route-groups";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -56,9 +54,6 @@ class InspectionRouteGroupResourceIT {
 
     @Autowired
     private InspectionRouteGroupRepository inspectionRouteGroupRepository;
-
-    @Mock
-    private InspectionRouteGroupRepository inspectionRouteGroupRepositoryMock;
 
     @Autowired
     private EntityManager em;
@@ -77,7 +72,12 @@ class InspectionRouteGroupResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static InspectionRouteGroup createEntity() {
-        return new InspectionRouteGroup().name(DEFAULT_NAME).title(DEFAULT_TITLE).description(DEFAULT_DESCRIPTION);
+        return new InspectionRouteGroup()
+            .code(DEFAULT_CODE)
+            .name(DEFAULT_NAME)
+            .description(DEFAULT_DESCRIPTION)
+            .included(DEFAULT_INCLUDED)
+            .orderIndex(DEFAULT_ORDER_INDEX);
     }
 
     /**
@@ -87,7 +87,12 @@ class InspectionRouteGroupResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static InspectionRouteGroup createUpdatedEntity() {
-        return new InspectionRouteGroup().name(UPDATED_NAME).title(UPDATED_TITLE).description(UPDATED_DESCRIPTION);
+        return new InspectionRouteGroup()
+            .code(UPDATED_CODE)
+            .name(UPDATED_NAME)
+            .description(UPDATED_DESCRIPTION)
+            .included(UPDATED_INCLUDED)
+            .orderIndex(UPDATED_ORDER_INDEX);
     }
 
     @BeforeEach
@@ -173,26 +178,11 @@ class InspectionRouteGroupResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(inspectionRouteGroup.getId().toString())))
+            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
-    }
-
-    @SuppressWarnings({ "unchecked" })
-    void getAllInspectionRouteGroupsWithEagerRelationshipsIsEnabled() throws Exception {
-        when(inspectionRouteGroupRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
-        restInspectionRouteGroupMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
-
-        verify(inspectionRouteGroupRepositoryMock, times(1)).findAllWithEagerRelationships(any());
-    }
-
-    @SuppressWarnings({ "unchecked" })
-    void getAllInspectionRouteGroupsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        when(inspectionRouteGroupRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
-        restInspectionRouteGroupMockMvc.perform(get(ENTITY_API_URL + "?eagerload=false")).andExpect(status().isOk());
-        verify(inspectionRouteGroupRepositoryMock, times(1)).findAll(any(Pageable.class));
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].included").value(hasItem(DEFAULT_INCLUDED)))
+            .andExpect(jsonPath("$.[*].orderIndex").value(hasItem(DEFAULT_ORDER_INDEX)));
     }
 
     @Test
@@ -207,9 +197,11 @@ class InspectionRouteGroupResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(inspectionRouteGroup.getId().toString()))
+            .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
-            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION));
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.included").value(DEFAULT_INCLUDED))
+            .andExpect(jsonPath("$.orderIndex").value(DEFAULT_ORDER_INDEX));
     }
 
     @Test
@@ -233,7 +225,12 @@ class InspectionRouteGroupResourceIT {
             .orElseThrow();
         // Disconnect from session so that the updates on updatedInspectionRouteGroup are not directly saved in db
         em.detach(updatedInspectionRouteGroup);
-        updatedInspectionRouteGroup.name(UPDATED_NAME).title(UPDATED_TITLE).description(UPDATED_DESCRIPTION);
+        updatedInspectionRouteGroup
+            .code(UPDATED_CODE)
+            .name(UPDATED_NAME)
+            .description(UPDATED_DESCRIPTION)
+            .included(UPDATED_INCLUDED)
+            .orderIndex(UPDATED_ORDER_INDEX);
 
         restInspectionRouteGroupMockMvc
             .perform(
@@ -313,7 +310,7 @@ class InspectionRouteGroupResourceIT {
         InspectionRouteGroup partialUpdatedInspectionRouteGroup = new InspectionRouteGroup();
         partialUpdatedInspectionRouteGroup.setId(inspectionRouteGroup.getId());
 
-        partialUpdatedInspectionRouteGroup.name(UPDATED_NAME).title(UPDATED_TITLE);
+        partialUpdatedInspectionRouteGroup.code(UPDATED_CODE).description(UPDATED_DESCRIPTION).included(UPDATED_INCLUDED);
 
         restInspectionRouteGroupMockMvc
             .perform(
@@ -344,7 +341,12 @@ class InspectionRouteGroupResourceIT {
         InspectionRouteGroup partialUpdatedInspectionRouteGroup = new InspectionRouteGroup();
         partialUpdatedInspectionRouteGroup.setId(inspectionRouteGroup.getId());
 
-        partialUpdatedInspectionRouteGroup.name(UPDATED_NAME).title(UPDATED_TITLE).description(UPDATED_DESCRIPTION);
+        partialUpdatedInspectionRouteGroup
+            .code(UPDATED_CODE)
+            .name(UPDATED_NAME)
+            .description(UPDATED_DESCRIPTION)
+            .included(UPDATED_INCLUDED)
+            .orderIndex(UPDATED_ORDER_INDEX);
 
         restInspectionRouteGroupMockMvc
             .perform(

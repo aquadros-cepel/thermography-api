@@ -79,7 +79,7 @@
       "relationshipValidateRules": "required"
     },
     {
-      "otherEntityName": "inspectionRoute",
+      "otherEntityName": "inspectionRouteRecord",
       "relationshipName": "route",
       "relationshipSide": "left",
       "relationshipType": "many-to-one"

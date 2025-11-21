@@ -1,0 +1,296 @@
+entity UserInfo {
+    id UUID required
+    position String
+    phoneNumber String
+}
+entity Company {
+    id UUID required
+    code String
+    name String required
+    description String
+    address String
+    primaryPhoneNumber String
+    secondaryPhoneNumber String
+    taxIdNumber String // CNPJ
+}
+entity Plant {
+    id UUID required
+    code String
+    name String required
+    description String
+    latitude Double
+    longitude Double
+    startDate LocalDate
+}
+entity BusinessUnit {
+    id UUID required
+    code String
+    name String required
+    description String
+}
+entity Equipment {
+    id UUID required
+    code String
+    name String required
+    description String
+    type EquipmentType required
+    manufacturer String
+    model String
+    serialNumber String
+    voltageClass Float
+    phaseType PhaseType
+    startDate LocalDate
+    latitude Double
+    longitude Double
+}
+entity EquipmentGroup {
+    id UUID required
+    code String
+    name String required
+    description String
+}
+entity InspectionRoute {
+    id UUID required
+    code String
+    name String required
+    description String
+	maintenancePlan String
+    periodicity Periodicity
+    duration Integer
+    expectedStartDate LocalDate
+    createdAt Instant required
+}
+entity InspectionRouteGroup {
+    id UUID required    
+    code String
+    name String required
+    description String
+    included Boolean
+    orderIndex Integer
+}
+entity InspectionRouteGroupEquipment {	
+	id UUID required
+  	included Boolean
+  	orderIndex Integer
+}
+entity InspectionRouteRecord {
+    id UUID required
+    code String
+    name String required
+    description String
+    maintenanceDocument String
+    
+    createdAt Instant required
+
+    expectedStartDate LocalDate required
+    expectedEndDate LocalDate required
+
+	started Boolean
+    startedAt Instant
+    
+	finished Boolean
+	finishedAt Instant
+}
+entity EquipmentTypeTranslation {
+    id UUID required
+	code EquipmentType required
+    language String required
+    name String required
+}
+entity EquipmentComponent{
+    id UUID required
+    code String
+    name String required
+    description String
+}
+entity EquipmentComponentTemperatureLimits{
+    id UUID required
+    name String
+    normal String
+    lowRisk String
+    mediumRisk String
+    highRisk String
+    imminentHighRisk String
+}
+entity RiskPeriodicityDeadline {
+    id UUID required
+    name String
+    deadline Integer
+    deadlineUnit DatetimeUnit
+    periodicity Integer
+    periodicityUnit DatetimeUnit
+    recommendations String
+}
+entity RiskRecommendationTranslation {
+    id UUID required
+    language String required
+    name String required
+}
+entity Thermogram {
+    id UUID required
+	imagePath String required
+  	audioPath String
+    
+    imageRefPath String required
+    
+  	minTemp Double
+  	avgTemp Double
+  	maxTemp Double
+
+	emissivity Double
+  	subjectDistance Double
+  	atmosphericTemp Double
+  	reflectedTemp Double
+  	relativeHumidity Double
+  	cameraLens String
+  	cameraModel String
+  	imageResolution String
+
+	selectedRoiId UUID
+  	maxTempRoi Double
+
+    createdAt Instant
+    
+    latitude Double
+  	longitude Double
+}
+entity ROI {
+    id UUID required
+  	type String required
+  	label String required
+  	maxTemp Double required
+}
+entity ThermographicInspectionRecord {
+    id UUID required
+    name String required
+  	type ThermographicInspectionRecordType required
+  	serviceOrder String
+    
+    createdAt Instant required
+    
+    analysisDescription String
+    
+  	condition ConditionType required
+  	deltaT Double required
+  	periodicity Integer
+    deadlineExecution LocalDate
+    nextMonitoring LocalDate
+    
+  	recommendations String
+    
+  	finished Boolean
+	finishedAt Instant
+}
+enum Periodicity {
+    MONTHLY, 
+    QUARTERLY, 
+    SEMI_ANNUAL, 
+    ANNUAL, 
+    APERIODIC
+}
+
+enum PhaseType {
+    PHASE_A, 
+    PHASE_B, 
+    PHASE_C, 
+    NEUTRAL, 
+    GROUND, 
+    THREE_PHASE
+}
+enum EquipmentType {
+    AUTOTRANSFORMER, 
+    BATTERY_BANK, 
+    BLOCKING_COIL, 
+    BUSHING, 
+    CAPACITOR_BANK, 
+    CAPACITIVE_DIVIDER, 
+    CAPACITIVE_VOLTAGE_TRANSFORMER, 
+    CIRCUIT_BREAKER, 
+    CURRENT_TRANSFORMER, 
+    DISCONNECT_SWITCH, 
+    ELECTRICAL_PANEL, 
+    FUSE_SWITCH, 
+    GENERATOR, 
+    METAL_CLAD_SWITCHGEAR, 
+    POTENTIAL_TRANSFORMER, 
+    POWER_TRANSFORMER, 
+    PROTECTION_CONTROL_PANEL, 
+    PROTECTION_SYSTEM, 
+    RECTIFIER, 
+    RELAY, 
+    SERIES_COMPENSATOR, 
+    SHUNT_REACTOR, 
+    STATIC_COMPENSATOR, 
+    SURGE_ARRESTER, 
+    SYNCHRONOUS_CONDENSER, 
+    VOLTAGE_TRANSFORMER
+}
+enum DatetimeUnit {
+    HOUR, 
+    DAY, 
+    WEEK, 
+    MONTH, 
+    YEAR
+}
+enum ThermographicInspectionRecordType {
+    NO_ANOMALY
+    ANOMALY_INITIAL
+    ANOMALY_MONITORING
+    ANOMALY_SOLVED
+}
+enum ConditionType {
+    NORMAL
+    LOW_RISK
+    MEDIUM_RISK
+    HIGH_RISK
+    IMMINENT_HIGH_RISK
+}
+
+relationship OneToOne {
+    EquipmentComponent{componentTemperatureLimits} to EquipmentComponentTemperatureLimits
+    UserInfo{user} to User with builtInEntity // FK Optional
+}
+relationship ManyToMany{
+    EquipmentComponent{equipments} to Equipment{components}
+}
+relationship ManyToOne {
+    Plant {company } to Company			        //FK Optional
+    Equipment {plant required } to Plant
+	EquipmentGroup {plant} to Plant		      //FK Optional
+	Equipment {group} to EquipmentGroup     //FK Optional
+    
+    // Auto-relacionamento (um grupo pode conter subgrupos)
+  	EquipmentGroup{subGroup} to EquipmentGroup{parentGroup} //FK Optional
+
+	InspectionRoute {plant required } to Plant
+    InspectionRoute {createdBy required } to UserInfo
+    InspectionRouteGroup{inspectionRoute} to InspectionRoute          //FK Optional
+    // Auto-relacionamento (um grupo pode conter subgrupos)
+	InspectionRouteGroup{subGroup} to InspectionRouteGroup{parentGroup} //FK Optional
+    
+    //Tabela associativa ManyToMany desmembrada em 2 relacionamentos ManyToOne
+	InspectionRouteGroupEquipment {inspectionRouteGroup} to InspectionRouteGroup
+    InspectionRouteGroupEquipment {equipment} to Equipment
+
+	InspectionRouteRecord {startedBy } to UserInfo          //FK Optional (Quando ainda não iniciou a rota)
+  	InspectionRouteRecord {finishedBy } to UserInfo         //FK Optional (Quando ainda não finalizou a rota)
+	
+    Thermogram {equipment required } to Equipment
+    Thermogram {createdBy required } to UserInfo
+    ROI {thermogram required } to Thermogram
+    
+    ThermographicInspectionRecord {plant required } to Plant
+    ThermographicInspectionRecord {route } to InspectionRouteRecord		//FK optional
+    ThermographicInspectionRecord {equipment required } to Equipment
+    ThermographicInspectionRecord {component } to EquipmentComponent	//FK optional
+    ThermographicInspectionRecord {createdBy required } to UserInfo
+    ThermographicInspectionRecord {finishedBy required } to UserInfo
+    ThermographicInspectionRecord {thermogram required} to Thermogram
+  	ThermographicInspectionRecord {thermogramRef} to Thermogram			  //FK optional
+    
+    UserInfo {company} to Company				      //FK optional
+    BusinessUnit {company} to Company		  //FK optional
+    Plant {businessUnit} to BusinessUnit	//FK optional
+    
+    RiskRecommendationTranslation{riskPeriodicityDeadline} to RiskPeriodicityDeadline
+}

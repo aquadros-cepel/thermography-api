@@ -14,6 +14,8 @@ import thermogram from 'app/entities/thermogram/thermogram.reducer';
 import rOI from 'app/entities/roi/roi.reducer';
 import thermographicInspectionRecord from 'app/entities/thermographic-inspection-record/thermographic-inspection-record.reducer';
 import userInfo from 'app/entities/user-info/user-info.reducer';
+import inspectionRouteGroupEquipment from 'app/entities/inspection-route-group-equipment/inspection-route-group-equipment.reducer';
+import inspectionRouteRecord from 'app/entities/inspection-route-record/inspection-route-record.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 const entitiesReducers = {
@@ -33,6 +35,8 @@ const entitiesReducers = {
   rOI,
   thermographicInspectionRecord,
   userInfo,
+  inspectionRouteGroupEquipment,
+  inspectionRouteRecord,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
 };
 

@@ -18,8 +18,8 @@
         "title": "Plant"
       },
       "id": "Id",
+      "code": "Code",
       "name": "Name",
-      "title": "Title",
       "description": "Description",
       "latitude": "Latitude",
       "longitude": "Longitude",

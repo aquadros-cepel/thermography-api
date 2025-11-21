@@ -47,17 +47,14 @@ public class InspectionRouteAsserts {
     public static void assertInspectionRouteUpdatableFieldsEquals(InspectionRoute expected, InspectionRoute actual) {
         assertThat(actual)
             .as("Verify InspectionRoute relevant properties")
+            .satisfies(a -> assertThat(a.getCode()).as("check code").isEqualTo(expected.getCode()))
             .satisfies(a -> assertThat(a.getName()).as("check name").isEqualTo(expected.getName()))
-            .satisfies(a -> assertThat(a.getTitle()).as("check title").isEqualTo(expected.getTitle()))
             .satisfies(a -> assertThat(a.getDescription()).as("check description").isEqualTo(expected.getDescription()))
-            .satisfies(a -> assertThat(a.getPlanNote()).as("check planNote").isEqualTo(expected.getPlanNote()))
-            .satisfies(a -> assertThat(a.getCreatedAt()).as("check createdAt").isEqualTo(expected.getCreatedAt()))
-            .satisfies(a -> assertThat(a.getStartDate()).as("check startDate").isEqualTo(expected.getStartDate()))
-            .satisfies(a -> assertThat(a.getStarted()).as("check started").isEqualTo(expected.getStarted()))
-            .satisfies(a -> assertThat(a.getStartedAt()).as("check startedAt").isEqualTo(expected.getStartedAt()))
-            .satisfies(a -> assertThat(a.getEndDate()).as("check endDate").isEqualTo(expected.getEndDate()))
-            .satisfies(a -> assertThat(a.getFinished()).as("check finished").isEqualTo(expected.getFinished()))
-            .satisfies(a -> assertThat(a.getFinishedAt()).as("check finishedAt").isEqualTo(expected.getFinishedAt()));
+            .satisfies(a -> assertThat(a.getMaintenancePlan()).as("check maintenancePlan").isEqualTo(expected.getMaintenancePlan()))
+            .satisfies(a -> assertThat(a.getPeriodicity()).as("check periodicity").isEqualTo(expected.getPeriodicity()))
+            .satisfies(a -> assertThat(a.getDuration()).as("check duration").isEqualTo(expected.getDuration()))
+            .satisfies(a -> assertThat(a.getExpectedStartDate()).as("check expectedStartDate").isEqualTo(expected.getExpectedStartDate()))
+            .satisfies(a -> assertThat(a.getCreatedAt()).as("check createdAt").isEqualTo(expected.getCreatedAt()));
     }
 
     /**
@@ -70,8 +67,6 @@ public class InspectionRouteAsserts {
         assertThat(actual)
             .as("Verify InspectionRoute relationships")
             .satisfies(a -> assertThat(a.getPlant()).as("check plant").isEqualTo(expected.getPlant()))
-            .satisfies(a -> assertThat(a.getCreatedBy()).as("check createdBy").isEqualTo(expected.getCreatedBy()))
-            .satisfies(a -> assertThat(a.getStartedBy()).as("check startedBy").isEqualTo(expected.getStartedBy()))
-            .satisfies(a -> assertThat(a.getFinishedBy()).as("check finishedBy").isEqualTo(expected.getFinishedBy()));
+            .satisfies(a -> assertThat(a.getCreatedBy()).as("check createdBy").isEqualTo(expected.getCreatedBy()));
     }
 }

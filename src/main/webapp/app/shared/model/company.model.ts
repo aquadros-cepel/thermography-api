@@ -1,7 +1,7 @@
 export interface ICompany {
   id?: string;
+  code?: string | null;
   name?: string;
-  title?: string | null;
   description?: string | null;
   address?: string | null;
   primaryPhoneNumber?: string | null;

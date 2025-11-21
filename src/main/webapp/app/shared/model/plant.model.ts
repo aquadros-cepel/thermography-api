@@ -4,8 +4,8 @@ import { IBusinessUnit } from 'app/shared/model/business-unit.model';
 
 export interface IPlant {
   id?: string;
+  code?: string | null;
   name?: string;
-  title?: string | null;
   description?: string | null;
   latitude?: number | null;
   longitude?: number | null;

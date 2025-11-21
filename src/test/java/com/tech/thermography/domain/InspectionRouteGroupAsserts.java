@@ -47,9 +47,11 @@ public class InspectionRouteGroupAsserts {
     public static void assertInspectionRouteGroupUpdatableFieldsEquals(InspectionRouteGroup expected, InspectionRouteGroup actual) {
         assertThat(actual)
             .as("Verify InspectionRouteGroup relevant properties")
+            .satisfies(a -> assertThat(a.getCode()).as("check code").isEqualTo(expected.getCode()))
             .satisfies(a -> assertThat(a.getName()).as("check name").isEqualTo(expected.getName()))
-            .satisfies(a -> assertThat(a.getTitle()).as("check title").isEqualTo(expected.getTitle()))
-            .satisfies(a -> assertThat(a.getDescription()).as("check description").isEqualTo(expected.getDescription()));
+            .satisfies(a -> assertThat(a.getDescription()).as("check description").isEqualTo(expected.getDescription()))
+            .satisfies(a -> assertThat(a.getIncluded()).as("check included").isEqualTo(expected.getIncluded()))
+            .satisfies(a -> assertThat(a.getOrderIndex()).as("check orderIndex").isEqualTo(expected.getOrderIndex()));
     }
 
     /**
@@ -62,7 +64,6 @@ public class InspectionRouteGroupAsserts {
         assertThat(actual)
             .as("Verify InspectionRouteGroup relationships")
             .satisfies(a -> assertThat(a.getInspectionRoute()).as("check inspectionRoute").isEqualTo(expected.getInspectionRoute()))
-            .satisfies(a -> assertThat(a.getSubGroup()).as("check subGroup").isEqualTo(expected.getSubGroup()))
-            .satisfies(a -> assertThat(a.getEquipments()).as("check equipments").isEqualTo(expected.getEquipments()));
+            .satisfies(a -> assertThat(a.getSubGroup()).as("check subGroup").isEqualTo(expected.getSubGroup()));
     }
 }

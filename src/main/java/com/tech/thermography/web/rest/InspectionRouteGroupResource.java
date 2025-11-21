@@ -125,14 +125,20 @@ public class InspectionRouteGroupResource {
         Optional<InspectionRouteGroup> result = inspectionRouteGroupRepository
             .findById(inspectionRouteGroup.getId())
             .map(existingInspectionRouteGroup -> {
+                if (inspectionRouteGroup.getCode() != null) {
+                    existingInspectionRouteGroup.setCode(inspectionRouteGroup.getCode());
+                }
                 if (inspectionRouteGroup.getName() != null) {
                     existingInspectionRouteGroup.setName(inspectionRouteGroup.getName());
                 }
-                if (inspectionRouteGroup.getTitle() != null) {
-                    existingInspectionRouteGroup.setTitle(inspectionRouteGroup.getTitle());
-                }
                 if (inspectionRouteGroup.getDescription() != null) {
                     existingInspectionRouteGroup.setDescription(inspectionRouteGroup.getDescription());
+                }
+                if (inspectionRouteGroup.getIncluded() != null) {
+                    existingInspectionRouteGroup.setIncluded(inspectionRouteGroup.getIncluded());
+                }
+                if (inspectionRouteGroup.getOrderIndex() != null) {
+                    existingInspectionRouteGroup.setOrderIndex(inspectionRouteGroup.getOrderIndex());
                 }
 
                 return existingInspectionRouteGroup;
@@ -148,19 +154,12 @@ public class InspectionRouteGroupResource {
     /**
      * {@code GET  /inspection-route-groups} : get all the inspectionRouteGroups.
      *
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of inspectionRouteGroups in body.
      */
     @GetMapping("")
-    public List<InspectionRouteGroup> getAllInspectionRouteGroups(
-        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
-    ) {
+    public List<InspectionRouteGroup> getAllInspectionRouteGroups() {
         LOG.debug("REST request to get all InspectionRouteGroups");
-        if (eagerload) {
-            return inspectionRouteGroupRepository.findAllWithEagerRelationships();
-        } else {
-            return inspectionRouteGroupRepository.findAll();
-        }
+        return inspectionRouteGroupRepository.findAll();
     }
 
     /**
@@ -172,7 +171,7 @@ public class InspectionRouteGroupResource {
     @GetMapping("/{id}")
     public ResponseEntity<InspectionRouteGroup> getInspectionRouteGroup(@PathVariable("id") UUID id) {
         LOG.debug("REST request to get InspectionRouteGroup : {}", id);
-        Optional<InspectionRouteGroup> inspectionRouteGroup = inspectionRouteGroupRepository.findOneWithEagerRelationships(id);
+        Optional<InspectionRouteGroup> inspectionRouteGroup = inspectionRouteGroupRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(inspectionRouteGroup);
     }
 

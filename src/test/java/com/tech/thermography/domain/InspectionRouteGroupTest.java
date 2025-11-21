@@ -1,6 +1,5 @@
 package com.tech.thermography.domain;
 
-import static com.tech.thermography.domain.EquipmentTestSamples.*;
 import static com.tech.thermography.domain.InspectionRouteGroupTestSamples.*;
 import static com.tech.thermography.domain.InspectionRouteGroupTestSamples.*;
 import static com.tech.thermography.domain.InspectionRouteTestSamples.*;
@@ -49,24 +48,6 @@ class InspectionRouteGroupTest {
 
         inspectionRouteGroup.subGroup(null);
         assertThat(inspectionRouteGroup.getSubGroup()).isNull();
-    }
-
-    @Test
-    void equipmentsTest() {
-        InspectionRouteGroup inspectionRouteGroup = getInspectionRouteGroupRandomSampleGenerator();
-        Equipment equipmentBack = getEquipmentRandomSampleGenerator();
-
-        inspectionRouteGroup.addEquipments(equipmentBack);
-        assertThat(inspectionRouteGroup.getEquipments()).containsOnly(equipmentBack);
-
-        inspectionRouteGroup.removeEquipments(equipmentBack);
-        assertThat(inspectionRouteGroup.getEquipments()).doesNotContain(equipmentBack);
-
-        inspectionRouteGroup.equipments(new HashSet<>(Set.of(equipmentBack)));
-        assertThat(inspectionRouteGroup.getEquipments()).containsOnly(equipmentBack);
-
-        inspectionRouteGroup.setEquipments(new HashSet<>());
-        assertThat(inspectionRouteGroup.getEquipments()).doesNotContain(equipmentBack);
     }
 
     @Test

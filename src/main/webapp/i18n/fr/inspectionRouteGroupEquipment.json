@@ -1,0 +1,27 @@
+{
+  "thermographyApiApp": {
+    "inspectionRouteGroupEquipment": {
+      "home": {
+        "title": "InspectionRouteGroupEquipments",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Inspection Route Group Equipment",
+        "createOrEditLabel": "Créer ou éditer un Inspection Route Group Equipment",
+        "notFound": "Aucun Inspection Route Group Equipment trouvé"
+      },
+      "created": "Un nouveau Inspection Route Group Equipment a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Inspection Route Group Equipment avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Inspection Route Group Equipment avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Inspection Route Group Equipment {{ id }} ?"
+      },
+      "detail": {
+        "title": "Inspection Route Group Equipment"
+      },
+      "id": "Id",
+      "included": "Included",
+      "orderIndex": "Order Index",
+      "inspectionRouteGroup": "Inspection Route Group",
+      "equipment": "Equipment"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+export enum Periodicity {
+  MONTHLY = 'MONTHLY',
+
+  QUARTERLY = 'QUARTERLY',
+
+  SEMI_ANNUAL = 'SEMI_ANNUAL',
+
+  ANNUAL = 'ANNUAL',
+
+  APERIODIC = 'APERIODIC',
+}

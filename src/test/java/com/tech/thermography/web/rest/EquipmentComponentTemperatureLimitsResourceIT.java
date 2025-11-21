@@ -326,7 +326,7 @@ class EquipmentComponentTemperatureLimitsResourceIT {
         EquipmentComponentTemperatureLimits partialUpdatedEquipmentComponentTemperatureLimits = new EquipmentComponentTemperatureLimits();
         partialUpdatedEquipmentComponentTemperatureLimits.setId(equipmentComponentTemperatureLimits.getId());
 
-        partialUpdatedEquipmentComponentTemperatureLimits.normal(UPDATED_NORMAL).imminentHighRisk(UPDATED_IMMINENT_HIGH_RISK);
+        partialUpdatedEquipmentComponentTemperatureLimits.name(UPDATED_NAME).highRisk(UPDATED_HIGH_RISK);
 
         restEquipmentComponentTemperatureLimitsMockMvc
             .perform(

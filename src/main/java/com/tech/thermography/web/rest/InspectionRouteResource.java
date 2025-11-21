@@ -125,38 +125,29 @@ public class InspectionRouteResource {
         Optional<InspectionRoute> result = inspectionRouteRepository
             .findById(inspectionRoute.getId())
             .map(existingInspectionRoute -> {
+                if (inspectionRoute.getCode() != null) {
+                    existingInspectionRoute.setCode(inspectionRoute.getCode());
+                }
                 if (inspectionRoute.getName() != null) {
                     existingInspectionRoute.setName(inspectionRoute.getName());
-                }
-                if (inspectionRoute.getTitle() != null) {
-                    existingInspectionRoute.setTitle(inspectionRoute.getTitle());
                 }
                 if (inspectionRoute.getDescription() != null) {
                     existingInspectionRoute.setDescription(inspectionRoute.getDescription());
                 }
-                if (inspectionRoute.getPlanNote() != null) {
-                    existingInspectionRoute.setPlanNote(inspectionRoute.getPlanNote());
+                if (inspectionRoute.getMaintenancePlan() != null) {
+                    existingInspectionRoute.setMaintenancePlan(inspectionRoute.getMaintenancePlan());
+                }
+                if (inspectionRoute.getPeriodicity() != null) {
+                    existingInspectionRoute.setPeriodicity(inspectionRoute.getPeriodicity());
+                }
+                if (inspectionRoute.getDuration() != null) {
+                    existingInspectionRoute.setDuration(inspectionRoute.getDuration());
+                }
+                if (inspectionRoute.getExpectedStartDate() != null) {
+                    existingInspectionRoute.setExpectedStartDate(inspectionRoute.getExpectedStartDate());
                 }
                 if (inspectionRoute.getCreatedAt() != null) {
                     existingInspectionRoute.setCreatedAt(inspectionRoute.getCreatedAt());
-                }
-                if (inspectionRoute.getStartDate() != null) {
-                    existingInspectionRoute.setStartDate(inspectionRoute.getStartDate());
-                }
-                if (inspectionRoute.getStarted() != null) {
-                    existingInspectionRoute.setStarted(inspectionRoute.getStarted());
-                }
-                if (inspectionRoute.getStartedAt() != null) {
-                    existingInspectionRoute.setStartedAt(inspectionRoute.getStartedAt());
-                }
-                if (inspectionRoute.getEndDate() != null) {
-                    existingInspectionRoute.setEndDate(inspectionRoute.getEndDate());
-                }
-                if (inspectionRoute.getFinished() != null) {
-                    existingInspectionRoute.setFinished(inspectionRoute.getFinished());
-                }
-                if (inspectionRoute.getFinishedAt() != null) {
-                    existingInspectionRoute.setFinishedAt(inspectionRoute.getFinishedAt());
                 }
 
                 return existingInspectionRoute;

@@ -13,4 +13,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PlantRepository extends JpaRepository<Plant, UUID> {
     Optional<Plant> findByName(String name);
+    Optional<Plant> findByCode(String code);
 }

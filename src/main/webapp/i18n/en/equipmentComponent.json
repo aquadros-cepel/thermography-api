@@ -18,8 +18,8 @@
         "title": "Equipment Component"
       },
       "id": "Id",
+      "code": "Code",
       "name": "Name",
-      "title": "Title",
       "description": "Description",
       "componentTemperatureLimits": "Component Temperature Limits",
       "equipments": "Equipments"

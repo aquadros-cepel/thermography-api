@@ -18,12 +18,13 @@
         "title": "Inspection Route Group"
       },
       "id": "Id",
+      "code": "Code",
       "name": "Name",
-      "title": "Title",
       "description": "Description",
+      "included": "Included",
+      "orderIndex": "Order Index",
       "inspectionRoute": "Inspection Route",
       "subGroup": "Sub Group",
-      "equipments": "Equipments",
       "parentGroup": "Parent Group"
     }
   }

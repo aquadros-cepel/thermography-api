@@ -307,9 +307,9 @@ class RiskPeriodicityDeadlineResourceIT {
         partialUpdatedRiskPeriodicityDeadline.setId(riskPeriodicityDeadline.getId());
 
         partialUpdatedRiskPeriodicityDeadline
-            .deadline(UPDATED_DEADLINE)
             .deadlineUnit(UPDATED_DEADLINE_UNIT)
-            .periodicity(UPDATED_PERIODICITY);
+            .periodicityUnit(UPDATED_PERIODICITY_UNIT)
+            .recommendations(UPDATED_RECOMMENDATIONS);
 
         restRiskPeriodicityDeadlineMockMvc
             .perform(

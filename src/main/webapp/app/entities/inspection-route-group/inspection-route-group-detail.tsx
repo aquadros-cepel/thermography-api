@@ -32,23 +32,35 @@ export const InspectionRouteGroupDetail = () => {
           </dt>
           <dd>{inspectionRouteGroupEntity.id}</dd>
           <dt>
+            <span id="code">
+              <Translate contentKey="thermographyApiApp.inspectionRouteGroup.code">Code</Translate>
+            </span>
+          </dt>
+          <dd>{inspectionRouteGroupEntity.code}</dd>
+          <dt>
             <span id="name">
               <Translate contentKey="thermographyApiApp.inspectionRouteGroup.name">Name</Translate>
             </span>
           </dt>
           <dd>{inspectionRouteGroupEntity.name}</dd>
           <dt>
-            <span id="title">
-              <Translate contentKey="thermographyApiApp.inspectionRouteGroup.title">Title</Translate>
-            </span>
-          </dt>
-          <dd>{inspectionRouteGroupEntity.title}</dd>
-          <dt>
             <span id="description">
               <Translate contentKey="thermographyApiApp.inspectionRouteGroup.description">Description</Translate>
             </span>
           </dt>
           <dd>{inspectionRouteGroupEntity.description}</dd>
+          <dt>
+            <span id="included">
+              <Translate contentKey="thermographyApiApp.inspectionRouteGroup.included">Included</Translate>
+            </span>
+          </dt>
+          <dd>{inspectionRouteGroupEntity.included ? 'true' : 'false'}</dd>
+          <dt>
+            <span id="orderIndex">
+              <Translate contentKey="thermographyApiApp.inspectionRouteGroup.orderIndex">Order Index</Translate>
+            </span>
+          </dt>
+          <dd>{inspectionRouteGroupEntity.orderIndex}</dd>
           <dt>
             <Translate contentKey="thermographyApiApp.inspectionRouteGroup.inspectionRoute">Inspection Route</Translate>
           </dt>
@@ -57,19 +69,6 @@ export const InspectionRouteGroupDetail = () => {
             <Translate contentKey="thermographyApiApp.inspectionRouteGroup.subGroup">Sub Group</Translate>
           </dt>
           <dd>{inspectionRouteGroupEntity.subGroup ? inspectionRouteGroupEntity.subGroup.id : ''}</dd>
-          <dt>
-            <Translate contentKey="thermographyApiApp.inspectionRouteGroup.equipments">Equipments</Translate>
-          </dt>
-          <dd>
-            {inspectionRouteGroupEntity.equipments
-              ? inspectionRouteGroupEntity.equipments.map((val, i) => (
-                  <span key={val.id}>
-                    <a>{val.id}</a>
-                    {inspectionRouteGroupEntity.equipments && i === inspectionRouteGroupEntity.equipments.length - 1 ? '' : ', '}
-                  </span>
-                ))
-              : null}
-          </dd>
         </dl>
         <Button tag={Link} to="/inspection-route-group" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

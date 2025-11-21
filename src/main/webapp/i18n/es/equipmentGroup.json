@@ -18,8 +18,8 @@
         "title": "Equipment Group"
       },
       "id": "Id",
+      "code": "Code",
       "name": "Name",
-      "title": "Title",
       "description": "Description",
       "plant": "Plant",
       "subGroup": "Sub Group",

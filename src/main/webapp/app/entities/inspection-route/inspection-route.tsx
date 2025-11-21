@@ -88,63 +88,43 @@ export const InspectionRoute = () => {
                   <Translate contentKey="thermographyApiApp.inspectionRoute.id">Id</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
+                <th className="hand" onClick={sort('code')}>
+                  <Translate contentKey="thermographyApiApp.inspectionRoute.code">Code</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('code')} />
+                </th>
                 <th className="hand" onClick={sort('name')}>
                   <Translate contentKey="thermographyApiApp.inspectionRoute.name">Name</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('name')} />
-                </th>
-                <th className="hand" onClick={sort('title')}>
-                  <Translate contentKey="thermographyApiApp.inspectionRoute.title">Title</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('title')} />
                 </th>
                 <th className="hand" onClick={sort('description')}>
                   <Translate contentKey="thermographyApiApp.inspectionRoute.description">Description</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('description')} />
                 </th>
-                <th className="hand" onClick={sort('planNote')}>
-                  <Translate contentKey="thermographyApiApp.inspectionRoute.planNote">Plan Note</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('planNote')} />
+                <th className="hand" onClick={sort('maintenancePlan')}>
+                  <Translate contentKey="thermographyApiApp.inspectionRoute.maintenancePlan">Maintenance Plan</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('maintenancePlan')} />
+                </th>
+                <th className="hand" onClick={sort('periodicity')}>
+                  <Translate contentKey="thermographyApiApp.inspectionRoute.periodicity">Periodicity</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('periodicity')} />
+                </th>
+                <th className="hand" onClick={sort('duration')}>
+                  <Translate contentKey="thermographyApiApp.inspectionRoute.duration">Duration</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('duration')} />
+                </th>
+                <th className="hand" onClick={sort('expectedStartDate')}>
+                  <Translate contentKey="thermographyApiApp.inspectionRoute.expectedStartDate">Expected Start Date</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('expectedStartDate')} />
                 </th>
                 <th className="hand" onClick={sort('createdAt')}>
                   <Translate contentKey="thermographyApiApp.inspectionRoute.createdAt">Created At</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('createdAt')} />
-                </th>
-                <th className="hand" onClick={sort('startDate')}>
-                  <Translate contentKey="thermographyApiApp.inspectionRoute.startDate">Start Date</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('startDate')} />
-                </th>
-                <th className="hand" onClick={sort('started')}>
-                  <Translate contentKey="thermographyApiApp.inspectionRoute.started">Started</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('started')} />
-                </th>
-                <th className="hand" onClick={sort('startedAt')}>
-                  <Translate contentKey="thermographyApiApp.inspectionRoute.startedAt">Started At</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('startedAt')} />
-                </th>
-                <th className="hand" onClick={sort('endDate')}>
-                  <Translate contentKey="thermographyApiApp.inspectionRoute.endDate">End Date</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('endDate')} />
-                </th>
-                <th className="hand" onClick={sort('finished')}>
-                  <Translate contentKey="thermographyApiApp.inspectionRoute.finished">Finished</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('finished')} />
-                </th>
-                <th className="hand" onClick={sort('finishedAt')}>
-                  <Translate contentKey="thermographyApiApp.inspectionRoute.finishedAt">Finished At</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('finishedAt')} />
                 </th>
                 <th>
                   <Translate contentKey="thermographyApiApp.inspectionRoute.plant">Plant</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
                   <Translate contentKey="thermographyApiApp.inspectionRoute.createdBy">Created By</Translate>{' '}
-                  <FontAwesomeIcon icon="sort" />
-                </th>
-                <th>
-                  <Translate contentKey="thermographyApiApp.inspectionRoute.startedBy">Started By</Translate>{' '}
-                  <FontAwesomeIcon icon="sort" />
-                </th>
-                <th>
-                  <Translate contentKey="thermographyApiApp.inspectionRoute.finishedBy">Finished By</Translate>{' '}
                   <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
@@ -158,55 +138,28 @@ export const InspectionRoute = () => {
                       {inspectionRoute.id}
                     </Button>
                   </td>
+                  <td>{inspectionRoute.code}</td>
                   <td>{inspectionRoute.name}</td>
-                  <td>{inspectionRoute.title}</td>
                   <td>{inspectionRoute.description}</td>
-                  <td>{inspectionRoute.planNote}</td>
+                  <td>{inspectionRoute.maintenancePlan}</td>
+                  <td>
+                    <Translate contentKey={`thermographyApiApp.Periodicity.${inspectionRoute.periodicity}`} />
+                  </td>
+                  <td>{inspectionRoute.duration}</td>
+                  <td>
+                    {inspectionRoute.expectedStartDate ? (
+                      <TextFormat type="date" value={inspectionRoute.expectedStartDate} format={APP_LOCAL_DATE_FORMAT} />
+                    ) : null}
+                  </td>
                   <td>
                     {inspectionRoute.createdAt ? (
                       <TextFormat type="date" value={inspectionRoute.createdAt} format={APP_DATE_FORMAT} />
-                    ) : null}
-                  </td>
-                  <td>
-                    {inspectionRoute.startDate ? (
-                      <TextFormat type="date" value={inspectionRoute.startDate} format={APP_LOCAL_DATE_FORMAT} />
-                    ) : null}
-                  </td>
-                  <td>{inspectionRoute.started ? 'true' : 'false'}</td>
-                  <td>
-                    {inspectionRoute.startedAt ? (
-                      <TextFormat type="date" value={inspectionRoute.startedAt} format={APP_DATE_FORMAT} />
-                    ) : null}
-                  </td>
-                  <td>
-                    {inspectionRoute.endDate ? (
-                      <TextFormat type="date" value={inspectionRoute.endDate} format={APP_LOCAL_DATE_FORMAT} />
-                    ) : null}
-                  </td>
-                  <td>{inspectionRoute.finished ? 'true' : 'false'}</td>
-                  <td>
-                    {inspectionRoute.finishedAt ? (
-                      <TextFormat type="date" value={inspectionRoute.finishedAt} format={APP_DATE_FORMAT} />
                     ) : null}
                   </td>
                   <td>{inspectionRoute.plant ? <Link to={`/plant/${inspectionRoute.plant.id}`}>{inspectionRoute.plant.id}</Link> : ''}</td>
                   <td>
                     {inspectionRoute.createdBy ? (
                       <Link to={`/user-info/${inspectionRoute.createdBy.id}`}>{inspectionRoute.createdBy.id}</Link>
-                    ) : (
-                      ''
-                    )}
-                  </td>
-                  <td>
-                    {inspectionRoute.startedBy ? (
-                      <Link to={`/user-info/${inspectionRoute.startedBy.id}`}>{inspectionRoute.startedBy.id}</Link>
-                    ) : (
-                      ''
-                    )}
-                  </td>
-                  <td>
-                    {inspectionRoute.finishedBy ? (
-                      <Link to={`/user-info/${inspectionRoute.finishedBy.id}`}>{inspectionRoute.finishedBy.id}</Link>
                     ) : (
                       ''
                     )}

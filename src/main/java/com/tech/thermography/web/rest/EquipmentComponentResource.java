@@ -125,11 +125,11 @@ public class EquipmentComponentResource {
         Optional<EquipmentComponent> result = equipmentComponentRepository
             .findById(equipmentComponent.getId())
             .map(existingEquipmentComponent -> {
+                if (equipmentComponent.getCode() != null) {
+                    existingEquipmentComponent.setCode(equipmentComponent.getCode());
+                }
                 if (equipmentComponent.getName() != null) {
                     existingEquipmentComponent.setName(equipmentComponent.getName());
-                }
-                if (equipmentComponent.getTitle() != null) {
-                    existingEquipmentComponent.setTitle(equipmentComponent.getTitle());
                 }
                 if (equipmentComponent.getDescription() != null) {
                     existingEquipmentComponent.setDescription(equipmentComponent.getDescription());

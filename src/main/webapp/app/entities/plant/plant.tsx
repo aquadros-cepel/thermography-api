@@ -87,13 +87,13 @@ export const Plant = () => {
                 <th className="hand" onClick={sort('id')}>
                   <Translate contentKey="thermographyApiApp.plant.id">Id</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
+                <th className="hand" onClick={sort('code')}>
+                  <Translate contentKey="thermographyApiApp.plant.code">Code</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('code')} />
+                </th>
                 <th className="hand" onClick={sort('name')}>
                   <Translate contentKey="thermographyApiApp.plant.name">Name</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('name')} />
-                </th>
-                <th className="hand" onClick={sort('title')}>
-                  <Translate contentKey="thermographyApiApp.plant.title">Title</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('title')} />
                 </th>
                 <th className="hand" onClick={sort('description')}>
                   <Translate contentKey="thermographyApiApp.plant.description">Description</Translate>{' '}
@@ -128,8 +128,8 @@ export const Plant = () => {
                       {plant.id}
                     </Button>
                   </td>
+                  <td>{plant.code}</td>
                   <td>{plant.name}</td>
-                  <td>{plant.title}</td>
                   <td>{plant.description}</td>
                   <td>{plant.latitude}</td>
                   <td>{plant.longitude}</td>

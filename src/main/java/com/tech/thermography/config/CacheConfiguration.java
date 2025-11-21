@@ -68,6 +68,8 @@ public class CacheConfiguration {
             createCache(cm, com.tech.thermography.domain.ROI.class.getName());
             createCache(cm, com.tech.thermography.domain.ThermographicInspectionRecord.class.getName());
             createCache(cm, com.tech.thermography.domain.UserInfo.class.getName());
+            createCache(cm, com.tech.thermography.domain.InspectionRouteGroupEquipment.class.getName());
+            createCache(cm, com.tech.thermography.domain.InspectionRouteRecord.class.getName());
             // jhipster-needle-caffeine-add-entry
         };
     }

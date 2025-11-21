@@ -47,8 +47,8 @@ public class PlantAsserts {
     public static void assertPlantUpdatableFieldsEquals(Plant expected, Plant actual) {
         assertThat(actual)
             .as("Verify Plant relevant properties")
+            .satisfies(a -> assertThat(a.getCode()).as("check code").isEqualTo(expected.getCode()))
             .satisfies(a -> assertThat(a.getName()).as("check name").isEqualTo(expected.getName()))
-            .satisfies(a -> assertThat(a.getTitle()).as("check title").isEqualTo(expected.getTitle()))
             .satisfies(a -> assertThat(a.getDescription()).as("check description").isEqualTo(expected.getDescription()))
             .satisfies(a -> assertThat(a.getLatitude()).as("check latitude").isEqualTo(expected.getLatitude()))
             .satisfies(a -> assertThat(a.getLongitude()).as("check longitude").isEqualTo(expected.getLongitude()))

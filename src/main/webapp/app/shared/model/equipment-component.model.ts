@@ -3,8 +3,8 @@ import { IEquipment } from 'app/shared/model/equipment.model';
 
 export interface IEquipmentComponent {
   id?: string;
+  code?: string | null;
   name?: string;
-  title?: string | null;
   description?: string | null;
   componentTemperatureLimits?: IEquipmentComponentTemperatureLimits | null;
   equipments?: IEquipment[] | null;

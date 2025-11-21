@@ -10,13 +10,13 @@
       "fieldValidateRules": ["required"]
     },
     {
+      "fieldName": "code",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "name",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "title",
-      "fieldType": "String"
     },
     {
       "fieldName": "description",
@@ -76,13 +76,6 @@
       "relationshipName": "group",
       "relationshipSide": "left",
       "relationshipType": "many-to-one"
-    },
-    {
-      "otherEntityName": "inspectionRouteGroup",
-      "otherEntityRelationshipName": "equipments",
-      "relationshipName": "inspectionRouteGroups",
-      "relationshipSide": "right",
-      "relationshipType": "many-to-many"
     },
     {
       "otherEntityName": "equipmentComponent",
