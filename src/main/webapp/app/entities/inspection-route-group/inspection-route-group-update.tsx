@@ -55,7 +55,7 @@ export const InspectionRouteGroupUpdate = () => {
       ...inspectionRouteGroupEntity,
       ...values,
       inspectionRoute: inspectionRoutes.find(it => it.id.toString() === values.inspectionRoute?.toString()),
-      subGroup: inspectionRouteGroups.find(it => it.id.toString() === values.subGroup?.toString()),
+      parentGroup: inspectionRouteGroups.find(it => it.id.toString() === values.parentGroup?.toString()),
     };
 
     if (isNew) {
@@ -71,7 +71,7 @@ export const InspectionRouteGroupUpdate = () => {
       : {
           ...inspectionRouteGroupEntity,
           inspectionRoute: inspectionRouteGroupEntity?.inspectionRoute?.id,
-          subGroup: inspectionRouteGroupEntity?.subGroup?.id,
+          parentGroup: inspectionRouteGroupEntity?.parentGroup?.id,
         };
 
   return (
@@ -157,10 +157,10 @@ export const InspectionRouteGroupUpdate = () => {
                   : null}
               </ValidatedField>
               <ValidatedField
-                id="inspection-route-group-subGroup"
-                name="subGroup"
-                data-cy="subGroup"
-                label={translate('thermographyApiApp.inspectionRouteGroup.subGroup')}
+                id="inspection-route-group-parentGroup"
+                name="parentGroup"
+                data-cy="parentGroup"
+                label={translate('thermographyApiApp.inspectionRouteGroup.parentGroup')}
                 type="select"
               >
                 <option value="" key="0" />

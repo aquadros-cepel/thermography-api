@@ -117,7 +117,7 @@ export const InspectionRouteGroup = () => {
                   <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
-                  <Translate contentKey="thermographyApiApp.inspectionRouteGroup.subGroup">Sub Group</Translate>{' '}
+                  <Translate contentKey="thermographyApiApp.inspectionRouteGroup.parentGroup">Parent Group</Translate>{' '}
                   <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
@@ -146,8 +146,10 @@ export const InspectionRouteGroup = () => {
                     )}
                   </td>
                   <td>
-                    {inspectionRouteGroup.subGroup ? (
-                      <Link to={`/inspection-route-group/${inspectionRouteGroup.subGroup.id}`}>{inspectionRouteGroup.subGroup.id}</Link>
+                    {inspectionRouteGroup.parentGroup ? (
+                      <Link to={`/inspection-route-group/${inspectionRouteGroup.parentGroup.id}`}>
+                        {inspectionRouteGroup.parentGroup.id}
+                      </Link>
                     ) : (
                       ''
                     )}

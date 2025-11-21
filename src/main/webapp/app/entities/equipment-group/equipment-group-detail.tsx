@@ -54,9 +54,9 @@ export const EquipmentGroupDetail = () => {
           </dt>
           <dd>{equipmentGroupEntity.plant ? equipmentGroupEntity.plant.id : ''}</dd>
           <dt>
-            <Translate contentKey="thermographyApiApp.equipmentGroup.subGroup">Sub Group</Translate>
+            <Translate contentKey="thermographyApiApp.equipmentGroup.parentGroup">Parent Group</Translate>
           </dt>
-          <dd>{equipmentGroupEntity.subGroup ? equipmentGroupEntity.subGroup.id : ''}</dd>
+          <dd>{equipmentGroupEntity.parentGroup ? equipmentGroupEntity.parentGroup.id : ''}</dd>
         </dl>
         <Button tag={Link} to="/equipment-group" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

@@ -33,15 +33,15 @@
     },
     {
       "otherEntityName": "equipmentGroup",
-      "otherEntityRelationshipName": "parentGroup",
-      "relationshipName": "subGroup",
+      "otherEntityRelationshipName": "subGroups",
+      "relationshipName": "parentGroup",
       "relationshipSide": "left",
       "relationshipType": "many-to-one"
     },
     {
       "otherEntityName": "equipmentGroup",
-      "otherEntityRelationshipName": "subGroup",
-      "relationshipName": "parentGroup",
+      "otherEntityRelationshipName": "parentGroup",
+      "relationshipName": "subGroups",
       "relationshipSide": "right",
       "relationshipType": "one-to-many"
     }

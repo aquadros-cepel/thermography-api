@@ -35,21 +35,29 @@
   "relationships": [
     {
       "otherEntityName": "inspectionRoute",
+      "otherEntityRelationshipName": "groups",
       "relationshipName": "inspectionRoute",
       "relationshipSide": "left",
       "relationshipType": "many-to-one"
     },
     {
       "otherEntityName": "inspectionRouteGroup",
-      "otherEntityRelationshipName": "parentGroup",
-      "relationshipName": "subGroup",
+      "otherEntityRelationshipName": "subGroups",
+      "relationshipName": "parentGroup",
       "relationshipSide": "left",
       "relationshipType": "many-to-one"
     },
     {
       "otherEntityName": "inspectionRouteGroup",
-      "otherEntityRelationshipName": "subGroup",
-      "relationshipName": "parentGroup",
+      "otherEntityRelationshipName": "parentGroup",
+      "relationshipName": "subGroups",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "inspectionRouteGroupEquipment",
+      "otherEntityRelationshipName": "inspectionRouteGroup",
+      "relationshipName": "equipments",
       "relationshipSide": "right",
       "relationshipType": "one-to-many"
     }

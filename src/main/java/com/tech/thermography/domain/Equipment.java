@@ -75,7 +75,7 @@ public class Equipment implements Serializable {
     private Plant plant;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "plant", "subGroup", "parentGroups" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "plant", "parentGroup", "subGroups" }, allowSetters = true)
     private EquipmentGroup group;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "equipments")

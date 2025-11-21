@@ -22,6 +22,7 @@
   "relationships": [
     {
       "otherEntityName": "inspectionRouteGroup",
+      "otherEntityRelationshipName": "equipments",
       "relationshipName": "inspectionRouteGroup",
       "relationshipSide": "left",
       "relationshipType": "many-to-one"

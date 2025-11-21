@@ -1,11 +1,14 @@
 package com.tech.thermography.domain;
 
+import static com.tech.thermography.domain.InspectionRouteGroupTestSamples.*;
 import static com.tech.thermography.domain.InspectionRouteTestSamples.*;
 import static com.tech.thermography.domain.PlantTestSamples.*;
 import static com.tech.thermography.domain.UserInfoTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.tech.thermography.web.rest.TestUtil;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 class InspectionRouteTest {
@@ -46,5 +49,27 @@ class InspectionRouteTest {
 
         inspectionRoute.createdBy(null);
         assertThat(inspectionRoute.getCreatedBy()).isNull();
+    }
+
+    @Test
+    void groupsTest() {
+        InspectionRoute inspectionRoute = getInspectionRouteRandomSampleGenerator();
+        InspectionRouteGroup inspectionRouteGroupBack = getInspectionRouteGroupRandomSampleGenerator();
+
+        inspectionRoute.addGroups(inspectionRouteGroupBack);
+        assertThat(inspectionRoute.getGroups()).containsOnly(inspectionRouteGroupBack);
+        assertThat(inspectionRouteGroupBack.getInspectionRoute()).isEqualTo(inspectionRoute);
+
+        inspectionRoute.removeGroups(inspectionRouteGroupBack);
+        assertThat(inspectionRoute.getGroups()).doesNotContain(inspectionRouteGroupBack);
+        assertThat(inspectionRouteGroupBack.getInspectionRoute()).isNull();
+
+        inspectionRoute.groups(new HashSet<>(Set.of(inspectionRouteGroupBack)));
+        assertThat(inspectionRoute.getGroups()).containsOnly(inspectionRouteGroupBack);
+        assertThat(inspectionRouteGroupBack.getInspectionRoute()).isEqualTo(inspectionRoute);
+
+        inspectionRoute.setGroups(new HashSet<>());
+        assertThat(inspectionRoute.getGroups()).doesNotContain(inspectionRouteGroupBack);
+        assertThat(inspectionRouteGroupBack.getInspectionRoute()).isNull();
     }
 }

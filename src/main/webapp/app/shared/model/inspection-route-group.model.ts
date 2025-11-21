@@ -8,7 +8,7 @@ export interface IInspectionRouteGroup {
   included?: boolean | null;
   orderIndex?: number | null;
   inspectionRoute?: IInspectionRoute | null;
-  subGroup?: IInspectionRouteGroup | null;
+  parentGroup?: IInspectionRouteGroup | null;
 }
 
 export const defaultValue: Readonly<IInspectionRouteGroup> = {

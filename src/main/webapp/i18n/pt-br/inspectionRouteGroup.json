@@ -24,8 +24,9 @@
       "included": "Included",
       "orderIndex": "Order Index",
       "inspectionRoute": "Inspection Route",
-      "subGroup": "Sub Group",
-      "parentGroup": "Parent Group"
+      "parentGroup": "Parent Group",
+      "subGroups": "Sub Groups",
+      "equipments": "Equipments"
     }
   }
 }

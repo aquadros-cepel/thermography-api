@@ -41,13 +41,13 @@ public class EquipmentGroup implements Serializable {
     private Plant plant;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "plant", "subGroup", "parentGroups" }, allowSetters = true)
-    private EquipmentGroup subGroup;
+    @JsonIgnoreProperties(value = { "plant", "parentGroup", "subGroups" }, allowSetters = true)
+    private EquipmentGroup parentGroup;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "subGroup")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentGroup")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "plant", "subGroup", "parentGroups" }, allowSetters = true)
-    private Set<EquipmentGroup> parentGroups = new HashSet<>();
+    @JsonIgnoreProperties(value = { "plant", "parentGroup", "subGroups" }, allowSetters = true)
+    private Set<EquipmentGroup> subGroups = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -116,47 +116,47 @@ public class EquipmentGroup implements Serializable {
         return this;
     }
 
-    public EquipmentGroup getSubGroup() {
-        return this.subGroup;
+    public EquipmentGroup getParentGroup() {
+        return this.parentGroup;
     }
 
-    public void setSubGroup(EquipmentGroup equipmentGroup) {
-        this.subGroup = equipmentGroup;
+    public void setParentGroup(EquipmentGroup equipmentGroup) {
+        this.parentGroup = equipmentGroup;
     }
 
-    public EquipmentGroup subGroup(EquipmentGroup equipmentGroup) {
-        this.setSubGroup(equipmentGroup);
+    public EquipmentGroup parentGroup(EquipmentGroup equipmentGroup) {
+        this.setParentGroup(equipmentGroup);
         return this;
     }
 
-    public Set<EquipmentGroup> getParentGroups() {
-        return this.parentGroups;
+    public Set<EquipmentGroup> getSubGroups() {
+        return this.subGroups;
     }
 
-    public void setParentGroups(Set<EquipmentGroup> equipmentGroups) {
-        if (this.parentGroups != null) {
-            this.parentGroups.forEach(i -> i.setSubGroup(null));
+    public void setSubGroups(Set<EquipmentGroup> equipmentGroups) {
+        if (this.subGroups != null) {
+            this.subGroups.forEach(i -> i.setParentGroup(null));
         }
         if (equipmentGroups != null) {
-            equipmentGroups.forEach(i -> i.setSubGroup(this));
+            equipmentGroups.forEach(i -> i.setParentGroup(this));
         }
-        this.parentGroups = equipmentGroups;
+        this.subGroups = equipmentGroups;
     }
 
-    public EquipmentGroup parentGroups(Set<EquipmentGroup> equipmentGroups) {
-        this.setParentGroups(equipmentGroups);
+    public EquipmentGroup subGroups(Set<EquipmentGroup> equipmentGroups) {
+        this.setSubGroups(equipmentGroups);
         return this;
     }
 
-    public EquipmentGroup addParentGroup(EquipmentGroup equipmentGroup) {
-        this.parentGroups.add(equipmentGroup);
-        equipmentGroup.setSubGroup(this);
+    public EquipmentGroup addSubGroups(EquipmentGroup equipmentGroup) {
+        this.subGroups.add(equipmentGroup);
+        equipmentGroup.setParentGroup(this);
         return this;
     }
 
-    public EquipmentGroup removeParentGroup(EquipmentGroup equipmentGroup) {
-        this.parentGroups.remove(equipmentGroup);
-        equipmentGroup.setSubGroup(null);
+    public EquipmentGroup removeSubGroups(EquipmentGroup equipmentGroup) {
+        this.subGroups.remove(equipmentGroup);
+        equipmentGroup.setParentGroup(null);
         return this;
     }
 

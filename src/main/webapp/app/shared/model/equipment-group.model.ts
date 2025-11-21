@@ -6,7 +6,7 @@ export interface IEquipmentGroup {
   name?: string;
   description?: string | null;
   plant?: IPlant | null;
-  subGroup?: IEquipmentGroup | null;
+  parentGroup?: IEquipmentGroup | null;
 }
 
 export const defaultValue: Readonly<IEquipmentGroup> = {};

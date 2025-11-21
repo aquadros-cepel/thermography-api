@@ -43,17 +43,22 @@ public class InspectionRouteGroup implements Serializable {
     private Integer orderIndex;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "plant", "createdBy" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "plant", "createdBy", "groups" }, allowSetters = true)
     private InspectionRoute inspectionRoute;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "inspectionRoute", "subGroup", "parentGroups" }, allowSetters = true)
-    private InspectionRouteGroup subGroup;
+    @JsonIgnoreProperties(value = { "inspectionRoute", "parentGroup", "subGroups", "equipments" }, allowSetters = true)
+    private InspectionRouteGroup parentGroup;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "subGroup")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentGroup")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "inspectionRoute", "subGroup", "parentGroups" }, allowSetters = true)
-    private Set<InspectionRouteGroup> parentGroups = new HashSet<>();
+    @JsonIgnoreProperties(value = { "inspectionRoute", "parentGroup", "subGroups", "equipments" }, allowSetters = true)
+    private Set<InspectionRouteGroup> subGroups = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "inspectionRouteGroup")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "inspectionRouteGroup", "equipment" }, allowSetters = true)
+    private Set<InspectionRouteGroupEquipment> equipments = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -148,47 +153,78 @@ public class InspectionRouteGroup implements Serializable {
         return this;
     }
 
-    public InspectionRouteGroup getSubGroup() {
-        return this.subGroup;
+    public InspectionRouteGroup getParentGroup() {
+        return this.parentGroup;
     }
 
-    public void setSubGroup(InspectionRouteGroup inspectionRouteGroup) {
-        this.subGroup = inspectionRouteGroup;
+    public void setParentGroup(InspectionRouteGroup inspectionRouteGroup) {
+        this.parentGroup = inspectionRouteGroup;
     }
 
-    public InspectionRouteGroup subGroup(InspectionRouteGroup inspectionRouteGroup) {
-        this.setSubGroup(inspectionRouteGroup);
+    public InspectionRouteGroup parentGroup(InspectionRouteGroup inspectionRouteGroup) {
+        this.setParentGroup(inspectionRouteGroup);
         return this;
     }
 
-    public Set<InspectionRouteGroup> getParentGroups() {
-        return this.parentGroups;
+    public Set<InspectionRouteGroup> getSubGroups() {
+        return this.subGroups;
     }
 
-    public void setParentGroups(Set<InspectionRouteGroup> inspectionRouteGroups) {
-        if (this.parentGroups != null) {
-            this.parentGroups.forEach(i -> i.setSubGroup(null));
+    public void setSubGroups(Set<InspectionRouteGroup> inspectionRouteGroups) {
+        if (this.subGroups != null) {
+            this.subGroups.forEach(i -> i.setParentGroup(null));
         }
         if (inspectionRouteGroups != null) {
-            inspectionRouteGroups.forEach(i -> i.setSubGroup(this));
+            inspectionRouteGroups.forEach(i -> i.setParentGroup(this));
         }
-        this.parentGroups = inspectionRouteGroups;
+        this.subGroups = inspectionRouteGroups;
     }
 
-    public InspectionRouteGroup parentGroups(Set<InspectionRouteGroup> inspectionRouteGroups) {
-        this.setParentGroups(inspectionRouteGroups);
+    public InspectionRouteGroup subGroups(Set<InspectionRouteGroup> inspectionRouteGroups) {
+        this.setSubGroups(inspectionRouteGroups);
         return this;
     }
 
-    public InspectionRouteGroup addParentGroup(InspectionRouteGroup inspectionRouteGroup) {
-        this.parentGroups.add(inspectionRouteGroup);
-        inspectionRouteGroup.setSubGroup(this);
+    public InspectionRouteGroup addSubGroups(InspectionRouteGroup inspectionRouteGroup) {
+        this.subGroups.add(inspectionRouteGroup);
+        inspectionRouteGroup.setParentGroup(this);
         return this;
     }
 
-    public InspectionRouteGroup removeParentGroup(InspectionRouteGroup inspectionRouteGroup) {
-        this.parentGroups.remove(inspectionRouteGroup);
-        inspectionRouteGroup.setSubGroup(null);
+    public InspectionRouteGroup removeSubGroups(InspectionRouteGroup inspectionRouteGroup) {
+        this.subGroups.remove(inspectionRouteGroup);
+        inspectionRouteGroup.setParentGroup(null);
+        return this;
+    }
+
+    public Set<InspectionRouteGroupEquipment> getEquipments() {
+        return this.equipments;
+    }
+
+    public void setEquipments(Set<InspectionRouteGroupEquipment> inspectionRouteGroupEquipments) {
+        if (this.equipments != null) {
+            this.equipments.forEach(i -> i.setInspectionRouteGroup(null));
+        }
+        if (inspectionRouteGroupEquipments != null) {
+            inspectionRouteGroupEquipments.forEach(i -> i.setInspectionRouteGroup(this));
+        }
+        this.equipments = inspectionRouteGroupEquipments;
+    }
+
+    public InspectionRouteGroup equipments(Set<InspectionRouteGroupEquipment> inspectionRouteGroupEquipments) {
+        this.setEquipments(inspectionRouteGroupEquipments);
+        return this;
+    }
+
+    public InspectionRouteGroup addEquipments(InspectionRouteGroupEquipment inspectionRouteGroupEquipment) {
+        this.equipments.add(inspectionRouteGroupEquipment);
+        inspectionRouteGroupEquipment.setInspectionRouteGroup(this);
+        return this;
+    }
+
+    public InspectionRouteGroup removeEquipments(InspectionRouteGroupEquipment inspectionRouteGroupEquipment) {
+        this.equipments.remove(inspectionRouteGroupEquipment);
+        inspectionRouteGroupEquipment.setInspectionRouteGroup(null);
         return this;
     }
 

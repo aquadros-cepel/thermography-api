@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity ThermographicInspectionRecord.
+    -->
+    <changeSet id="20251107125641-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="plant_id"
+                                 baseTableName="thermographic_inspection_record"
+                                 constraintName="fk_thermographic_inspection_record__plant_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="plant"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="route_id"
+                                 baseTableName="thermographic_inspection_record"
+                                 constraintName="fk_thermographic_inspection_record__route_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="inspection_route_record"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="equipment_id"
+                                 baseTableName="thermographic_inspection_record"
+                                 constraintName="fk_thermographic_inspection_record__equipment_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="equipment"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="component_id"
+                                 baseTableName="thermographic_inspection_record"
+                                 constraintName="fk_thermographic_inspection_record__component_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="equipment_component"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="created_by_id"
+                                 baseTableName="thermographic_inspection_record"
+                                 constraintName="fk_thermographic_inspection_record__created_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user_info"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="finished_by_id"
+                                 baseTableName="thermographic_inspection_record"
+                                 constraintName="fk_thermographic_inspection_record__finished_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user_info"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="thermogram_id"
+                                 baseTableName="thermographic_inspection_record"
+                                 constraintName="fk_thermographic_inspection_record__thermogram_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="thermogram"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="thermogram_ref_id"
+                                 baseTableName="thermographic_inspection_record"
+                                 constraintName="fk_thermographic_inspection_record__thermogram_ref_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="thermogram"
+                                 />
+    </changeSet>
+</databaseChangeLog>

@@ -64,6 +64,6 @@ public class InspectionRouteGroupAsserts {
         assertThat(actual)
             .as("Verify InspectionRouteGroup relationships")
             .satisfies(a -> assertThat(a.getInspectionRoute()).as("check inspectionRoute").isEqualTo(expected.getInspectionRoute()))
-            .satisfies(a -> assertThat(a.getSubGroup()).as("check subGroup").isEqualTo(expected.getSubGroup()));
+            .satisfies(a -> assertThat(a.getParentGroup()).as("check parentGroup").isEqualTo(expected.getParentGroup()));
     }
 }

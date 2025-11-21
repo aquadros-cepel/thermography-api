@@ -22,8 +22,8 @@
       "name": "Name",
       "description": "Description",
       "plant": "Plant",
-      "subGroup": "Sub Group",
-      "parentGroup": "Parent Group"
+      "parentGroup": "Parent Group",
+      "subGroups": "Sub Groups"
     }
   }
 }

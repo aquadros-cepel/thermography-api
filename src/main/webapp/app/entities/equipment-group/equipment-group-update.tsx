@@ -51,7 +51,7 @@ export const EquipmentGroupUpdate = () => {
       ...equipmentGroupEntity,
       ...values,
       plant: plants.find(it => it.id.toString() === values.plant?.toString()),
-      subGroup: equipmentGroups.find(it => it.id.toString() === values.subGroup?.toString()),
+      parentGroup: equipmentGroups.find(it => it.id.toString() === values.parentGroup?.toString()),
     };
 
     if (isNew) {
@@ -67,7 +67,7 @@ export const EquipmentGroupUpdate = () => {
       : {
           ...equipmentGroupEntity,
           plant: equipmentGroupEntity?.plant?.id,
-          subGroup: equipmentGroupEntity?.subGroup?.id,
+          parentGroup: equipmentGroupEntity?.parentGroup?.id,
         };
 
   return (
@@ -136,10 +136,10 @@ export const EquipmentGroupUpdate = () => {
                   : null}
               </ValidatedField>
               <ValidatedField
-                id="equipment-group-subGroup"
-                name="subGroup"
-                data-cy="subGroup"
-                label={translate('thermographyApiApp.equipmentGroup.subGroup')}
+                id="equipment-group-parentGroup"
+                name="parentGroup"
+                data-cy="parentGroup"
+                label={translate('thermographyApiApp.equipmentGroup.parentGroup')}
                 type="select"
               >
                 <option value="" key="0" />

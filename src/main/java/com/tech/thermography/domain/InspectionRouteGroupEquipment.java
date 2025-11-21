@@ -31,7 +31,7 @@ public class InspectionRouteGroupEquipment implements Serializable {
     private Integer orderIndex;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "inspectionRoute", "subGroup", "parentGroups" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "inspectionRoute", "parentGroup", "subGroups", "equipments" }, allowSetters = true)
     private InspectionRouteGroup inspectionRouteGroup;
 
     @ManyToOne(fetch = FetchType.LAZY)

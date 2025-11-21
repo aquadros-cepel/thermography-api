@@ -103,7 +103,8 @@ export const EquipmentGroup = () => {
                   <Translate contentKey="thermographyApiApp.equipmentGroup.plant">Plant</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
-                  <Translate contentKey="thermographyApiApp.equipmentGroup.subGroup">Sub Group</Translate> <FontAwesomeIcon icon="sort" />
+                  <Translate contentKey="thermographyApiApp.equipmentGroup.parentGroup">Parent Group</Translate>{' '}
+                  <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
@@ -121,8 +122,8 @@ export const EquipmentGroup = () => {
                   <td>{equipmentGroup.description}</td>
                   <td>{equipmentGroup.plant ? <Link to={`/plant/${equipmentGroup.plant.id}`}>{equipmentGroup.plant.id}</Link> : ''}</td>
                   <td>
-                    {equipmentGroup.subGroup ? (
-                      <Link to={`/equipment-group/${equipmentGroup.subGroup.id}`}>{equipmentGroup.subGroup.id}</Link>
+                    {equipmentGroup.parentGroup ? (
+                      <Link to={`/equipment-group/${equipmentGroup.parentGroup.id}`}>{equipmentGroup.parentGroup.id}</Link>
                     ) : (
                       ''
                     )}

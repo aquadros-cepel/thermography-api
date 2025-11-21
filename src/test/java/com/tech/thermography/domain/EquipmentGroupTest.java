@@ -39,36 +39,36 @@ class EquipmentGroupTest {
     }
 
     @Test
-    void subGroupTest() {
-        EquipmentGroup equipmentGroup = getEquipmentGroupRandomSampleGenerator();
-        EquipmentGroup equipmentGroupBack = getEquipmentGroupRandomSampleGenerator();
-
-        equipmentGroup.setSubGroup(equipmentGroupBack);
-        assertThat(equipmentGroup.getSubGroup()).isEqualTo(equipmentGroupBack);
-
-        equipmentGroup.subGroup(null);
-        assertThat(equipmentGroup.getSubGroup()).isNull();
-    }
-
-    @Test
     void parentGroupTest() {
         EquipmentGroup equipmentGroup = getEquipmentGroupRandomSampleGenerator();
         EquipmentGroup equipmentGroupBack = getEquipmentGroupRandomSampleGenerator();
 
-        equipmentGroup.addParentGroup(equipmentGroupBack);
-        assertThat(equipmentGroup.getParentGroups()).containsOnly(equipmentGroupBack);
-        assertThat(equipmentGroupBack.getSubGroup()).isEqualTo(equipmentGroup);
+        equipmentGroup.setParentGroup(equipmentGroupBack);
+        assertThat(equipmentGroup.getParentGroup()).isEqualTo(equipmentGroupBack);
 
-        equipmentGroup.removeParentGroup(equipmentGroupBack);
-        assertThat(equipmentGroup.getParentGroups()).doesNotContain(equipmentGroupBack);
-        assertThat(equipmentGroupBack.getSubGroup()).isNull();
+        equipmentGroup.parentGroup(null);
+        assertThat(equipmentGroup.getParentGroup()).isNull();
+    }
 
-        equipmentGroup.parentGroups(new HashSet<>(Set.of(equipmentGroupBack)));
-        assertThat(equipmentGroup.getParentGroups()).containsOnly(equipmentGroupBack);
-        assertThat(equipmentGroupBack.getSubGroup()).isEqualTo(equipmentGroup);
+    @Test
+    void subGroupsTest() {
+        EquipmentGroup equipmentGroup = getEquipmentGroupRandomSampleGenerator();
+        EquipmentGroup equipmentGroupBack = getEquipmentGroupRandomSampleGenerator();
 
-        equipmentGroup.setParentGroups(new HashSet<>());
-        assertThat(equipmentGroup.getParentGroups()).doesNotContain(equipmentGroupBack);
-        assertThat(equipmentGroupBack.getSubGroup()).isNull();
+        equipmentGroup.addSubGroups(equipmentGroupBack);
+        assertThat(equipmentGroup.getSubGroups()).containsOnly(equipmentGroupBack);
+        assertThat(equipmentGroupBack.getParentGroup()).isEqualTo(equipmentGroup);
+
+        equipmentGroup.removeSubGroups(equipmentGroupBack);
+        assertThat(equipmentGroup.getSubGroups()).doesNotContain(equipmentGroupBack);
+        assertThat(equipmentGroupBack.getParentGroup()).isNull();
+
+        equipmentGroup.subGroups(new HashSet<>(Set.of(equipmentGroupBack)));
+        assertThat(equipmentGroup.getSubGroups()).containsOnly(equipmentGroupBack);
+        assertThat(equipmentGroupBack.getParentGroup()).isEqualTo(equipmentGroup);
+
+        equipmentGroup.setSubGroups(new HashSet<>());
+        assertThat(equipmentGroup.getSubGroups()).doesNotContain(equipmentGroupBack);
+        assertThat(equipmentGroupBack.getParentGroup()).isNull();
     }
 }

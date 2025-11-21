@@ -27,7 +27,8 @@
       "expectedStartDate": "Expected Start Date",
       "createdAt": "Created At",
       "plant": "Plant",
-      "createdBy": "Created By"
+      "createdBy": "Created By",
+      "groups": "Groups"
     }
   }
 }

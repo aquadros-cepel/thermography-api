@@ -7,6 +7,8 @@ import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -63,6 +65,11 @@ public class InspectionRoute implements Serializable {
     @NotNull
     @JsonIgnoreProperties(value = { "user", "company" }, allowSetters = true)
     private UserInfo createdBy;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "inspectionRoute")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "inspectionRoute", "parentGroup", "subGroups", "equipments" }, allowSetters = true)
+    private Set<InspectionRouteGroup> groups = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -206,6 +213,37 @@ public class InspectionRoute implements Serializable {
 
     public InspectionRoute createdBy(UserInfo userInfo) {
         this.setCreatedBy(userInfo);
+        return this;
+    }
+
+    public Set<InspectionRouteGroup> getGroups() {
+        return this.groups;
+    }
+
+    public void setGroups(Set<InspectionRouteGroup> inspectionRouteGroups) {
+        if (this.groups != null) {
+            this.groups.forEach(i -> i.setInspectionRoute(null));
+        }
+        if (inspectionRouteGroups != null) {
+            inspectionRouteGroups.forEach(i -> i.setInspectionRoute(this));
+        }
+        this.groups = inspectionRouteGroups;
+    }
+
+    public InspectionRoute groups(Set<InspectionRouteGroup> inspectionRouteGroups) {
+        this.setGroups(inspectionRouteGroups);
+        return this;
+    }
+
+    public InspectionRoute addGroups(InspectionRouteGroup inspectionRouteGroup) {
+        this.groups.add(inspectionRouteGroup);
+        inspectionRouteGroup.setInspectionRoute(this);
+        return this;
+    }
+
+    public InspectionRoute removeGroups(InspectionRouteGroup inspectionRouteGroup) {
+        this.groups.remove(inspectionRouteGroup);
+        inspectionRouteGroup.setInspectionRoute(null);
         return this;
     }
 

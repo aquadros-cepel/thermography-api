@@ -66,9 +66,9 @@ export const InspectionRouteGroupDetail = () => {
           </dt>
           <dd>{inspectionRouteGroupEntity.inspectionRoute ? inspectionRouteGroupEntity.inspectionRoute.id : ''}</dd>
           <dt>
-            <Translate contentKey="thermographyApiApp.inspectionRouteGroup.subGroup">Sub Group</Translate>
+            <Translate contentKey="thermographyApiApp.inspectionRouteGroup.parentGroup">Parent Group</Translate>
           </dt>
-          <dd>{inspectionRouteGroupEntity.subGroup ? inspectionRouteGroupEntity.subGroup.id : ''}</dd>
+          <dd>{inspectionRouteGroupEntity.parentGroup ? inspectionRouteGroupEntity.parentGroup.id : ''}</dd>
         </dl>
         <Button tag={Link} to="/inspection-route-group" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

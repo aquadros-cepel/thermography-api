@@ -62,6 +62,6 @@ public class EquipmentGroupAsserts {
         assertThat(actual)
             .as("Verify EquipmentGroup relationships")
             .satisfies(a -> assertThat(a.getPlant()).as("check plant").isEqualTo(expected.getPlant()))
-            .satisfies(a -> assertThat(a.getSubGroup()).as("check subGroup").isEqualTo(expected.getSubGroup()));
+            .satisfies(a -> assertThat(a.getParentGroup()).as("check parentGroup").isEqualTo(expected.getParentGroup()));
     }
 }

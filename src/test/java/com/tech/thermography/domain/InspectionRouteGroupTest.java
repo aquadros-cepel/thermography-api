@@ -1,5 +1,6 @@
 package com.tech.thermography.domain;
 
+import static com.tech.thermography.domain.InspectionRouteGroupEquipmentTestSamples.*;
 import static com.tech.thermography.domain.InspectionRouteGroupTestSamples.*;
 import static com.tech.thermography.domain.InspectionRouteGroupTestSamples.*;
 import static com.tech.thermography.domain.InspectionRouteTestSamples.*;
@@ -39,36 +40,58 @@ class InspectionRouteGroupTest {
     }
 
     @Test
-    void subGroupTest() {
-        InspectionRouteGroup inspectionRouteGroup = getInspectionRouteGroupRandomSampleGenerator();
-        InspectionRouteGroup inspectionRouteGroupBack = getInspectionRouteGroupRandomSampleGenerator();
-
-        inspectionRouteGroup.setSubGroup(inspectionRouteGroupBack);
-        assertThat(inspectionRouteGroup.getSubGroup()).isEqualTo(inspectionRouteGroupBack);
-
-        inspectionRouteGroup.subGroup(null);
-        assertThat(inspectionRouteGroup.getSubGroup()).isNull();
-    }
-
-    @Test
     void parentGroupTest() {
         InspectionRouteGroup inspectionRouteGroup = getInspectionRouteGroupRandomSampleGenerator();
         InspectionRouteGroup inspectionRouteGroupBack = getInspectionRouteGroupRandomSampleGenerator();
 
-        inspectionRouteGroup.addParentGroup(inspectionRouteGroupBack);
-        assertThat(inspectionRouteGroup.getParentGroups()).containsOnly(inspectionRouteGroupBack);
-        assertThat(inspectionRouteGroupBack.getSubGroup()).isEqualTo(inspectionRouteGroup);
+        inspectionRouteGroup.setParentGroup(inspectionRouteGroupBack);
+        assertThat(inspectionRouteGroup.getParentGroup()).isEqualTo(inspectionRouteGroupBack);
 
-        inspectionRouteGroup.removeParentGroup(inspectionRouteGroupBack);
-        assertThat(inspectionRouteGroup.getParentGroups()).doesNotContain(inspectionRouteGroupBack);
-        assertThat(inspectionRouteGroupBack.getSubGroup()).isNull();
+        inspectionRouteGroup.parentGroup(null);
+        assertThat(inspectionRouteGroup.getParentGroup()).isNull();
+    }
 
-        inspectionRouteGroup.parentGroups(new HashSet<>(Set.of(inspectionRouteGroupBack)));
-        assertThat(inspectionRouteGroup.getParentGroups()).containsOnly(inspectionRouteGroupBack);
-        assertThat(inspectionRouteGroupBack.getSubGroup()).isEqualTo(inspectionRouteGroup);
+    @Test
+    void subGroupsTest() {
+        InspectionRouteGroup inspectionRouteGroup = getInspectionRouteGroupRandomSampleGenerator();
+        InspectionRouteGroup inspectionRouteGroupBack = getInspectionRouteGroupRandomSampleGenerator();
 
-        inspectionRouteGroup.setParentGroups(new HashSet<>());
-        assertThat(inspectionRouteGroup.getParentGroups()).doesNotContain(inspectionRouteGroupBack);
-        assertThat(inspectionRouteGroupBack.getSubGroup()).isNull();
+        inspectionRouteGroup.addSubGroups(inspectionRouteGroupBack);
+        assertThat(inspectionRouteGroup.getSubGroups()).containsOnly(inspectionRouteGroupBack);
+        assertThat(inspectionRouteGroupBack.getParentGroup()).isEqualTo(inspectionRouteGroup);
+
+        inspectionRouteGroup.removeSubGroups(inspectionRouteGroupBack);
+        assertThat(inspectionRouteGroup.getSubGroups()).doesNotContain(inspectionRouteGroupBack);
+        assertThat(inspectionRouteGroupBack.getParentGroup()).isNull();
+
+        inspectionRouteGroup.subGroups(new HashSet<>(Set.of(inspectionRouteGroupBack)));
+        assertThat(inspectionRouteGroup.getSubGroups()).containsOnly(inspectionRouteGroupBack);
+        assertThat(inspectionRouteGroupBack.getParentGroup()).isEqualTo(inspectionRouteGroup);
+
+        inspectionRouteGroup.setSubGroups(new HashSet<>());
+        assertThat(inspectionRouteGroup.getSubGroups()).doesNotContain(inspectionRouteGroupBack);
+        assertThat(inspectionRouteGroupBack.getParentGroup()).isNull();
+    }
+
+    @Test
+    void equipmentsTest() {
+        InspectionRouteGroup inspectionRouteGroup = getInspectionRouteGroupRandomSampleGenerator();
+        InspectionRouteGroupEquipment inspectionRouteGroupEquipmentBack = getInspectionRouteGroupEquipmentRandomSampleGenerator();
+
+        inspectionRouteGroup.addEquipments(inspectionRouteGroupEquipmentBack);
+        assertThat(inspectionRouteGroup.getEquipments()).containsOnly(inspectionRouteGroupEquipmentBack);
+        assertThat(inspectionRouteGroupEquipmentBack.getInspectionRouteGroup()).isEqualTo(inspectionRouteGroup);
+
+        inspectionRouteGroup.removeEquipments(inspectionRouteGroupEquipmentBack);
+        assertThat(inspectionRouteGroup.getEquipments()).doesNotContain(inspectionRouteGroupEquipmentBack);
+        assertThat(inspectionRouteGroupEquipmentBack.getInspectionRouteGroup()).isNull();
+
+        inspectionRouteGroup.equipments(new HashSet<>(Set.of(inspectionRouteGroupEquipmentBack)));
+        assertThat(inspectionRouteGroup.getEquipments()).containsOnly(inspectionRouteGroupEquipmentBack);
+        assertThat(inspectionRouteGroupEquipmentBack.getInspectionRouteGroup()).isEqualTo(inspectionRouteGroup);
+
+        inspectionRouteGroup.setEquipments(new HashSet<>());
+        assertThat(inspectionRouteGroup.getEquipments()).doesNotContain(inspectionRouteGroupEquipmentBack);
+        assertThat(inspectionRouteGroupEquipmentBack.getInspectionRouteGroup()).isNull();
     }
 }

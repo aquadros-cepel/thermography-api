@@ -254,22 +254,22 @@ relationship ManyToMany{
     EquipmentComponent{equipments} to Equipment{components}
 }
 relationship ManyToOne {
-    Plant {company } to Company			        //FK Optional
+    Plant {company } to Company			   //FK Optional
     Equipment {plant required } to Plant
-	EquipmentGroup {plant} to Plant		      //FK Optional
-	Equipment {group} to EquipmentGroup     //FK Optional
+	EquipmentGroup {plant} to Plant		   //FK Optional
+	Equipment {group} to EquipmentGroup    //FK Optional
     
     // Auto-relacionamento (um grupo pode conter subgrupos)
-  	EquipmentGroup{subGroup} to EquipmentGroup{parentGroup} //FK Optional
+  	EquipmentGroup{parentGroup} to EquipmentGroup{subGroups} //FK Optional
 
 	InspectionRoute {plant required } to Plant
     InspectionRoute {createdBy required } to UserInfo
-    InspectionRouteGroup{inspectionRoute} to InspectionRoute          //FK Optional
+    InspectionRouteGroup{inspectionRoute} to InspectionRoute{groups}     //FK Optional
     // Auto-relacionamento (um grupo pode conter subgrupos)
-	InspectionRouteGroup{subGroup} to InspectionRouteGroup{parentGroup} //FK Optional
+	InspectionRouteGroup{parentGroup} to InspectionRouteGroup{subGroups} //FK Optional
     
     //Tabela associativa ManyToMany desmembrada em 2 relacionamentos ManyToOne
-	InspectionRouteGroupEquipment {inspectionRouteGroup} to InspectionRouteGroup
+	InspectionRouteGroupEquipment {inspectionRouteGroup} to InspectionRouteGroup{equipments}
     InspectionRouteGroupEquipment {equipment} to Equipment
 
 	InspectionRouteRecord {startedBy } to UserInfo          //FK Optional (Quando ainda não iniciou a rota)

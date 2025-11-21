@@ -60,6 +60,13 @@
       "relationshipSide": "left",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "inspectionRouteGroup",
+      "otherEntityRelationshipName": "inspectionRoute",
+      "relationshipName": "groups",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
     }
   ],
   "searchEngine": "no"
