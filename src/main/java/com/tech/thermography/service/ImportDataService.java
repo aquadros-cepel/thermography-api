@@ -9,7 +9,6 @@ import com.tech.thermography.repository.EquipmentGroupRepository;
 import com.tech.thermography.repository.EquipmentRepository;
 import com.tech.thermography.repository.PlantRepository;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -181,8 +180,8 @@ public class ImportDataService {
         int importedCount = 0;
         int totalRecords = 0;
 
-        // Key: plantCode + ":" + groupCode, Value: EquipmentGroup
-        Map<String, EquipmentGroup> groupCache = new HashMap<>();
+        // --- PHASE 1: Read CSV and Build Hierarchy (In-Memory) ---
+        Map<String, ImportPlant> plantsMap = new HashMap<>(); // Key: plantCode
 
         String line;
         boolean firstLine = true;
@@ -194,155 +193,125 @@ public class ImportDataService {
             }
 
             totalRecords++;
-            String[] values = line.split(",", -1); // -1 to keep trailing empty strings
+            String[] values = line.split(",", -1);
 
-            if (values.length < 15) { // Check for minimum expected columns
-                errorMessages.add(String.format("Linha %d: Formato inválido (menos de 15 colunas).", totalRecords + 1));
+            if (values.length < 17) {
+                errorMessages.add(String.format("Linha %d: Formato inválido (menos de 17 colunas).", totalRecords + 1));
                 continue;
             }
 
             try {
-                // --- PHASE 2: CSV Parsing and Initial Data Extraction ---
+                // Extract Data
                 String plantCode = values[0].trim();
                 String groupCode = values[1].trim();
                 String groupName = values[2].trim();
-                String equipmentCode = values[3].trim();
-                String equipmentName = values[4].trim();
-                String equipmentDescription = values[5].trim();
-                String equipmentTypeStr = values[6].trim();
-                String equipmentManufacturer = values[7].trim();
-                String equipmentModel = values[8].trim();
-                String equipmentSerialNumber = values[9].trim();
-                String equipmentVoltageClassStr = values[10].trim();
-                String equipmentPhaseType = values[11].trim();
-                String equipmentStartDateStr = values[12].trim();
-                String equipmentLatitudeStr = values[13].trim();
-                String equipmentLongitudeStr = values[14].trim();
+                String subgroupCode = values[3].trim();
+                String subgroupName = values[4].trim();
 
-                // --- PHASE 3: Business Logic Implementation ---
-
-                // 1. Plant Existence Check (Rule 1)
-                Optional<Plant> plantOpt = plantRepository.findByCode(plantCode);
-                if (plantOpt.isEmpty()) {
-                    errorMessages.add(
-                        String.format("Linha %d: Planta '%s' não encontrada. Equipamento não importado.", totalRecords + 1, plantCode)
-                    );
-                    continue;
-                }
-                Plant plant = plantOpt.get();
-
-                // 2. EquipmentGroup Handling (Rule 2)
-                EquipmentGroup equipmentGroup = null;
-                String groupCacheKey = plantCode + ":" + groupCode;
-
-                boolean hasGroupData = !groupCode.isEmpty() && !groupName.isEmpty();
-
-                if (hasGroupData) {
-                    // Check cache first
-                    if (groupCache.containsKey(groupCacheKey)) {
-                        equipmentGroup = groupCache.get(groupCacheKey);
-                    } else {
-                        // Try to find in DB
-                        Optional<EquipmentGroup> groupOpt = equipmentGroupRepository.findByNameAndPlant(groupCode, plant);
-                        if (groupOpt.isPresent()) {
-                            equipmentGroup = groupOpt.get();
-                        } else {
-                            // Create and save new group
-                            EquipmentGroup newGroup = new EquipmentGroup();
-                            newGroup.setCode(groupCode);
-                            newGroup.setName(groupName);
-                            newGroup.setPlant(plant);
-                            equipmentGroup = equipmentGroupRepository.save(newGroup);
-                        }
-                        // Add to cache
-                        groupCache.put(groupCacheKey, equipmentGroup);
-                    }
-                }
-                // If hasGroupData is false, equipmentGroup remains null (Rule 3 satisfied: "Se
-                // não existir o grupo no Map, colocar null")
-
-                // 3. Equipment Creation (Rule 3)
+                // Equipment Data
                 Equipment equipment = new Equipment();
-                equipment.setCode(equipmentCode);
-                equipment.setName(equipmentName);
-                equipment.setDescription(equipmentDescription);
-                equipment.setManufacturer(equipmentManufacturer);
-                equipment.setModel(equipmentModel);
-                equipment.setSerialNumber(equipmentSerialNumber);
+                equipment.setCode(values[5].trim());
+                equipment.setName(values[6].trim());
+                equipment.setDescription(values[7].trim());
+                equipment.setManufacturer(values[9].trim());
+                equipment.setModel(values[10].trim());
+                equipment.setSerialNumber(values[11].trim());
 
-                // Data Conversion
-                EquipmentType equipmentType;
-                try {
-                    equipmentType = EquipmentType.valueOf(equipmentTypeStr.toUpperCase());
-                } catch (IllegalArgumentException e) {
-                    errorMessages.add(
-                        String.format(
-                            "Linha %d: Tipo de equipamento '%s' inválido. Equipamento não importado.",
-                            totalRecords + 1,
-                            equipmentTypeStr
-                        )
-                    );
-                    continue;
-                }
+                // Enums and Parsed fields
+                String typeStr = values[8].trim();
+                if (!typeStr.isEmpty()) equipment.setType(EquipmentType.valueOf(typeStr.toUpperCase()));
 
-                PhaseType phaseType = null;
-                if (!equipmentPhaseType.isEmpty() && !"NULL".equalsIgnoreCase(equipmentPhaseType)) {
-                    try {
-                        phaseType = PhaseType.valueOf(equipmentPhaseType.toUpperCase());
-                    } catch (IllegalArgumentException e) {
-                        errorMessages.add(
-                            String.format(
-                                "Linha %d: Tipo de fase '%s' inválido. Equipamento não importado.",
-                                totalRecords + 1,
-                                equipmentPhaseType
-                            )
+                String phaseStr = values[13].trim();
+                if (!phaseStr.isEmpty() && !"NULL".equalsIgnoreCase(phaseStr)) equipment.setPhaseType(
+                    PhaseType.valueOf(phaseStr.toUpperCase())
+                );
+
+                String voltStr = values[12].trim();
+                if (!voltStr.isEmpty() && !"NULL".equalsIgnoreCase(voltStr)) equipment.setVoltageClass(Float.parseFloat(voltStr));
+
+                String dateStr = values[14].trim();
+                if (!dateStr.isEmpty() && !"NULL".equalsIgnoreCase(dateStr)) equipment.setStartDate(LocalDate.parse(dateStr));
+
+                String latStr = values[15].trim();
+                if (!latStr.isEmpty() && !"NULL".equalsIgnoreCase(latStr)) equipment.setLatitude(Double.parseDouble(latStr));
+
+                String lonStr = values[16].trim();
+                if (!lonStr.isEmpty() && !"NULL".equalsIgnoreCase(lonStr)) equipment.setLongitude(Double.parseDouble(lonStr));
+
+                // Build Hierarchy
+                ImportPlant importPlant = plantsMap.computeIfAbsent(plantCode, k -> new ImportPlant(k));
+
+                if (!groupCode.isEmpty()) {
+                    ImportGroup importGroup = importPlant.groups.computeIfAbsent(groupCode, k -> new ImportGroup(k, groupName));
+
+                    if (!subgroupCode.isEmpty()) {
+                        ImportSubgroup importSubgroup = importGroup.subgroups.computeIfAbsent(subgroupCode, k ->
+                            new ImportSubgroup(k, subgroupName)
                         );
-                        continue;
+                        importSubgroup.equipments.add(equipment);
+                    } else {
+                        // Equipment directly under Group (if allowed/possible logic, though req says eq
+                        // -> subgroup)
+                        // For now, let's assume strict hierarchy or handle as needed.
+                        // If subgroup is empty, we might attach to group directly or warn.
+                        // Based on user req: "equipamentos têm que possuir uma referencia para o
+                        // subgrupo".
+                        // So if no subgroup, maybe we skip or attach to group?
+                        // Let's attach to group via a "default" or just keep it in group list if we
+                        // added one.
+                        // But ImportGroup structure below needs a list of equipments too if we support
+                        // that.
+                        // Let's add equipments list to ImportGroup as fallback.
+                        importGroup.directEquipments.add(equipment);
                     }
                 }
-
-                Float voltageClass = equipmentVoltageClassStr.isEmpty() || "NULL".equalsIgnoreCase(equipmentVoltageClassStr)
-                    ? null
-                    : Float.parseFloat(equipmentVoltageClassStr);
-                LocalDate startDate = equipmentStartDateStr.isEmpty() || "NULL".equalsIgnoreCase(equipmentStartDateStr)
-                    ? null
-                    : LocalDate.parse(equipmentStartDateStr);
-                Double latitude = equipmentLatitudeStr.isEmpty() || "NULL".equalsIgnoreCase(equipmentLatitudeStr)
-                    ? null
-                    : Double.parseDouble(equipmentLatitudeStr);
-                Double longitude = equipmentLongitudeStr.isEmpty() || "NULL".equalsIgnoreCase(equipmentLongitudeStr)
-                    ? null
-                    : Double.parseDouble(equipmentLongitudeStr);
-
-                equipment.setType(equipmentType);
-                equipment.setPhaseType(phaseType);
-                equipment.setVoltageClass(voltageClass);
-                equipment.setStartDate(startDate);
-                equipment.setLatitude(latitude);
-                equipment.setLongitude(longitude);
-
-                // Associations
-                equipment.setPlant(plant);
-                equipment.setGroup(equipmentGroup);
-
-                // Save Equipment
-                equipmentRepository.save(equipment);
-
-                // Increment count
-                importedCount++;
             } catch (IllegalArgumentException e) {
-                errorMessages.add(String.format("Linha %d: Erro de conversão de dados. Detalhe: %s", totalRecords + 1, e.getMessage()));
+                errorMessages.add(String.format("Linha %d: Erro de conversão/enum. Detalhe: %s", totalRecords + 1, e.getMessage()));
             } catch (Exception e) {
-                errorMessages.add(
-                    String.format("Linha %d: Erro inesperado ao processar o registro. Detalhe: %s", totalRecords + 1, e.getMessage())
-                );
+                errorMessages.add(String.format("Linha %d: Erro inesperado. Detalhe: %s", totalRecords + 1, e.getMessage()));
             }
         }
 
-        // --- PHASE 4: Finalization ---
+        // --- PHASE 2: Persist Hierarchy ---
+
+        for (ImportPlant importPlant : plantsMap.values()) {
+            Optional<Plant> plantOpt = plantRepository.findByCode(importPlant.code);
+            if (plantOpt.isEmpty()) {
+                errorMessages.add(String.format("Planta '%s' não encontrada. Equipamentos ignorados.", importPlant.code));
+                continue;
+            }
+            Plant plant = plantOpt.get();
+
+            for (ImportGroup importGroup : importPlant.groups.values()) {
+                // Find or Create Parent Group
+                EquipmentGroup parentGroup = findOrCreateGroup(importGroup.code, importGroup.name, plant, null);
+
+                // Process Subgroups
+                for (ImportSubgroup importSubgroup : importGroup.subgroups.values()) {
+                    EquipmentGroup subgroup = findOrCreateGroup(importSubgroup.code, importSubgroup.name, plant, parentGroup);
+
+                    // Save Equipments for Subgroup
+                    for (Equipment eq : importSubgroup.equipments) {
+                        eq.setPlant(plant);
+                        eq.setGroup(subgroup);
+                        equipmentRepository.save(eq);
+                        importedCount++;
+                    }
+                }
+
+                // Process Direct Equipments (Fallback)
+                for (Equipment eq : importGroup.directEquipments) {
+                    eq.setPlant(plant);
+                    eq.setGroup(parentGroup);
+                    equipmentRepository.save(eq);
+                    importedCount++;
+                }
+            }
+        }
+
         if (!errorMessages.isEmpty()) {
             return String.format(
-                "Importação concluída com erros. Total de registros processados: %d. Registros importados com sucesso: %d. Erros encontrados:\n%s",
+                "Importação concluída com erros. Total lido: %d. Importados: %d. Erros:\n%s",
                 totalRecords,
                 importedCount,
                 String.join("\n", errorMessages)
@@ -350,5 +319,62 @@ public class ImportDataService {
         }
 
         return String.format("Importação concluída com sucesso. Total de %d equipamentos importados.", importedCount);
+    }
+
+    private EquipmentGroup findOrCreateGroup(String code, String name, Plant plant, EquipmentGroup parent) {
+        Optional<EquipmentGroup> opt;
+        if (parent == null) {
+            opt = equipmentGroupRepository.findFirstByCodeAndPlantAndParentGroupIsNull(code, plant);
+        } else {
+            opt = equipmentGroupRepository.findFirstByCodeAndPlantAndParentGroup(code, plant, parent);
+        }
+
+        if (opt.isPresent()) {
+            return opt.get();
+        } else {
+            EquipmentGroup group = new EquipmentGroup();
+            group.setCode(code);
+            group.setName(name);
+            group.setPlant(plant);
+            group.setParentGroup(parent);
+            return equipmentGroupRepository.save(group);
+        }
+    }
+
+    // --- Inner Classes for In-Memory Hierarchy ---
+
+    private static class ImportPlant {
+
+        String code;
+        Map<String, ImportGroup> groups = new HashMap<>();
+
+        ImportPlant(String code) {
+            this.code = code;
+        }
+    }
+
+    private static class ImportGroup {
+
+        String code;
+        String name;
+        Map<String, ImportSubgroup> subgroups = new HashMap<>();
+        List<Equipment> directEquipments = new ArrayList<>();
+
+        ImportGroup(String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+    }
+
+    private static class ImportSubgroup {
+
+        String code;
+        String name;
+        List<Equipment> equipments = new ArrayList<>();
+
+        ImportSubgroup(String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
     }
 }
