@@ -2,7 +2,7 @@
 
 TOKEN=$(./bin/login.sh)
 
-PLANT_ID="1ddcc73b-b1cf-4d48-b572-2daf68f1403a"
+PLANT_ID="a28bae75-69b3-4ddc-bc26-05a052c96ebc"
 
 echo "🔐 Token retrieved successfully."
 
