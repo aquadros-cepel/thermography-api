@@ -2,7 +2,6 @@ package com.tech.thermography.domain;
 
 import com.tech.thermography.domain.enumeration.DatetimeUnit;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.UUID;
 import org.hibernate.annotations.Cache;
@@ -137,7 +136,8 @@ public class RiskPeriodicityDeadline implements Serializable {
         this.recommendations = recommendations;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -152,7 +152,8 @@ public class RiskPeriodicityDeadline implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -160,13 +161,13 @@ public class RiskPeriodicityDeadline implements Serializable {
     @Override
     public String toString() {
         return "RiskPeriodicityDeadline{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", deadline=" + getDeadline() +
-            ", deadlineUnit='" + getDeadlineUnit() + "'" +
-            ", periodicity=" + getPeriodicity() +
-            ", periodicityUnit='" + getPeriodicityUnit() + "'" +
-            ", recommendations='" + getRecommendations() + "'" +
-            "}";
+                "id=" + getId() +
+                ", name='" + getName() + "'" +
+                ", deadline=" + getDeadline() +
+                ", deadlineUnit='" + getDeadlineUnit() + "'" +
+                ", periodicity=" + getPeriodicity() +
+                ", periodicityUnit='" + getPeriodicityUnit() + "'" +
+                ", recommendations='" + getRecommendations() + "'" +
+                "}";
     }
 }
