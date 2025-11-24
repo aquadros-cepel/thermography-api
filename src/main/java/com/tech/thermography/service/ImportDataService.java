@@ -326,7 +326,7 @@ public class ImportDataService {
         if (parent == null) {
             opt = equipmentGroupRepository.findFirstByCodeAndPlantAndParentGroupIsNull(code, plant);
         } else {
-            opt = equipmentGroupRepository.findFirstByCodeAndPlantAndParentGroup(code, plant, parent);
+            opt = equipmentGroupRepository.findFirstByCodeAndPlantAndParentGroup(code, null, parent);
         }
 
         if (opt.isPresent()) {
@@ -335,7 +335,11 @@ public class ImportDataService {
             EquipmentGroup group = new EquipmentGroup();
             group.setCode(code);
             group.setName(name);
-            group.setPlant(plant);
+            if (parent != null) {
+                group.setPlant(null);
+            } else {
+                group.setPlant(plant);
+            }
             group.setParentGroup(parent);
             return equipmentGroupRepository.save(group);
         }
