@@ -23,7 +23,7 @@ logging:
 spring:
   devtools:
     restart:
-      enabled: true
+      enabled: false
       additional-exclude: static/**
     livereload:
       enabled: false # we use Webpack dev server + BrowserSync for livereload
@@ -41,6 +41,11 @@ spring:
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev
+    enabled: false
+
+  jpa:
+    hibernate:
+      ddl-auto: none
   mail:
     host: localhost
     port: 25
