@@ -95,26 +95,28 @@ spring:
     exclude: org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration
   application:
     name: thermographyApi
-  cloud:
-    function:
-      definition: kafkaConsumer;kafkaProducer
-    stream:
-      kafka:
-        binder:
-          replicationFactor: 1
-          auto-create-topics: true
-          brokers: localhost:9092
-      bindings:
-        binding-out-0:
-          content-type: text/plain
-          group: thermography-api
-        kafkaConsumer-in-0:
-          destination: sse-topic
-          content-type: text/plain
-          group: thermography-api
-        kafkaProducer-out-0:
-          content-type: text/plain
-          group: thermography-api
+  # Kafka configuration - DISABLED for development
+  # Uncomment the lines below to re-enable Kafka
+  # cloud:
+  #   function:
+  #     definition: kafkaConsumer;kafkaProducer
+  #   stream:
+  #     kafka:
+  #       binder:
+  #         replicationFactor: 1
+  #         auto-create-topics: true
+  #         brokers: localhost:9092
+  #     bindings:
+  #       binding-out-0:
+  #         content-type: text/plain
+  #         group: thermography-api
+  #       kafkaConsumer-in-0:
+  #         destination: sse-topic
+  #         content-type: text/plain
+  #         group: thermography-api
+  #       kafkaProducer-out-0:
+  #         content-type: text/plain
+  #         group: thermography-api
   docker:
     compose:
       enabled: true

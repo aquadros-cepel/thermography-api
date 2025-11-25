@@ -42,6 +42,11 @@ spring:
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: prod
+    enabled: false
+
+  jpa:
+    hibernate:
+      ddl-auto: none
   mail:
     host: localhost
     port: 25
@@ -49,6 +54,13 @@ spring:
     password:
   thymeleaf:
     cache: true
+  autoconfigure:
+    exclude:
+      - org.springframework.cloud.stream.config.BindingServiceConfiguration
+      - org.springframework.cloud.function.context.config.ContextFunctionCatalogAutoConfiguration
+  cloud:
+    stream:
+      enabled: false
 
 # ===================================================================
 # To enable TLS in production, generate a certificate using:
@@ -122,3 +134,9 @@ jhipster:
 # ===================================================================
 
 # application:
+
+# ===================================================================
+# Kafka Configuration
+# ===================================================================
+kafka:
+  enabled: false

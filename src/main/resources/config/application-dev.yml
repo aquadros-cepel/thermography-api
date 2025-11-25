@@ -20,7 +20,17 @@ logging:
     org.hibernate.SQL: DEBUG
     com.tech.thermography: DEBUG
 
+kafka:
+  enabled: false
+
 spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.cloud.stream.config.BindingServiceConfiguration
+      - org.springframework.cloud.stream.function.FunctionConfiguration
+  cloud:
+    stream:
+      enabled: false
   devtools:
     restart:
       enabled: false
