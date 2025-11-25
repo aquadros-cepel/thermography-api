@@ -1,5 +1,5 @@
 {
-  "id": "5875e577-b3c8-4993-aca4-9f64b5a02f62",
+  "id": "107a26ee-4342-4d36-bd54-29bcf6b37604",
   "code": null,
   "name": null,
   "description": null,
@@ -7,7 +7,7 @@
   "periodicity": null,
   "duration": null,
   "expectedStartDate": null,
-  "createdAt": "2025-11-25T10:58:41.670801120Z",
+  "createdAt": "2025-11-25T14:02:42.090990345Z",
   "plant": {
     "id": "fb380f41-57a0-4e56-8e52-433a27863580",
     "code": "N-S-PAAT",
@@ -20,30 +20,30 @@
   "createdBy": null,
   "groups": [
     {
-      "id": "f55bbd71-8208-4b4e-b984-f409b401442a",
+      "id": "f47cdb17-8c26-4832-bb84-b8bed5d10f7a",
       "code": "N-S-PAAT-TF601",
       "name": "Transformador 230kV Nº 01",
       "description": null,
       "included": true,
       "orderIndex": 1,
       "inspectionRoute": {
-        "id": "5875e577-b3c8-4993-aca4-9f64b5a02f62"
+        "id": "107a26ee-4342-4d36-bd54-29bcf6b37604"
       },
       "parentGroup": null,
       "subGroups": [
         {
-          "id": "ab0a6756-8309-41c1-ad23-83285f7c9631",
+          "id": "22c48798-8589-4725-96a7-7de914b8a04b",
           "code": "N-S-PAAT-TF601-TF230",
           "name": "Módulo TF230",
           "description": null,
           "included": true,
           "orderIndex": 1,
           "parentGroup": {
-            "id": "f55bbd71-8208-4b4e-b984-f409b401442a"
+            "id": "f47cdb17-8c26-4832-bb84-b8bed5d10f7a"
           },
           "equipments": [
             {
-              "id": "417a0e2a-c778-41e9-b691-5e19adc3d7c0",
+              "id": "45251ee2-9d7c-41ab-aef1-f22ee2be928a",
               "included": true,
               "orderIndex": 1,
               "equipment": {
@@ -68,30 +68,30 @@
       "equipments": []
     },
     {
-      "id": "d10bd8a4-bf75-46c3-9262-7634695ddc7b",
+      "id": "6aebf8fa-7d66-4564-8761-a20c968661f3",
       "code": "N-S-PAAT-TF603",
       "name": "Transformador 230kV Nº 03",
       "description": null,
       "included": true,
       "orderIndex": 2,
       "inspectionRoute": {
-        "id": "5875e577-b3c8-4993-aca4-9f64b5a02f62"
+        "id": "107a26ee-4342-4d36-bd54-29bcf6b37604"
       },
       "parentGroup": null,
       "subGroups": [
         {
-          "id": "862c9dcd-23cd-44e6-ad75-20ff11756b11",
+          "id": "3321cabb-82e8-4bf3-a279-ef90764b529a",
           "code": "N-S-PAAT-TF603-MC69",
           "name": "Módulo MC69",
           "description": null,
           "included": true,
           "orderIndex": 1,
           "parentGroup": {
-            "id": "d10bd8a4-bf75-46c3-9262-7634695ddc7b"
+            "id": "6aebf8fa-7d66-4564-8761-a20c968661f3"
           },
           "equipments": [
             {
-              "id": "37e8f19f-0b35-42ea-af54-28e081f6800f",
+              "id": "b0a75af1-01d5-4b84-bb43-f6a77e1e9d94",
               "included": true,
               "orderIndex": 1,
               "equipment": {
@@ -113,18 +113,18 @@
           ]
         },
         {
-          "id": "2641dd9d-6bf5-4f93-aea8-d57354c72bc5",
+          "id": "736c161b-b8d2-4f44-855c-baf37f437737",
           "code": "N-S-PAAT-TF603-MC230",
           "name": "Módulo MC230",
           "description": null,
           "included": true,
           "orderIndex": 2,
           "parentGroup": {
-            "id": "d10bd8a4-bf75-46c3-9262-7634695ddc7b"
+            "id": "6aebf8fa-7d66-4564-8761-a20c968661f3"
           },
           "equipments": [
             {
-              "id": "ac6c928f-de80-4b4e-ba26-eda42e89f573",
+              "id": "97c995da-bb4c-4a7f-a110-84cff59521c8",
               "included": true,
               "orderIndex": 1,
               "equipment": {
@@ -146,18 +146,18 @@
           ]
         },
         {
-          "id": "d0a10f19-0b4d-4b86-9032-e2dba8a8315f",
+          "id": "26773e18-54a9-4f83-a056-783b61088481",
           "code": "N-S-PAAT-TF603-TF230",
           "name": "Módulo TF230",
           "description": null,
           "included": true,
           "orderIndex": 3,
           "parentGroup": {
-            "id": "d10bd8a4-bf75-46c3-9262-7634695ddc7b"
+            "id": "6aebf8fa-7d66-4564-8761-a20c968661f3"
           },
           "equipments": [
             {
-              "id": "fe0ad672-b58e-40ac-a93a-b30e7ce3f441",
+              "id": "fecf63b2-6548-4431-9877-be14f256e248",
               "included": true,
               "orderIndex": 1,
               "equipment": {
@@ -182,30 +182,30 @@
       "equipments": []
     },
     {
-      "id": "4f9fd60c-ae0f-484d-85af-9e46ad9a8a0c",
+      "id": "757da0a7-ccf6-4352-9014-a50e957f813f",
       "code": "N-S-PAAT-TF602",
       "name": "Transformador 230kV Nº 02",
       "description": null,
       "included": true,
       "orderIndex": 3,
       "inspectionRoute": {
-        "id": "5875e577-b3c8-4993-aca4-9f64b5a02f62"
+        "id": "107a26ee-4342-4d36-bd54-29bcf6b37604"
       },
       "parentGroup": null,
       "subGroups": [
         {
-          "id": "b48f1728-8617-4154-9d7e-97da9973b5dd",
+          "id": "30fa35e5-ada5-4563-985a-211e6f99eb96",
           "code": "N-S-PAAT-TF602-MC230",
           "name": "Módulo MC230",
           "description": null,
           "included": true,
           "orderIndex": 1,
           "parentGroup": {
-            "id": "4f9fd60c-ae0f-484d-85af-9e46ad9a8a0c"
+            "id": "757da0a7-ccf6-4352-9014-a50e957f813f"
           },
           "equipments": [
             {
-              "id": "a100719d-73cb-4885-9c25-be0493b31fca",
+              "id": "89d6d56e-b49d-473a-b912-54057f1acd80",
               "included": true,
               "orderIndex": 1,
               "equipment": {
@@ -227,18 +227,18 @@
           ]
         },
         {
-          "id": "b4909365-5edc-4312-8892-0cd7a5ed7b90",
+          "id": "056e5c0a-3060-4c35-b5e8-cc09b302f976",
           "code": "N-S-PAAT-TF602-TF230",
           "name": "Módulo TF230",
           "description": null,
           "included": true,
           "orderIndex": 2,
           "parentGroup": {
-            "id": "4f9fd60c-ae0f-484d-85af-9e46ad9a8a0c"
+            "id": "757da0a7-ccf6-4352-9014-a50e957f813f"
           },
           "equipments": [
             {
-              "id": "0720e322-4619-4cfc-a414-ef8652479b71",
+              "id": "e564a7f0-fc62-4543-b4c1-3a737d5e7cf9",
               "included": true,
               "orderIndex": 1,
               "equipment": {
@@ -258,7 +258,7 @@
               }
             },
             {
-              "id": "ca84c555-c563-4f89-91c5-efbb2e19cf84",
+              "id": "1481eb73-45ce-421e-b72d-6e3f85da4360",
               "included": true,
               "orderIndex": 2,
               "equipment": {
@@ -280,18 +280,18 @@
           ]
         },
         {
-          "id": "fb751d85-2906-4e5e-b950-2833c31b6b4a",
+          "id": "55cc0d77-917e-4fcc-b007-39e727735830",
           "code": "N-S-PAAT-TF602-MC69",
           "name": "Módulo MC69",
           "description": null,
           "included": true,
           "orderIndex": 3,
           "parentGroup": {
-            "id": "4f9fd60c-ae0f-484d-85af-9e46ad9a8a0c"
+            "id": "757da0a7-ccf6-4352-9014-a50e957f813f"
           },
           "equipments": [
             {
-              "id": "c4df16ca-2e17-40e1-9435-7c277574f332",
+              "id": "dcf3eea3-0aa7-4afb-9d5f-fac47f06de5c",
               "included": true,
               "orderIndex": 1,
               "equipment": {
