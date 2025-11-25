@@ -2,8 +2,8 @@
 services:
   postgresql:
     image: postgres:17.4
-    # volumes:
-    #   - ~/volumes/jhipster/thermographyApi/postgresql/:/var/lib/postgresql/data/
+    volumes:
+      - ~/volumes/thermographyApi/postgresql/:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=thermographyApi
       - POSTGRES_HOST_AUTH_METHOD=trust

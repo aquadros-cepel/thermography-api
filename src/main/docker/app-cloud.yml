@@ -1,0 +1,68 @@
+# Docker Compose configuration for Cloud Deployment
+# This configuration is optimized for production deployment on cloud servers
+name: thermographyapi
+services:
+  app:
+    image: thermographyapi:latest
+    container_name: thermographyapi-app
+    environment:
+      - _JAVA_OPTIONS=-Xmx1024m -Xms512m
+      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/thermographyApi
+      - SPRING_DATASOURCE_USERNAME=thermographyApi
+      #- SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+      - SPRING_DATASOURCE_PASSWORD=thermographyApi
+      - SPRING_LIQUIBASE_URL=jdbc:postgresql://postgresql:5432/thermographyApi
+      # Kafka desabilitado
+      - KAFKA_ENABLED=false
+    ports:
+      - 8080:8080
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8080/management/health
+      interval: 10s
+      timeout: 5s
+      retries: 40
+      start_period: 60s
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - thermography-network
+
+  postgresql:
+    image: postgres:17.4
+    container_name: thermographyapi-postgresql
+    volumes:
+      # Volume nomeado para persistência de dados
+      - postgres-data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=thermographyApi
+      # - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+      - POSTGRES_PASSWORD=thermographyApi
+      - POSTGRES_DB=thermographyApi
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U thermographyApi']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+    networks:
+      - thermography-network
+
+# Volume nomeado para persistência de dados do PostgreSQL
+volumes:
+  postgres-data:
+    driver: local
+
+# Rede isolada para os containers
+networks:
+  thermography-network:
+    driver: bridge
