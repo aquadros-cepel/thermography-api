@@ -31,6 +31,7 @@ public class InspectionRouteGroupEquipment implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "inspectionRoute", "parentGroup", "subGroups", "equipments" }, allowSetters = true)
+    @com.fasterxml.jackson.annotation.JsonIncludeProperties(value = { "id" })
     private InspectionRouteGroup inspectionRouteGroup;
 
     @ManyToOne(fetch = FetchType.LAZY)

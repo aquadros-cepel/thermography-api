@@ -2,8 +2,9 @@ package com.tech.thermography.web.rest;
 
 import com.tech.thermography.domain.Equipment;
 import com.tech.thermography.domain.EquipmentGroup;
-import com.tech.thermography.domain.EquipmentGroup;
 import com.tech.thermography.domain.InspectionRoute;
+import com.tech.thermography.domain.InspectionRouteGroup;
+import com.tech.thermography.domain.InspectionRouteGroupEquipment;
 import com.tech.thermography.domain.Plant;
 import com.tech.thermography.repository.EquipmentGroupRepository;
 import com.tech.thermography.repository.EquipmentRepository;
@@ -233,18 +234,23 @@ public class InspectionRouteResource {
             .build();
     }
 
+    // **********************************************************************************************
+    // ******************************************** */ Testes sem DTO
+    // ******************************
+    // **********************************************************************************************
+
     /**
-     * {@code GET  /inspection-routes/new/:id} : get a complex InspectionRoute DTO
+     * {@code GET  /inspection-routes/new2/:id} : get a complex InspectionRoute
      * with groups, equipments and plant data assembled.
      *
      * @param id the id of the inspectionRoute to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
-     *         the constructed InspectionRouteDTO, or with status
+     *         the constructed InspectionRoute, or with status
      *         {@code 404 (Not Found)}.
      */
     @GetMapping("/new/{plantId}")
-    public ResponseEntity<InspectionRouteDTO> getNewInspectionRoute(@PathVariable("plantId") UUID plantId) {
-        LOG.debug("REST request to get new InspectionRoute DTO : {}", plantId);
+    public ResponseEntity<InspectionRoute> getNewInspectionRoute(@PathVariable("plantId") UUID plantId) {
+        LOG.debug("REST request to get new InspectionRoute: {}", plantId);
 
         Optional<Plant> plantOpt = plantRepository.findById(plantId);
 
@@ -254,125 +260,227 @@ public class InspectionRouteResource {
 
         Plant plant = plantOpt.get();
 
-        // Create InspectionRouteDTO
-        InspectionRouteDTO routeDto = new InspectionRouteDTO();
-        routeDto.setId(UUID.randomUUID());
-        routeDto.setCreatedAt(Instant.now());
-
-        // Map Plant to PlantDTO
-        PlantDTO plantDto = new PlantDTO();
-        plantDto.setId(plant.getId());
-        plantDto.setCode(plant.getCode());
-        plantDto.setName(plant.getName());
-        plantDto.setDescription(plant.getDescription());
-        plantDto.setLatitude(plant.getLatitude());
-        plantDto.setLongitude(plant.getLongitude());
-        plantDto.setStartDate(plant.getStartDate() != null ? plant.getStartDate().toString() : null);
-        routeDto.setPlant(plantDto);
+        // Create InspectionRoute
+        InspectionRoute route = new InspectionRoute();
+        route.setId(UUID.randomUUID());
+        // TODO: Inserir o código de criação do Nome
+        // route.setName("Inspection Route " + plant.getName());
+        route.setCreatedAt(Instant.now());
+        route.setPlant(plant);
 
         // Fetch equipment groups for the plant
         List<EquipmentGroup> equipmentGroups = equipmentGroupRepository.findByPlant(plant);
 
         // Map EquipmentGroups to InspectionRouteGroupDTO
-        Set<InspectionRouteGroupDTO> rootGroups = new HashSet<>();
+        Set<InspectionRouteGroup> rootGroups = new HashSet<>();
         int[] rootOrderIndex = { 1 };
 
         for (EquipmentGroup eg : equipmentGroups) {
             if (eg.getParentGroup() == null) {
-                rootGroups.add(mapGroupToDto(eg, routeDto, null, rootOrderIndex));
+                rootGroups.add(mapGroup(eg, route, null, rootOrderIndex));
             }
         }
 
-        routeDto.setGroups(rootGroups);
+        route.setGroups(rootGroups);
+        LOG.debug("REST request to get new InspectionRoute: {}", route);
 
-        return ResponseEntity.ok(routeDto);
+        return ResponseEntity.ok(route);
     }
 
-    private InspectionRouteGroupDTO mapGroupToDto(
-        EquipmentGroup eg,
-        InspectionRouteDTO routeDto,
-        InspectionRouteGroupDTO parentDto,
-        int[] orderIndexCounter
-    ) {
-        InspectionRouteGroupDTO dto = new InspectionRouteGroupDTO();
-        dto.setId(eg.getId()); // Using EquipmentGroup ID as base, but maybe should be new UUID? User said
-        // "copia os dados", usually implies new ID for new entity, but here we are
-        // returning DTO structure. Let's use EG ID for now as it maps to the group.
-        // Wait, the user example shows "group-100", "group-101". If we are creating a
-        // NEW route, we might want new IDs for the route groups. But the user said
-        // "copia os dados objeto para um objeto InspectionRouteGroup". If this is for a
-        // NEW route to be saved later, the IDs should probably be null or new UUIDs.
-        // However, the example shows IDs. Let's assume we use the EquipmentGroup ID for
-        // reference or generate new ones. The user example has "group-100", which looks
-        // like it could be the EG ID. Let's generate new UUIDs for the new
-        // InspectionRouteGroupDTOs to avoid confusion with EG IDs, or use EG IDs if
-        // they are meant to be the source. Actually, for a "new" route, these are
-        // transient DTOs. Let's generate new UUIDs.
-        dto.setId(UUID.randomUUID());
-        dto.setCode(eg.getCode());
-        dto.setName(eg.getName());
-        dto.setDescription(eg.getDescription());
-        dto.setIncluded(true);
-        dto.setOrderIndex(orderIndexCounter[0]++);
-
-        if (routeDto != null) {
-            InspectionRouteDTO routeRef = new InspectionRouteDTO();
-            routeRef.setId(routeDto.getId());
-            dto.setInspectionRoute(routeRef);
-        }
-
-        if (parentDto != null) {
-            InspectionRouteGroupDTO parentRef = new InspectionRouteGroupDTO();
-            parentRef.setId(parentDto.getId());
-            dto.setParentGroup(parentRef);
-        }
+    private InspectionRouteGroup mapGroup(EquipmentGroup eg, InspectionRoute route, InspectionRouteGroup parent, int[] orderIndexCounter) {
+        // Grupo
+        InspectionRouteGroup inspectionRouteGroup = new InspectionRouteGroup();
+        inspectionRouteGroup.setId(UUID.randomUUID());
+        inspectionRouteGroup.setCode(eg.getCode());
+        inspectionRouteGroup.setName(eg.getName());
+        inspectionRouteGroup.setDescription(eg.getDescription());
+        inspectionRouteGroup.setIncluded(true);
+        inspectionRouteGroup.setOrderIndex(orderIndexCounter[0]++);
+        inspectionRouteGroup.setInspectionRoute(route);
+        inspectionRouteGroup.setParentGroup(parent);
 
         // Subgroups
         if (eg.getSubGroups() != null && !eg.getSubGroups().isEmpty()) {
-            Set<InspectionRouteGroupDTO> subGroupsDto = new HashSet<>();
+            Set<InspectionRouteGroup> subGroups = new HashSet<>();
             int[] subOrderIndex = { 1 };
             for (EquipmentGroup subEg : eg.getSubGroups()) {
-                subGroupsDto.add(mapGroupToDto(subEg, null, dto, subOrderIndex));
+                subGroups.add(mapGroup(subEg, null, inspectionRouteGroup, subOrderIndex));
             }
-            dto.setSubGroups(subGroupsDto);
+            inspectionRouteGroup.setSubGroups(subGroups);
         }
 
         // Equipments
         List<Equipment> equipments = equipmentRepository.findByGroup(eg);
         if (equipments != null && !equipments.isEmpty()) {
-            Set<InspectionRouteGroupEquipmentDTO> equipmentsDto = new HashSet<>();
+            Set<InspectionRouteGroupEquipment> equipmentsHashSet = new HashSet<>();
             int equipmentOrderIndex = 1;
+
             for (Equipment eq : equipments) {
-                InspectionRouteGroupEquipmentDTO eqDto = new InspectionRouteGroupEquipmentDTO();
-                eqDto.setId(UUID.randomUUID());
-                eqDto.setIncluded(true);
-                eqDto.setOrderIndex(equipmentOrderIndex++);
+                InspectionRouteGroupEquipment inspectionRouteGroupEquipment = new InspectionRouteGroupEquipment();
+                inspectionRouteGroupEquipment.setId(UUID.randomUUID());
+                inspectionRouteGroupEquipment.setIncluded(true);
+                inspectionRouteGroupEquipment.setOrderIndex(equipmentOrderIndex++);
 
-                InspectionRouteGroupDTO groupRef = new InspectionRouteGroupDTO();
-                groupRef.setId(dto.getId());
-                eqDto.setInspectionRouteGroup(groupRef);
-
-                EquipmentDTO equipmentDto = new EquipmentDTO();
-                equipmentDto.setId(eq.getId());
-                equipmentDto.setCode(eq.getCode());
-                equipmentDto.setName(eq.getName());
-                equipmentDto.setDescription(eq.getDescription());
-                equipmentDto.setType(eq.getType());
-                equipmentDto.setManufacturer(eq.getManufacturer());
-                equipmentDto.setModel(eq.getModel());
-                equipmentDto.setSerialNumber(eq.getSerialNumber());
-                equipmentDto.setVoltageClass(eq.getVoltageClass());
-                equipmentDto.setPhaseType(eq.getPhaseType());
-                equipmentDto.setStartDate(eq.getStartDate());
-                equipmentDto.setLatitude(eq.getLatitude());
-                equipmentDto.setLongitude(eq.getLongitude());
-
-                eqDto.setEquipment(equipmentDto);
-                equipmentsDto.add(eqDto);
+                InspectionRouteGroup groupRef = new InspectionRouteGroup();
+                groupRef.setId(inspectionRouteGroup.getId());
+                inspectionRouteGroupEquipment.setInspectionRouteGroup(groupRef);
+                inspectionRouteGroupEquipment.setEquipment(eq);
+                equipmentsHashSet.add(inspectionRouteGroupEquipment);
             }
-            dto.setEquipments(equipmentsDto);
+            inspectionRouteGroup.setEquipments(equipmentsHashSet);
         }
 
-        return dto;
+        return inspectionRouteGroup;
     }
+    // /**
+    // * {@code GET /inspection-routes/new/:id} : get a complex InspectionRoute DTO
+    // * with groups, equipments and plant data assembled.
+    // *
+    // * @param id the id of the inspectionRoute to retrieve.
+    // * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
+    // body
+    // * the constructed InspectionRouteDTO, or with status
+    // * {@code 404 (Not Found)}.
+    // */
+    // @GetMapping("/new/{plantId}")
+    // public ResponseEntity<InspectionRouteDTO>
+    // getNewInspectionRoute(@PathVariable("plantId") UUID plantId) {
+    // LOG.debug("REST request to get new InspectionRoute DTO : {}", plantId);
+
+    // Optional<Plant> plantOpt = plantRepository.findById(plantId);
+
+    // if (!plantOpt.isPresent()) {
+    // return ResponseEntity.notFound().build();
+    // }
+
+    // Plant plant = plantOpt.get();
+
+    // // Create InspectionRouteDTO
+    // InspectionRouteDTO routeDto = new InspectionRouteDTO();
+    // routeDto.setId(UUID.randomUUID());
+    // routeDto.setCreatedAt(Instant.now());
+
+    // // Map Plant to PlantDTO
+    // PlantDTO plantDto = new PlantDTO();
+    // plantDto.setId(plant.getId());
+    // plantDto.setCode(plant.getCode());
+    // plantDto.setName(plant.getName());
+    // plantDto.setDescription(plant.getDescription());
+    // plantDto.setLatitude(plant.getLatitude());
+    // plantDto.setLongitude(plant.getLongitude());
+    // plantDto.setStartDate(plant.getStartDate() != null ?
+    // plant.getStartDate().toString() : null);
+    // routeDto.setPlant(plantDto);
+
+    // // Fetch equipment groups for the plant
+    // List<EquipmentGroup> equipmentGroups =
+    // equipmentGroupRepository.findByPlant(plant);
+
+    // // Map EquipmentGroups to InspectionRouteGroupDTO
+    // Set<InspectionRouteGroupDTO> rootGroups = new HashSet<>();
+    // int[] rootOrderIndex = { 1 };
+
+    // for (EquipmentGroup eg : equipmentGroups) {
+    // if (eg.getParentGroup() == null) {
+    // rootGroups.add(mapGroupToDto(eg, routeDto, null, rootOrderIndex));
+    // }
+    // }
+
+    // routeDto.setGroups(rootGroups);
+
+    // return ResponseEntity.ok(routeDto);
+    // }
+
+    // private InspectionRouteGroupDTO mapGroupToDto(
+    // EquipmentGroup eg,
+    // InspectionRouteDTO routeDto,
+    // InspectionRouteGroupDTO parentDto,
+    // int[] orderIndexCounter) {
+    // InspectionRouteGroupDTO dto = new InspectionRouteGroupDTO();
+    // dto.setId(eg.getId()); // Using EquipmentGroup ID as base, but maybe should
+    // be new UUID? User said
+    // // "copia os dados", usually implies new ID for new entity, but here we are
+    // // returning DTO structure. Let's use EG ID for now as it maps to the group.
+    // // Wait, the user example shows "group-100", "group-101". If we are creating
+    // a
+    // // NEW route, we might want new IDs for the route groups. But the user said
+    // // "copia os dados objeto para um objeto InspectionRouteGroup". If this is
+    // for a
+    // // NEW route to be saved later, the IDs should probably be null or new UUIDs.
+    // // However, the example shows IDs. Let's assume we use the EquipmentGroup ID
+    // for
+    // // reference or generate new ones. The user example has "group-100", which
+    // looks
+    // // like it could be the EG ID. Let's generate new UUIDs for the new
+    // // InspectionRouteGroupDTOs to avoid confusion with EG IDs, or use EG IDs if
+    // // they are meant to be the source. Actually, for a "new" route, these are
+    // // transient DTOs. Let's generate new UUIDs.
+    // dto.setId(UUID.randomUUID());
+    // dto.setCode(eg.getCode());
+    // dto.setName(eg.getName());
+    // dto.setDescription(eg.getDescription());
+    // dto.setIncluded(true);
+    // dto.setOrderIndex(orderIndexCounter[0]++);
+
+    // if (routeDto != null) {
+    // InspectionRouteDTO routeRef = new InspectionRouteDTO();
+    // routeRef.setId(routeDto.getId());
+    // dto.setInspectionRoute(routeRef);
+    // }
+
+    // if (parentDto != null) {
+    // InspectionRouteGroupDTO parentRef = new InspectionRouteGroupDTO();
+    // parentRef.setId(parentDto.getId());
+    // dto.setParentGroup(parentRef);
+    // }
+
+    // // Subgroups
+    // if (eg.getSubGroups() != null && !eg.getSubGroups().isEmpty()) {
+    // Set<InspectionRouteGroupDTO> subGroupsDto = new HashSet<>();
+    // int[] subOrderIndex = { 1 };
+    // for (EquipmentGroup subEg : eg.getSubGroups()) {
+    // subGroupsDto.add(mapGroupToDto(subEg, null, dto, subOrderIndex));
+    // }
+    // dto.setSubGroups(subGroupsDto);
+    // }
+
+    // // Equipments
+    // List<Equipment> equipments = equipmentRepository.findByGroup(eg);
+    // if (equipments != null && !equipments.isEmpty()) {
+    // Set<InspectionRouteGroupEquipmentDTO> equipmentsDto = new HashSet<>();
+    // int equipmentOrderIndex = 1;
+    // for (Equipment eq : equipments) {
+    // InspectionRouteGroupEquipmentDTO eqDto = new
+    // InspectionRouteGroupEquipmentDTO();
+    // eqDto.setId(UUID.randomUUID());
+    // eqDto.setIncluded(true);
+    // eqDto.setOrderIndex(equipmentOrderIndex++);
+
+    // InspectionRouteGroupDTO groupRef = new InspectionRouteGroupDTO();
+    // groupRef.setId(dto.getId());
+    // eqDto.setInspectionRouteGroup(groupRef);
+
+    // EquipmentDTO equipmentDto = new EquipmentDTO();
+    // equipmentDto.setId(eq.getId());
+    // equipmentDto.setCode(eq.getCode());
+    // equipmentDto.setName(eq.getName());
+    // equipmentDto.setDescription(eq.getDescription());
+    // equipmentDto.setType(eq.getType());
+    // equipmentDto.setManufacturer(eq.getManufacturer());
+    // equipmentDto.setModel(eq.getModel());
+    // equipmentDto.setSerialNumber(eq.getSerialNumber());
+    // equipmentDto.setVoltageClass(eq.getVoltageClass());
+    // equipmentDto.setPhaseType(eq.getPhaseType());
+    // equipmentDto.setStartDate(eq.getStartDate());
+    // equipmentDto.setLatitude(eq.getLatitude());
+    // equipmentDto.setLongitude(eq.getLongitude());
+
+    // eqDto.setEquipment(equipmentDto);
+    // equipmentsDto.add(eqDto);
+    // }
+    // dto.setEquipments(equipmentsDto);
+    // }
+
+    // return dto;
+    // }
 }
