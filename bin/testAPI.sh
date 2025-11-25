@@ -1,9 +1,10 @@
 #!/bin/bash
 
 TOKEN=$(./bin/login.sh)
+SERVER="35.247.197.28"
 
 PLANT_ID="fb380f41-57a0-4e56-8e52-433a27863580"
-curl -s -X GET "http://localhost:8080/api/inspection-routes/new/$PLANT_ID" \
+curl -s -X GET "http://${SERVER}:8080/api/inspection-routes/new/$PLANT_ID" \
   -H "Authorization: Bearer $TOKEN" \
   -H "Accept: application/json"
 
