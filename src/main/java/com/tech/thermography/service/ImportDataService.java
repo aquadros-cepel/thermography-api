@@ -8,6 +8,7 @@ import com.tech.thermography.domain.enumeration.PhaseType;
 import com.tech.thermography.repository.EquipmentGroupRepository;
 import com.tech.thermography.repository.EquipmentRepository;
 import com.tech.thermography.repository.PlantRepository;
+import com.tech.thermography.web.rest.NotFoundException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -275,12 +276,15 @@ public class ImportDataService {
         // --- PHASE 2: Persist Hierarchy ---
 
         for (ImportPlant importPlant : plantsMap.values()) {
-            Optional<Plant> plantOpt = plantRepository.findByCode(importPlant.code);
-            if (plantOpt.isEmpty()) {
+            Plant plant;
+            try {
+                plant = plantRepository
+                    .findByCode(importPlant.code)
+                    .orElseThrow(() -> new NotFoundException("Plant not found with code: " + importPlant.code));
+            } catch (NotFoundException e) {
                 errorMessages.add(String.format("Planta '%s' não encontrada. Equipamentos ignorados.", importPlant.code));
                 continue;
             }
-            Plant plant = plantOpt.get();
 
             for (ImportGroup importGroup : importPlant.groups.values()) {
                 // Find or Create Parent Group
@@ -329,9 +333,7 @@ public class ImportDataService {
             opt = equipmentGroupRepository.findFirstByCodeAndPlantAndParentGroup(code, null, parent);
         }
 
-        if (opt.isPresent()) {
-            return opt.get();
-        } else {
+        return opt.orElseGet(() -> {
             EquipmentGroup group = new EquipmentGroup();
             group.setCode(code);
             group.setName(name);
@@ -342,7 +344,7 @@ public class ImportDataService {
             }
             group.setParentGroup(parent);
             return equipmentGroupRepository.save(group);
-        }
+        });
     }
 
     // --- Inner Classes for In-Memory Hierarchy ---

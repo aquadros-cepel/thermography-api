@@ -10,7 +10,6 @@ import com.tech.thermography.repository.EquipmentGroupRepository;
 import com.tech.thermography.repository.EquipmentRepository;
 import com.tech.thermography.repository.InspectionRouteRepository;
 import com.tech.thermography.repository.PlantRepository;
-import com.tech.thermography.web.rest.dto.*;
 import com.tech.thermography.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -25,6 +24,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -62,6 +62,19 @@ public class InspectionRouteResource {
         this.equipmentGroupRepository = equipmentGroupRepository;
         this.equipmentRepository = equipmentRepository;
         this.plantRepository = plantRepository;
+    }
+
+    /**
+     * Exception handler for NotFoundException.
+     * Returns a 404 NOT FOUND response when a NotFoundException is thrown.
+     *
+     * @param ex the NotFoundException that was thrown
+     * @return ResponseEntity with 404 status
+     */
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleNotFoundException(NotFoundException ex) {
+        LOG.error("Resource not found: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
     /**
@@ -252,13 +265,7 @@ public class InspectionRouteResource {
     public ResponseEntity<InspectionRoute> getNewInspectionRoute(@PathVariable("plantId") UUID plantId) {
         LOG.debug("REST request to get new InspectionRoute: {}", plantId);
 
-        Optional<Plant> plantOpt = plantRepository.findById(plantId);
-
-        if (!plantOpt.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Plant plant = plantOpt.get();
+        Plant plant = plantRepository.findById(plantId).orElseThrow(() -> new NotFoundException("Plant not found with id: " + plantId));
 
         // Create InspectionRoute
         InspectionRoute route = new InspectionRoute();
