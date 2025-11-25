@@ -4,7 +4,9 @@ services:
     extends:
       file: ./postgresql.yml
       service: postgresql
-  kafka:
-    extends:
-      file: ./kafka.yml
-      service: kafka
+  # Kafka service - DISABLED for development
+  # Uncomment the lines below to re-enable Kafka
+  # kafka:
+  #   extends:
+  #     file: ./kafka.yml
+  #     service: kafka
