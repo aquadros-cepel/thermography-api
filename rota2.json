@@ -1,0 +1,319 @@
+{
+  "id": "5875e577-b3c8-4993-aca4-9f64b5a02f62",
+  "code": null,
+  "name": null,
+  "description": null,
+  "maintenancePlan": null,
+  "periodicity": null,
+  "duration": null,
+  "expectedStartDate": null,
+  "createdAt": "2025-11-25T10:58:41.670801120Z",
+  "plant": {
+    "id": "fb380f41-57a0-4e56-8e52-433a27863580",
+    "code": "N-S-PAAT",
+    "name": "SE Altamira",
+    "description": "SUBESTAÇÃO ALTAMIRA",
+    "latitude": -3.13688171,
+    "longitude": -52.17962128,
+    "startDate": "1998-06-01"
+  },
+  "createdBy": null,
+  "groups": [
+    {
+      "id": "f55bbd71-8208-4b4e-b984-f409b401442a",
+      "code": "N-S-PAAT-TF601",
+      "name": "Transformador 230kV Nº 01",
+      "description": null,
+      "included": true,
+      "orderIndex": 1,
+      "inspectionRoute": {
+        "id": "5875e577-b3c8-4993-aca4-9f64b5a02f62"
+      },
+      "parentGroup": null,
+      "subGroups": [
+        {
+          "id": "ab0a6756-8309-41c1-ad23-83285f7c9631",
+          "code": "N-S-PAAT-TF601-TF230",
+          "name": "Módulo TF230",
+          "description": null,
+          "included": true,
+          "orderIndex": 1,
+          "parentGroup": {
+            "id": "f55bbd71-8208-4b4e-b984-f409b401442a"
+          },
+          "equipments": [
+            {
+              "id": "417a0e2a-c778-41e9-b691-5e19adc3d7c0",
+              "included": true,
+              "orderIndex": 1,
+              "equipment": {
+                "id": "f9fc58f3-8f41-4bd1-9337-82ef7755f0c6",
+                "code": "N-S-PAAT-TF601-TF230-ATDJ221",
+                "name": "Disjuntor 230kV",
+                "description": "Disjuntor 230kV / Transformador 230kV Nº 01 / SE Altamira",
+                "type": "CIRCUIT_BREAKER",
+                "manufacturer": "",
+                "model": "",
+                "serialNumber": "",
+                "voltageClass": 230.0,
+                "phaseType": "THREE_PHASE",
+                "startDate": "1998-06-01",
+                "latitude": null,
+                "longitude": null
+              }
+            }
+          ]
+        }
+      ],
+      "equipments": []
+    },
+    {
+      "id": "d10bd8a4-bf75-46c3-9262-7634695ddc7b",
+      "code": "N-S-PAAT-TF603",
+      "name": "Transformador 230kV Nº 03",
+      "description": null,
+      "included": true,
+      "orderIndex": 2,
+      "inspectionRoute": {
+        "id": "5875e577-b3c8-4993-aca4-9f64b5a02f62"
+      },
+      "parentGroup": null,
+      "subGroups": [
+        {
+          "id": "862c9dcd-23cd-44e6-ad75-20ff11756b11",
+          "code": "N-S-PAAT-TF603-MC69",
+          "name": "Módulo MC69",
+          "description": null,
+          "included": true,
+          "orderIndex": 1,
+          "parentGroup": {
+            "id": "d10bd8a4-bf75-46c3-9262-7634695ddc7b"
+          },
+          "equipments": [
+            {
+              "id": "37e8f19f-0b35-42ea-af54-28e081f6800f",
+              "included": true,
+              "orderIndex": 1,
+              "equipment": {
+                "id": "d1cb3e15-0b7e-41f7-8fb6-f8743171a964",
+                "code": "N-S-PAAT-TF603-MC69-ATDJ406",
+                "name": "Disjuntor 69kV",
+                "description": "Disjuntor 69kV / Transformador 230kV Nº 03 / SE Altamira",
+                "type": "CIRCUIT_BREAKER",
+                "manufacturer": "",
+                "model": "",
+                "serialNumber": "",
+                "voltageClass": 69.0,
+                "phaseType": "THREE_PHASE",
+                "startDate": "1998-06-01",
+                "latitude": null,
+                "longitude": null
+              }
+            }
+          ]
+        },
+        {
+          "id": "2641dd9d-6bf5-4f93-aea8-d57354c72bc5",
+          "code": "N-S-PAAT-TF603-MC230",
+          "name": "Módulo MC230",
+          "description": null,
+          "included": true,
+          "orderIndex": 2,
+          "parentGroup": {
+            "id": "d10bd8a4-bf75-46c3-9262-7634695ddc7b"
+          },
+          "equipments": [
+            {
+              "id": "ac6c928f-de80-4b4e-ba26-eda42e89f573",
+              "included": true,
+              "orderIndex": 1,
+              "equipment": {
+                "id": "02114911-b757-4453-9adc-61304335f911",
+                "code": "N-S-PAAT-TF603-MC230-ATDJ611",
+                "name": "Disjuntor 230kV",
+                "description": "Disjuntor 230kV / Transformador 230kV Nº 03 / SE Altamira",
+                "type": "CIRCUIT_BREAKER",
+                "manufacturer": "SIEMENS",
+                "model": "3AP1 F1",
+                "serialNumber": "8637",
+                "voltageClass": 230.0,
+                "phaseType": "THREE_PHASE",
+                "startDate": "2016-12-18",
+                "latitude": null,
+                "longitude": null
+              }
+            }
+          ]
+        },
+        {
+          "id": "d0a10f19-0b4d-4b86-9032-e2dba8a8315f",
+          "code": "N-S-PAAT-TF603-TF230",
+          "name": "Módulo TF230",
+          "description": null,
+          "included": true,
+          "orderIndex": 3,
+          "parentGroup": {
+            "id": "d10bd8a4-bf75-46c3-9262-7634695ddc7b"
+          },
+          "equipments": [
+            {
+              "id": "fe0ad672-b58e-40ac-a93a-b30e7ce3f441",
+              "included": true,
+              "orderIndex": 1,
+              "equipment": {
+                "id": "e1cca418-691b-4b82-b03e-c096f1af39ba",
+                "code": "N-S-PAAT-TF603-TF230-ATTF603",
+                "name": "Transformador Nº03 230kV Trifásico",
+                "description": "Transformador Nº03 230kV Trifásico / Transformador 230kV Nº 03 / SE Altamira",
+                "type": "POWER_TRANSFORMER",
+                "manufacturer": "WEG",
+                "model": "13252002",
+                "serialNumber": "1028597508",
+                "voltageClass": 230.0,
+                "phaseType": "THREE_PHASE",
+                "startDate": "2016-12-18",
+                "latitude": null,
+                "longitude": null
+              }
+            }
+          ]
+        }
+      ],
+      "equipments": []
+    },
+    {
+      "id": "4f9fd60c-ae0f-484d-85af-9e46ad9a8a0c",
+      "code": "N-S-PAAT-TF602",
+      "name": "Transformador 230kV Nº 02",
+      "description": null,
+      "included": true,
+      "orderIndex": 3,
+      "inspectionRoute": {
+        "id": "5875e577-b3c8-4993-aca4-9f64b5a02f62"
+      },
+      "parentGroup": null,
+      "subGroups": [
+        {
+          "id": "b48f1728-8617-4154-9d7e-97da9973b5dd",
+          "code": "N-S-PAAT-TF602-MC230",
+          "name": "Módulo MC230",
+          "description": null,
+          "included": true,
+          "orderIndex": 1,
+          "parentGroup": {
+            "id": "4f9fd60c-ae0f-484d-85af-9e46ad9a8a0c"
+          },
+          "equipments": [
+            {
+              "id": "a100719d-73cb-4885-9c25-be0493b31fca",
+              "included": true,
+              "orderIndex": 1,
+              "equipment": {
+                "id": "5dad1021-a02c-4efe-a03b-31a2026e34bb",
+                "code": "N-S-PAAT-TF602-MC230-ATDJ608",
+                "name": "Disjuntor 230kV",
+                "description": "Disjuntor 230kV / Transformador 230kV Nº 02 / SE Altamira",
+                "type": "CIRCUIT_BREAKER",
+                "manufacturer": "SIEMENS",
+                "model": "3AP1 F1",
+                "serialNumber": "7204",
+                "voltageClass": 230.0,
+                "phaseType": "THREE_PHASE",
+                "startDate": "2016-06-19",
+                "latitude": null,
+                "longitude": null
+              }
+            }
+          ]
+        },
+        {
+          "id": "b4909365-5edc-4312-8892-0cd7a5ed7b90",
+          "code": "N-S-PAAT-TF602-TF230",
+          "name": "Módulo TF230",
+          "description": null,
+          "included": true,
+          "orderIndex": 2,
+          "parentGroup": {
+            "id": "4f9fd60c-ae0f-484d-85af-9e46ad9a8a0c"
+          },
+          "equipments": [
+            {
+              "id": "0720e322-4619-4cfc-a414-ef8652479b71",
+              "included": true,
+              "orderIndex": 1,
+              "equipment": {
+                "id": "6a25fd73-1a16-4748-9536-1dd6e029c3a3",
+                "code": "N-S-PAAT-TF602-TF230-ATTF602",
+                "name": "Transformador Nº02 230kV Trifásico",
+                "description": "Transformador Nº02 230kV Trifásico / Transformador 230kV Nº 02 / SE Altamira",
+                "type": "POWER_TRANSFORMER",
+                "manufacturer": "ANSALDO COEMSA S. A",
+                "model": "TOVC - NF",
+                "serialNumber": "111.249/U",
+                "voltageClass": 230.0,
+                "phaseType": "THREE_PHASE",
+                "startDate": "2009-03-22",
+                "latitude": null,
+                "longitude": null
+              }
+            },
+            {
+              "id": "ca84c555-c563-4f89-91c5-efbb2e19cf84",
+              "included": true,
+              "orderIndex": 2,
+              "equipment": {
+                "id": "e0399015-eddb-46af-ad8c-cc11230d82c0",
+                "code": "N-S-PAAT-TF602-TF230-ATDJ222",
+                "name": "Disjuntor 230kV",
+                "description": "Disjuntor 230kV / Transformador 230kV Nº 02 / SE Altamira",
+                "type": "CIRCUIT_BREAKER",
+                "manufacturer": "",
+                "model": "",
+                "serialNumber": "",
+                "voltageClass": 230.0,
+                "phaseType": "THREE_PHASE",
+                "startDate": "1998-06-01",
+                "latitude": null,
+                "longitude": null
+              }
+            }
+          ]
+        },
+        {
+          "id": "fb751d85-2906-4e5e-b950-2833c31b6b4a",
+          "code": "N-S-PAAT-TF602-MC69",
+          "name": "Módulo MC69",
+          "description": null,
+          "included": true,
+          "orderIndex": 3,
+          "parentGroup": {
+            "id": "4f9fd60c-ae0f-484d-85af-9e46ad9a8a0c"
+          },
+          "equipments": [
+            {
+              "id": "c4df16ca-2e17-40e1-9435-7c277574f332",
+              "included": true,
+              "orderIndex": 1,
+              "equipment": {
+                "id": "b89db053-aa8f-4a5f-a9cd-64f5abd14df5",
+                "code": "N-S-PAAT-TF602-MC69-ATDJ404",
+                "name": "Disjuntor 69kV",
+                "description": "Disjuntor 69kV / Transformador 230kV Nº 02 / SE Altamira",
+                "type": "CIRCUIT_BREAKER",
+                "manufacturer": "",
+                "model": "",
+                "serialNumber": "",
+                "voltageClass": 69.0,
+                "phaseType": "THREE_PHASE",
+                "startDate": "1998-06-01",
+                "latitude": null,
+                "longitude": null
+              }
+            }
+          ]
+        }
+      ],
+      "equipments": []
+    }
+  ]
+}
