@@ -14,11 +14,11 @@ SSH_OPTS="-i $SSH_KEY -o IdentitiesOnly=yes"
 
 echo ""
 echo "📦 Passo 1: Construindo imagem Docker localmente"
-#./bin/docker-build.sh
+./bin/docker-build.sh
 
 echo ""
 echo "💾 Passo 2: Salvando imagem Docker em arquivo tar"
-#docker save thermographyapi:latest -o thermographyapi-image.tar
+docker save thermographyapi:latest -o thermographyapi-image.tar
 echo "✅ Imagem salva: thermographyapi-image.tar ($(du -h thermographyapi-image.tar | cut -f1))"
 
 echo ""
