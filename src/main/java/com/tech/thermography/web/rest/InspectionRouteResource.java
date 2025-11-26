@@ -327,10 +327,7 @@ public class InspectionRouteResource {
                 inspectionRouteGroupEquipment.setId(UUID.randomUUID());
                 inspectionRouteGroupEquipment.setIncluded(true);
                 inspectionRouteGroupEquipment.setOrderIndex(equipmentOrderIndex++);
-
-                InspectionRouteGroup groupRef = new InspectionRouteGroup();
-                groupRef.setId(inspectionRouteGroup.getId());
-                inspectionRouteGroupEquipment.setInspectionRouteGroup(groupRef);
+                inspectionRouteGroupEquipment.setInspectionRouteGroup(inspectionRouteGroup);
                 inspectionRouteGroupEquipment.setEquipment(eq);
                 equipmentsHashSet.add(inspectionRouteGroupEquipment);
             }

@@ -1,0 +1,217 @@
+{
+  "id": "route-001",
+  "code": "RT-001",
+  "name": "Rota de Inspeção Geral",
+  "description": "Rota padrão da Planta XPTO",
+  "maintenancePlan": "Plano Preventivo 2025",
+  "periodicity": "MONTHLY",
+  "duration": 120,
+  "expectedStartDate": "2025-01-10",
+  "createdAt": "2025-01-01T10:00:00Z",
+  "plant": {
+    "id": "plant-001",
+    "code": "PL-001",
+    "name": "Subestação Centro",
+    "description": "Subestação Principal",
+    "latitude": -22.9035,
+    "longitude": -43.2096,
+    "startDate": "2010-01-01"
+  },
+  "createdBy": {
+    "id": "user-001",
+    "position": "Engenheiro de Manutenção",
+    "phoneNumber": "+55 21 99999-1111"
+  },
+  "groups": [
+    {
+      "id": "group-100",
+      "code": "FT-01",
+      "name": "Função de Transmissão 1",
+      "description": "Função responsável pela entrada A",
+      "included": true,
+      "orderIndex": 1,
+      "inspectionRoute": {
+        "id": "route-001"
+      },
+      "parentGroup": null,
+      "subGroups": [
+        {
+          "id": "group-101",
+          "code": "MOD-01",
+          "name": "Módulo A",
+          "description": "Módulo de entrada",
+          "included": true,
+          "orderIndex": 1,
+          "inspectionRoute": null,
+          "parentGroup": "group-100",
+          "equipments": [
+            {
+              "id": "ge-001",
+              "included": true,
+              "orderIndex": 1,
+              "inspectionRouteGroup": {
+                "id": "group-101"
+              },
+              "equipment": {
+                "id": "eq-001",
+                "code": "EQ-001",
+                "name": "Transformador 01",
+                "description": "Transformador de potência 50 MVA",
+                "type": "POWER_TRANSFORMER",
+                "manufacturer": "ABB",
+                "model": "TX50",
+                "serialNumber": "SN-12345",
+                "voltageClass": 138,
+                "phaseType": "THREE_PHASE",
+                "startDate": "2015-05-01",
+                "latitude": -22.9034,
+                "longitude": -43.2097,
+                "plant": {
+                  "id": "plant-001"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "group-102",
+          "code": "MOD-02",
+          "name": "Módulo B",
+          "description": "Módulo secundário",
+          "included": true,
+          "orderIndex": 2,
+          "inspectionRoute": null,
+          "parentGroup": "group-100",
+          "equipments": [
+            {
+              "id": "ge-002",
+              "included": true,
+              "orderIndex": 1,
+              "inspectionRouteGroup": {
+                "id": "group-102"
+              },
+              "equipment": {
+                "id": "eq-002",
+                "code": "EQ-002",
+                "name": "Disjuntor 12",
+                "type": "CIRCUIT_BREAKER",
+                "manufacturer": "Siemens",
+                "voltageClass": 138,
+                "phaseType": "THREE_PHASE",
+                "plant": {
+                  "id": "plant-001"
+                }
+              }
+            },
+            {
+              "id": "ge-003",
+              "included": true,
+              "orderIndex": 2,
+              "inspectionRouteGroup": {
+                "id": "group-102"
+              },
+              "equipment": {
+                "id": "eq-003",
+                "code": "EQ-003",
+                "name": "TC Entrada A",
+                "type": "CURRENT_TRANSFORMER",
+                "manufacturer": "GE",
+                "voltageClass": 138,
+                "phaseType": "PHASE_A",
+                "plant": {
+                  "id": "plant-001"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "group-200",
+      "code": "FT-02",
+      "name": "Função de Transmissão 2",
+      "description": "Saída B",
+      "included": true,
+      "orderIndex": 2,
+      "inspectionRoute": {
+        "id": "route-001"
+      },
+      "parentGroup": null,
+      "subGroups": [
+        {
+          "id": "group-201",
+          "code": "MOD-03",
+          "name": "Módulo C",
+          "description": "Módulo da saída B",
+          "included": true,
+          "orderIndex": 1,
+          "inspectionRoute": null,
+          "parentGroup": "group-200",
+          "equipments": [
+            {
+              "id": "ge-004",
+              "included": true,
+              "orderIndex": 1,
+              "inspectionRouteGroup": {
+                "id": "group-201"
+              },
+              "equipment": {
+                "id": "eq-004",
+                "code": "EQ-004",
+                "name": "Transformador 02",
+                "type": "POWER_TRANSFORMER",
+                "manufacturer": "ABB",
+                "voltageClass": 230,
+                "phaseType": "THREE_PHASE",
+                "plant": {
+                  "id": "plant-001"
+                }
+              }
+            },
+            {
+              "id": "ge-005",
+              "included": true,
+              "orderIndex": 2,
+              "inspectionRouteGroup": {
+                "id": "group-201"
+              },
+              "equipment": {
+                "id": "eq-005",
+                "code": "EQ-005",
+                "name": "Chave Seccionadora 5",
+                "type": "DISCONNECT_SWITCH",
+                "manufacturer": "Siemens",
+                "voltageClass": 230,
+                "phaseType": "THREE_PHASE",
+                "plant": {
+                  "id": "plant-001"
+                }
+              }
+            },
+            {
+              "id": "ge-006",
+              "included": true,
+              "orderIndex": 3,
+              "inspectionRouteGroup": {
+                "id": "group-201"
+              },
+              "equipment": {
+                "id": "eq-006",
+                "code": "EQ-006",
+                "name": "TP Saída B",
+                "type": "POTENTIAL_TRANSFORMER",
+                "manufacturer": "ABB",
+                "voltageClass": 230,
+                "phaseType": "THREE_PHASE",
+                "plant": {
+                  "id": "plant-001"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

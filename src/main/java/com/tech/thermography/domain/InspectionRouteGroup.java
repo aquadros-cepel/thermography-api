@@ -59,7 +59,6 @@ public class InspectionRouteGroup implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "inspectionRouteGroup")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "inspectionRouteGroup" }, allowSetters = true)
     private Set<InspectionRouteGroupEquipment> equipments = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
