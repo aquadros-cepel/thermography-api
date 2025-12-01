@@ -1,9 +1,11 @@
 select
-	p.external_name as plant_name,
-	f.external_name as group_name, 
-	f.title as group_description, 
-	e.external_name as equipment_name, 
-	e.title as equipment_title, 
+	p.external_name as plant_code,
+	f.external_name as group_code,
+	f.title as group_name,
+	array_to_string((string_to_array(e.external_name, '-'))[1:5], '-') as subgroup_code,
+	CONCAT('Módulo ', split_part(e.external_name, '-', 5)) as subgroup_name,
+	e.external_name as equipment_code,
+	e.title as equipment_name, 
 	e.description equipment_description,
 	
 	-- split_part(e.info_class, '.', array_length(string_to_array(e.info_class, '.'), 1)) AS type,
@@ -55,7 +57,11 @@ where
 		p.external_name like '%N-S-MA%' OR
 		p.external_name like '%N-S-TO%' OR
 		p.external_name like '%N-S-PA%' OR
-		p.external_name like '%N-S-STLI'
+		p.external_name like '%N-S-STLI' OR
+		p.external_name like '%N-S-MTJU%' OR
+		p.external_name like '%N-S-MTBP%' OR
+		p.external_name like '%N-S-ROAQ%' OR
+		p.external_name like '%N-S-RRBV%'
 	)
 
 -- select

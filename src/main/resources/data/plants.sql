@@ -1,6 +1,6 @@
 select
-    external_name as name,
-    title,
+    external_name as code,
+    name,
     description,
     latitude,
     longitude,
