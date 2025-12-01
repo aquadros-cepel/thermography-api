@@ -17,4 +17,16 @@ public interface InspectionRouteRepository extends JpaRepository<InspectionRoute
         "select inspectionRoute from InspectionRoute inspectionRoute left join fetch inspectionRoute.plant left join fetch inspectionRoute.createdBy where inspectionRoute.id =:id"
     )
     Optional<InspectionRoute> findByIdWithAssociations(@Param("id") UUID id);
+
+    @Query(
+        "SELECT DISTINCT ir FROM InspectionRoute ir " +
+        "LEFT JOIN FETCH ir.groups g " +
+        "LEFT JOIN FETCH g.subGroups sg " +
+        "LEFT JOIN FETCH sg.equipments sge " +
+        "LEFT JOIN FETCH sge.equipment eq " +
+        "LEFT JOIN FETCH g.equipments ge " +
+        "LEFT JOIN FETCH ge.equipment geq " +
+        "WHERE ir.id = :id"
+    )
+    Optional<InspectionRoute> findByIdWithFullHierarchy(@Param("id") UUID id);
 }

@@ -10,6 +10,7 @@ import com.tech.thermography.domain.Plant;
 import com.tech.thermography.domain.User;
 // import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import com.tech.thermography.domain.UserInfo;
+import com.tech.thermography.domain.enumeration.Periodicity;
 import com.tech.thermography.repository.EquipmentGroupRepository;
 import com.tech.thermography.repository.EquipmentRepository;
 import com.tech.thermography.repository.InspectionRouteGroupEquipmentRepository;
@@ -287,6 +288,13 @@ public class InspectionRouteResource {
     // ******************************
     // **********************************************************************************************
 
+    @GetMapping("/actions/{id}")
+    public ResponseEntity<InspectionRoute> getInspectionRouteWithFullHierarchy(@PathVariable("id") UUID id) {
+        LOG.debug("REST request to get InspectionRoute : {}", id);
+        Optional<InspectionRoute> inspectionRoute = inspectionRouteRepository.findByIdWithFullHierarchy(id);
+        return ResponseUtil.wrapOrNotFound(inspectionRoute);
+    }
+
     /**
      * {@code POST  /create-route} : Receive an InspectionRoute and return its JSON
      * representation.
@@ -298,6 +306,34 @@ public class InspectionRouteResource {
      */
     @PostMapping("/actions/create-route")
     public ResponseEntity<InspectionRoute> createRoute(@RequestBody InspectionRoute inspectionRoute) {
+        InspectionRoute inspectionRouteSaved = saveRoute(inspectionRoute);
+        try {
+            return ResponseEntity.created(new URI("/api/inspection-routes/" + inspectionRouteSaved.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, inspectionRoute.getId().toString()))
+                .body(inspectionRoute);
+        } catch (Exception e) {
+            LOG.error("Erro ao criar Rota", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PutMapping("/actions/update-route/{id}")
+    public ResponseEntity<InspectionRoute> updateRoute(
+        @PathVariable(value = "id", required = false) final UUID id,
+        @RequestBody InspectionRoute inspectionRoute
+    ) {
+        InspectionRoute inspectionRouteSaved = saveRoute(inspectionRoute);
+        try {
+            return ResponseEntity.created(new URI("/api/inspection-routes/" + inspectionRouteSaved.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, inspectionRoute.getId().toString()))
+                .body(inspectionRoute);
+        } catch (Exception e) {
+            LOG.error("Erro ao criar Rota", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    public InspectionRoute saveRoute(InspectionRoute inspectionRoute) {
         try {
             // 1. Pegar o login do usuário autenticado
             String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("Usuário não autenticado"));
@@ -317,7 +353,7 @@ public class InspectionRouteResource {
                 LOG.debug("Authenticated user is null, cannot set createdBy for InspectionRoute");
             }
 
-            inspectionRoute.setId(null);
+            // inspectionRoute.setId(null);
             inspectionRoute.setCreatedAt(Instant.now());
             inspectionRoute.setCreatedBy(userInfo);
             LOG.debug("InspectionRoute.name = ", inspectionRoute.getName());
@@ -325,30 +361,27 @@ public class InspectionRouteResource {
             InspectionRoute inspectionRouteSaved = inspectionRouteRepository.save(inspectionRoute);
 
             for (InspectionRouteGroup group : inspectionRoute.getGroups()) {
-                group.setId(null);
+                // group.setId(null);
                 group.setInspectionRoute(inspectionRouteSaved);
 
                 InspectionRouteGroup groupSaved = inspectionRouteGroupRepository.save(group);
 
                 for (InspectionRouteGroup subGroup : group.getSubGroups()) {
-                    subGroup.setId(null);
+                    // subGroup.setId(null);
                     subGroup.setParentGroup(groupSaved);
                     InspectionRouteGroup subGroupSaved = inspectionRouteGroupRepository.save(subGroup);
 
                     for (InspectionRouteGroupEquipment groupEquipment : subGroup.getEquipments()) {
-                        groupEquipment.setId(null);
+                        // groupEquipment.setId(null);
                         groupEquipment.setInspectionRouteGroup(subGroupSaved);
                         inspectionRouteGroupEquipmentRepository.save(groupEquipment);
                     }
                 }
             }
-
-            return ResponseEntity.created(new URI("/api/inspection-routes/" + inspectionRoute.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, inspectionRoute.getId().toString()))
-                .body(inspectionRoute);
+            return inspectionRouteSaved;
         } catch (Exception e) {
             LOG.error("Erro ao criar Rota", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return null;
         }
     }
 
@@ -372,7 +405,7 @@ public class InspectionRouteResource {
 
         // Create InspectionRoute
         InspectionRoute route = new InspectionRoute();
-        route.setId(UUID.randomUUID());
+        // route.setId(UUID.randomUUID());
 
         // Count existing routes for this plant
         Integer numRoutes = inspectionRouteRepository
@@ -386,26 +419,10 @@ public class InspectionRouteResource {
         String formattedRouteNumber = String.format("%03d", numRoutes + 1);
 
         route.setName("RI_" + plant.getCode() + "_C" + formattedRouteNumber);
-        route.setCreatedAt(Instant.now());
+        route.setDuration(15);
+        route.setPeriodicity(Periodicity.SEMI_ANNUAL);
         route.setPlant(plant);
-
-        // Get UserInfo by authenticated user
-        if (user != null) {
-            UserInfo userInfo = userInfoRepository
-                .findAll()
-                .stream()
-                .filter(ui -> ui.getUser() != null && ui.getUser().getId().equals(user.getId()))
-                .findFirst()
-                .orElse(null);
-
-            if (userInfo != null) {
-                route.setCreatedBy(userInfo);
-            } else {
-                LOG.debug("UserInfo not found for authenticated user id: {}", user.getId());
-            }
-        } else {
-            LOG.debug("Authenticated user is null, cannot set createdBy for InspectionRoute");
-        }
+        // route.setCreatedAt(Instant.now());
 
         // Fetch equipment groups for the plant
         List<EquipmentGroup> equipmentGroups = equipmentGroupRepository.findByPlant(plant);
@@ -429,7 +446,7 @@ public class InspectionRouteResource {
     private InspectionRouteGroup mapGroup(EquipmentGroup eg, InspectionRoute route, InspectionRouteGroup parent, int[] orderIndexCounter) {
         // Grupo
         InspectionRouteGroup inspectionRouteGroup = new InspectionRouteGroup();
-        inspectionRouteGroup.setId(UUID.randomUUID());
+        // inspectionRouteGroup.setId(UUID.randomUUID());
         inspectionRouteGroup.setCode(eg.getCode());
         inspectionRouteGroup.setName(eg.getName());
         inspectionRouteGroup.setDescription(eg.getDescription());
@@ -456,7 +473,7 @@ public class InspectionRouteResource {
 
             for (Equipment eq : equipments) {
                 InspectionRouteGroupEquipment inspectionRouteGroupEquipment = new InspectionRouteGroupEquipment();
-                inspectionRouteGroupEquipment.setId(UUID.randomUUID());
+                // inspectionRouteGroupEquipment.setId(UUID.randomUUID());
                 inspectionRouteGroupEquipment.setIncluded(true);
                 inspectionRouteGroupEquipment.setOrderIndex(equipmentOrderIndex++);
                 inspectionRouteGroupEquipment.setInspectionRouteGroup(inspectionRouteGroup);
