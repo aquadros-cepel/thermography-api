@@ -3,9 +3,13 @@ services:
   postgresql:
     image: postgres:17.4
     volumes:
+      # Volume nomeado para persistência de dados (recomendado para cloud)
+      #- postgres-data:/var/lib/postgresql/data/
+      # Para desenvolvimento local, descomente a linha abaixo e comente a acima:
       - ~/volumes/thermographyApi/postgresql/:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=thermographyApi
+      - POSTGRES_DB=thermographyApi
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER}']
@@ -16,3 +20,9 @@ services:
     # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:5432:5432
+    restart: unless-stopped
+
+# Volume nomeado para persistência de dados do PostgreSQL
+volumes:
+  postgres-data:
+    driver: local
