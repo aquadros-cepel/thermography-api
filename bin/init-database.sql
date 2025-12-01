@@ -43,6 +43,9 @@ VALUES
         now()
 );
 
+
+
+
 INSERT INTO jhi_user_authority
     (user_id, authority_name)
 SELECT id, 'ROLE_ADMIN'
@@ -54,6 +57,25 @@ INSERT INTO jhi_user_authority
 SELECT id, 'ROLE_USER'
 FROM jhi_user
 WHERE login = 'admin';
+
+
+-- Insert UserInfo for admin user
+INSERT INTO user_info
+    (
+    id,
+    position,
+    phone_number,
+    user_id,
+    company_id
+    )
+SELECT
+    gen_random_uuid(),
+    'System Administrator',
+    '+55 11 99999-9999',
+    u.id,
+    NULL
+FROM jhi_user u
+WHERE u.login = 'admin';
 
 
 
