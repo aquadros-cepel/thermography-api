@@ -1,33 +1,53 @@
 package com.tech.thermography.web.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tech.thermography.domain.Equipment;
 import com.tech.thermography.domain.EquipmentGroup;
 import com.tech.thermography.domain.InspectionRoute;
 import com.tech.thermography.domain.InspectionRouteGroup;
 import com.tech.thermography.domain.InspectionRouteGroupEquipment;
 import com.tech.thermography.domain.Plant;
+import com.tech.thermography.domain.User;
+// import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
+import com.tech.thermography.domain.UserInfo;
 import com.tech.thermography.repository.EquipmentGroupRepository;
 import com.tech.thermography.repository.EquipmentRepository;
+import com.tech.thermography.repository.InspectionRouteGroupEquipmentRepository;
+import com.tech.thermography.repository.InspectionRouteGroupRepository;
 import com.tech.thermography.repository.InspectionRouteRepository;
 import com.tech.thermography.repository.PlantRepository;
+import com.tech.thermography.repository.UserInfoRepository;
+import com.tech.thermography.security.SecurityUtils;
+import com.tech.thermography.service.UserService;
 import com.tech.thermography.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
-import java.util.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
@@ -36,7 +56,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * {@link com.tech.thermography.domain.InspectionRoute}.
  */
 @RestController
-@RequestMapping("/api/inspection-routes")
+@RequestMapping("/api/inspection-routes/")
 @Transactional
 public class InspectionRouteResource {
 
@@ -48,20 +68,35 @@ public class InspectionRouteResource {
     private String applicationName;
 
     private final InspectionRouteRepository inspectionRouteRepository;
+    private final InspectionRouteGroupRepository inspectionRouteGroupRepository;
+    private final InspectionRouteGroupEquipmentRepository inspectionRouteGroupEquipmentRepository;
     private final EquipmentGroupRepository equipmentGroupRepository;
     private final EquipmentRepository equipmentRepository;
     private final PlantRepository plantRepository;
+    private final UserInfoRepository userInfoRepository;
+    private final UserService userService;
+    private final ObjectMapper objectMapper;
 
     public InspectionRouteResource(
         InspectionRouteRepository inspectionRouteRepository,
+        InspectionRouteGroupRepository inspectionRouteGroupRepository,
+        InspectionRouteGroupEquipmentRepository inspectionRouteGroupEquipmentRepository,
         EquipmentGroupRepository equipmentGroupRepository,
         EquipmentRepository equipmentRepository,
-        PlantRepository plantRepository
+        PlantRepository plantRepository,
+        UserInfoRepository userInfoRepository,
+        UserService userService,
+        ObjectMapper objectMapper
     ) {
         this.inspectionRouteRepository = inspectionRouteRepository;
+        this.inspectionRouteGroupRepository = inspectionRouteGroupRepository;
+        this.inspectionRouteGroupEquipmentRepository = inspectionRouteGroupEquipmentRepository;
         this.equipmentGroupRepository = equipmentGroupRepository;
         this.equipmentRepository = equipmentRepository;
         this.plantRepository = plantRepository;
+        this.userInfoRepository = userInfoRepository;
+        this.userService = userService;
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -253,6 +288,71 @@ public class InspectionRouteResource {
     // **********************************************************************************************
 
     /**
+     * {@code POST  /create-route} : Receive an InspectionRoute and return its JSON
+     * representation.
+     *
+     * @param inspectionRoute the inspectionRoute to process.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the JSON representation of the inspectionRoute including all nested
+     *         objects.
+     */
+    @PostMapping("/actions/create-route")
+    public ResponseEntity<InspectionRoute> createRoute(@RequestBody InspectionRoute inspectionRoute) {
+        try {
+            // 1. Pegar o login do usuário autenticado
+            String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("Usuário não autenticado"));
+
+            // 2. Buscar o usuário completo no banco (entidade JPA)
+            User user = userService.getUserWithAuthoritiesByLogin(login).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+            // Get UserInfo by authenticated user
+            UserInfo userInfo = null;
+            if (user != null) {
+                userInfo = userInfoRepository.findByUser(user).orElse(null);
+
+                if (userInfo == null) {
+                    LOG.debug("UserInfo not found for authenticated user id: {}", user.getId());
+                }
+            } else {
+                LOG.debug("Authenticated user is null, cannot set createdBy for InspectionRoute");
+            }
+
+            inspectionRoute.setId(null);
+            inspectionRoute.setCreatedAt(Instant.now());
+            inspectionRoute.setCreatedBy(userInfo);
+            LOG.debug("InspectionRoute.name = ", inspectionRoute.getName());
+
+            InspectionRoute inspectionRouteSaved = inspectionRouteRepository.save(inspectionRoute);
+
+            for (InspectionRouteGroup group : inspectionRoute.getGroups()) {
+                group.setId(null);
+                group.setInspectionRoute(inspectionRouteSaved);
+
+                InspectionRouteGroup groupSaved = inspectionRouteGroupRepository.save(group);
+
+                for (InspectionRouteGroup subGroup : group.getSubGroups()) {
+                    subGroup.setId(null);
+                    subGroup.setParentGroup(groupSaved);
+                    InspectionRouteGroup subGroupSaved = inspectionRouteGroupRepository.save(subGroup);
+
+                    for (InspectionRouteGroupEquipment groupEquipment : subGroup.getEquipments()) {
+                        groupEquipment.setId(null);
+                        groupEquipment.setInspectionRouteGroup(subGroupSaved);
+                        inspectionRouteGroupEquipmentRepository.save(groupEquipment);
+                    }
+                }
+            }
+
+            return ResponseEntity.created(new URI("/api/inspection-routes/" + inspectionRoute.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, inspectionRoute.getId().toString()))
+                .body(inspectionRoute);
+        } catch (Exception e) {
+            LOG.error("Erro ao criar Rota", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /**
      * {@code GET  /inspection-routes/new2/:id} : get a complex InspectionRoute
      * with groups, equipments and plant data assembled.
      *
@@ -262,7 +362,10 @@ public class InspectionRouteResource {
      *         {@code 404 (Not Found)}.
      */
     @GetMapping("/new/{plantId}")
-    public ResponseEntity<InspectionRoute> getNewInspectionRoute(@PathVariable("plantId") UUID plantId) {
+    public ResponseEntity<InspectionRoute> getNewInspectionRoute(
+        @PathVariable("plantId") UUID plantId,
+        @AuthenticationPrincipal User user
+    ) {
         LOG.debug("REST request to get new InspectionRoute: {}", plantId);
 
         Plant plant = plantRepository.findById(plantId).orElseThrow(() -> new NotFoundException("Plant not found with id: " + plantId));
@@ -270,10 +373,39 @@ public class InspectionRouteResource {
         // Create InspectionRoute
         InspectionRoute route = new InspectionRoute();
         route.setId(UUID.randomUUID());
-        // TODO: Inserir o código de criação do Nome
-        // route.setName("Inspection Route " + plant.getName());
+
+        // Count existing routes for this plant
+        Integer numRoutes = inspectionRouteRepository
+            .findAll()
+            .stream()
+            .filter(r -> r.getPlant() != null && r.getPlant().getId().equals(plantId))
+            .toList()
+            .size();
+
+        // Format route number as XXX (001, 002, etc.)
+        String formattedRouteNumber = String.format("%03d", numRoutes + 1);
+
+        route.setName("RI_" + plant.getCode() + "_C" + formattedRouteNumber);
         route.setCreatedAt(Instant.now());
         route.setPlant(plant);
+
+        // Get UserInfo by authenticated user
+        if (user != null) {
+            UserInfo userInfo = userInfoRepository
+                .findAll()
+                .stream()
+                .filter(ui -> ui.getUser() != null && ui.getUser().getId().equals(user.getId()))
+                .findFirst()
+                .orElse(null);
+
+            if (userInfo != null) {
+                route.setCreatedBy(userInfo);
+            } else {
+                LOG.debug("UserInfo not found for authenticated user id: {}", user.getId());
+            }
+        } else {
+            LOG.debug("Authenticated user is null, cannot set createdBy for InspectionRoute");
+        }
 
         // Fetch equipment groups for the plant
         List<EquipmentGroup> equipmentGroups = equipmentGroupRepository.findByPlant(plant);
@@ -336,155 +468,4 @@ public class InspectionRouteResource {
 
         return inspectionRouteGroup;
     }
-    // /**
-    // * {@code GET /inspection-routes/new/:id} : get a complex InspectionRoute DTO
-    // * with groups, equipments and plant data assembled.
-    // *
-    // * @param id the id of the inspectionRoute to retrieve.
-    // * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
-    // body
-    // * the constructed InspectionRouteDTO, or with status
-    // * {@code 404 (Not Found)}.
-    // */
-    // @GetMapping("/new/{plantId}")
-    // public ResponseEntity<InspectionRouteDTO>
-    // getNewInspectionRoute(@PathVariable("plantId") UUID plantId) {
-    // LOG.debug("REST request to get new InspectionRoute DTO : {}", plantId);
-
-    // Optional<Plant> plantOpt = plantRepository.findById(plantId);
-
-    // if (!plantOpt.isPresent()) {
-    // return ResponseEntity.notFound().build();
-    // }
-
-    // Plant plant = plantOpt.get();
-
-    // // Create InspectionRouteDTO
-    // InspectionRouteDTO routeDto = new InspectionRouteDTO();
-    // routeDto.setId(UUID.randomUUID());
-    // routeDto.setCreatedAt(Instant.now());
-
-    // // Map Plant to PlantDTO
-    // PlantDTO plantDto = new PlantDTO();
-    // plantDto.setId(plant.getId());
-    // plantDto.setCode(plant.getCode());
-    // plantDto.setName(plant.getName());
-    // plantDto.setDescription(plant.getDescription());
-    // plantDto.setLatitude(plant.getLatitude());
-    // plantDto.setLongitude(plant.getLongitude());
-    // plantDto.setStartDate(plant.getStartDate() != null ?
-    // plant.getStartDate().toString() : null);
-    // routeDto.setPlant(plantDto);
-
-    // // Fetch equipment groups for the plant
-    // List<EquipmentGroup> equipmentGroups =
-    // equipmentGroupRepository.findByPlant(plant);
-
-    // // Map EquipmentGroups to InspectionRouteGroupDTO
-    // Set<InspectionRouteGroupDTO> rootGroups = new HashSet<>();
-    // int[] rootOrderIndex = { 1 };
-
-    // for (EquipmentGroup eg : equipmentGroups) {
-    // if (eg.getParentGroup() == null) {
-    // rootGroups.add(mapGroupToDto(eg, routeDto, null, rootOrderIndex));
-    // }
-    // }
-
-    // routeDto.setGroups(rootGroups);
-
-    // return ResponseEntity.ok(routeDto);
-    // }
-
-    // private InspectionRouteGroupDTO mapGroupToDto(
-    // EquipmentGroup eg,
-    // InspectionRouteDTO routeDto,
-    // InspectionRouteGroupDTO parentDto,
-    // int[] orderIndexCounter) {
-    // InspectionRouteGroupDTO dto = new InspectionRouteGroupDTO();
-    // dto.setId(eg.getId()); // Using EquipmentGroup ID as base, but maybe should
-    // be new UUID? User said
-    // // "copia os dados", usually implies new ID for new entity, but here we are
-    // // returning DTO structure. Let's use EG ID for now as it maps to the group.
-    // // Wait, the user example shows "group-100", "group-101". If we are creating
-    // a
-    // // NEW route, we might want new IDs for the route groups. But the user said
-    // // "copia os dados objeto para um objeto InspectionRouteGroup". If this is
-    // for a
-    // // NEW route to be saved later, the IDs should probably be null or new UUIDs.
-    // // However, the example shows IDs. Let's assume we use the EquipmentGroup ID
-    // for
-    // // reference or generate new ones. The user example has "group-100", which
-    // looks
-    // // like it could be the EG ID. Let's generate new UUIDs for the new
-    // // InspectionRouteGroupDTOs to avoid confusion with EG IDs, or use EG IDs if
-    // // they are meant to be the source. Actually, for a "new" route, these are
-    // // transient DTOs. Let's generate new UUIDs.
-    // dto.setId(UUID.randomUUID());
-    // dto.setCode(eg.getCode());
-    // dto.setName(eg.getName());
-    // dto.setDescription(eg.getDescription());
-    // dto.setIncluded(true);
-    // dto.setOrderIndex(orderIndexCounter[0]++);
-
-    // if (routeDto != null) {
-    // InspectionRouteDTO routeRef = new InspectionRouteDTO();
-    // routeRef.setId(routeDto.getId());
-    // dto.setInspectionRoute(routeRef);
-    // }
-
-    // if (parentDto != null) {
-    // InspectionRouteGroupDTO parentRef = new InspectionRouteGroupDTO();
-    // parentRef.setId(parentDto.getId());
-    // dto.setParentGroup(parentRef);
-    // }
-
-    // // Subgroups
-    // if (eg.getSubGroups() != null && !eg.getSubGroups().isEmpty()) {
-    // Set<InspectionRouteGroupDTO> subGroupsDto = new HashSet<>();
-    // int[] subOrderIndex = { 1 };
-    // for (EquipmentGroup subEg : eg.getSubGroups()) {
-    // subGroupsDto.add(mapGroupToDto(subEg, null, dto, subOrderIndex));
-    // }
-    // dto.setSubGroups(subGroupsDto);
-    // }
-
-    // // Equipments
-    // List<Equipment> equipments = equipmentRepository.findByGroup(eg);
-    // if (equipments != null && !equipments.isEmpty()) {
-    // Set<InspectionRouteGroupEquipmentDTO> equipmentsDto = new HashSet<>();
-    // int equipmentOrderIndex = 1;
-    // for (Equipment eq : equipments) {
-    // InspectionRouteGroupEquipmentDTO eqDto = new
-    // InspectionRouteGroupEquipmentDTO();
-    // eqDto.setId(UUID.randomUUID());
-    // eqDto.setIncluded(true);
-    // eqDto.setOrderIndex(equipmentOrderIndex++);
-
-    // InspectionRouteGroupDTO groupRef = new InspectionRouteGroupDTO();
-    // groupRef.setId(dto.getId());
-    // eqDto.setInspectionRouteGroup(groupRef);
-
-    // EquipmentDTO equipmentDto = new EquipmentDTO();
-    // equipmentDto.setId(eq.getId());
-    // equipmentDto.setCode(eq.getCode());
-    // equipmentDto.setName(eq.getName());
-    // equipmentDto.setDescription(eq.getDescription());
-    // equipmentDto.setType(eq.getType());
-    // equipmentDto.setManufacturer(eq.getManufacturer());
-    // equipmentDto.setModel(eq.getModel());
-    // equipmentDto.setSerialNumber(eq.getSerialNumber());
-    // equipmentDto.setVoltageClass(eq.getVoltageClass());
-    // equipmentDto.setPhaseType(eq.getPhaseType());
-    // equipmentDto.setStartDate(eq.getStartDate());
-    // equipmentDto.setLatitude(eq.getLatitude());
-    // equipmentDto.setLongitude(eq.getLongitude());
-
-    // eqDto.setEquipment(equipmentDto);
-    // equipmentsDto.add(eqDto);
-    // }
-    // dto.setEquipments(equipmentsDto);
-    // }
-
-    // return dto;
-    // }
 }

@@ -63,7 +63,7 @@ public class InspectionRoute implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "user", "company" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "company" }, allowSetters = true)
     private UserInfo createdBy;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "inspectionRoute")
