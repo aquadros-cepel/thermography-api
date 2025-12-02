@@ -8,7 +8,6 @@ import com.tech.thermography.domain.InspectionRouteGroup;
 import com.tech.thermography.domain.InspectionRouteGroupEquipment;
 import com.tech.thermography.domain.Plant;
 import com.tech.thermography.domain.User;
-// import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import com.tech.thermography.domain.UserInfo;
 import com.tech.thermography.domain.enumeration.Periodicity;
 import com.tech.thermography.repository.EquipmentGroupRepository;
@@ -306,7 +305,7 @@ public class InspectionRouteResource {
      */
     @PostMapping("/actions/create-route")
     public ResponseEntity<InspectionRoute> createRoute(@RequestBody InspectionRoute inspectionRoute) {
-        InspectionRoute inspectionRouteSaved = saveRoute(inspectionRoute);
+        InspectionRoute inspectionRouteSaved = saveRoute(inspectionRoute, true);
         try {
             return ResponseEntity.created(new URI("/api/inspection-routes/" + inspectionRouteSaved.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, inspectionRoute.getId().toString()))
@@ -322,7 +321,7 @@ public class InspectionRouteResource {
         @PathVariable(value = "id", required = false) final UUID id,
         @RequestBody InspectionRoute inspectionRoute
     ) {
-        InspectionRoute inspectionRouteSaved = saveRoute(inspectionRoute);
+        InspectionRoute inspectionRouteSaved = saveRoute(inspectionRoute, false);
         try {
             return ResponseEntity.created(new URI("/api/inspection-routes/" + inspectionRouteSaved.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, inspectionRoute.getId().toString()))
@@ -333,7 +332,36 @@ public class InspectionRouteResource {
         }
     }
 
-    public InspectionRoute saveRoute(InspectionRoute inspectionRoute) {
+    @DeleteMapping("/actions/delete-route/{id}")
+    public ResponseEntity<Void> deleteRoute(@PathVariable("id") UUID id) {
+        LOG.debug("REST request to delete InspectionRoute : {}", id);
+        InspectionRoute inspectionRoute = inspectionRouteRepository
+            .findByIdWithFullHierarchy(id)
+            .orElseThrow(() -> new NotFoundException("InspectionRoute not found with id: " + id));
+
+        inspectionRoute
+            .getGroups()
+            .forEach(group -> {
+                group
+                    .getSubGroups()
+                    .forEach(subGroup -> {
+                        subGroup
+                            .getEquipments()
+                            .forEach(equipment -> {
+                                inspectionRouteGroupEquipmentRepository.delete(equipment);
+                            });
+                        inspectionRouteGroupRepository.delete(subGroup);
+                    });
+                inspectionRouteGroupRepository.delete(group);
+            });
+
+        inspectionRouteRepository.deleteById(id);
+        return ResponseEntity.noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
+    }
+
+    public InspectionRoute saveRoute(InspectionRoute inspectionRoute, boolean isNew) {
         try {
             // 1. Pegar o login do usuário autenticado
             String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("Usuário não autenticado"));
@@ -353,7 +381,8 @@ public class InspectionRouteResource {
                 LOG.debug("Authenticated user is null, cannot set createdBy for InspectionRoute");
             }
 
-            // inspectionRoute.setId(null);
+            if (isNew) inspectionRoute.setId(null);
+
             inspectionRoute.setCreatedAt(Instant.now());
             inspectionRoute.setCreatedBy(userInfo);
             LOG.debug("InspectionRoute.name = ", inspectionRoute.getName());
@@ -361,18 +390,19 @@ public class InspectionRouteResource {
             InspectionRoute inspectionRouteSaved = inspectionRouteRepository.save(inspectionRoute);
 
             for (InspectionRouteGroup group : inspectionRoute.getGroups()) {
-                // group.setId(null);
+                if (isNew) group.setId(null);
                 group.setInspectionRoute(inspectionRouteSaved);
 
                 InspectionRouteGroup groupSaved = inspectionRouteGroupRepository.save(group);
 
                 for (InspectionRouteGroup subGroup : group.getSubGroups()) {
-                    // subGroup.setId(null);
+                    if (isNew) subGroup.setId(null);
+
                     subGroup.setParentGroup(groupSaved);
                     InspectionRouteGroup subGroupSaved = inspectionRouteGroupRepository.save(subGroup);
 
                     for (InspectionRouteGroupEquipment groupEquipment : subGroup.getEquipments()) {
-                        // groupEquipment.setId(null);
+                        if (isNew) groupEquipment.setId(null);
                         groupEquipment.setInspectionRouteGroup(subGroupSaved);
                         inspectionRouteGroupEquipmentRepository.save(groupEquipment);
                     }
@@ -405,7 +435,7 @@ public class InspectionRouteResource {
 
         // Create InspectionRoute
         InspectionRoute route = new InspectionRoute();
-        // route.setId(UUID.randomUUID());
+        route.setId(UUID.randomUUID());
 
         // Count existing routes for this plant
         Integer numRoutes = inspectionRouteRepository
@@ -446,7 +476,7 @@ public class InspectionRouteResource {
     private InspectionRouteGroup mapGroup(EquipmentGroup eg, InspectionRoute route, InspectionRouteGroup parent, int[] orderIndexCounter) {
         // Grupo
         InspectionRouteGroup inspectionRouteGroup = new InspectionRouteGroup();
-        // inspectionRouteGroup.setId(UUID.randomUUID());
+        inspectionRouteGroup.setId(UUID.randomUUID());
         inspectionRouteGroup.setCode(eg.getCode());
         inspectionRouteGroup.setName(eg.getName());
         inspectionRouteGroup.setDescription(eg.getDescription());
@@ -473,7 +503,7 @@ public class InspectionRouteResource {
 
             for (Equipment eq : equipments) {
                 InspectionRouteGroupEquipment inspectionRouteGroupEquipment = new InspectionRouteGroupEquipment();
-                // inspectionRouteGroupEquipment.setId(UUID.randomUUID());
+                inspectionRouteGroupEquipment.setId(UUID.randomUUID());
                 inspectionRouteGroupEquipment.setIncluded(true);
                 inspectionRouteGroupEquipment.setOrderIndex(equipmentOrderIndex++);
                 inspectionRouteGroupEquipment.setInspectionRouteGroup(inspectionRouteGroup);
