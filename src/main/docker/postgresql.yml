@@ -4,9 +4,9 @@ services:
     image: postgres:17.4
     volumes:
       # Volume nomeado para persistência de dados (recomendado para cloud)
-      - postgres-data:/var/lib/postgresql/data/
+      #- postgres-data:/var/lib/postgresql/data/
       # Para desenvolvimento local, descomente a linha abaixo e comente a acima:
-      # - ~/volumes/thermographyApi/postgresql/:/var/lib/postgresql/data/
+      - ~/volumes/thermographyApi/postgresql/:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=thermographyApi
       - POSTGRES_DB=thermographyApi

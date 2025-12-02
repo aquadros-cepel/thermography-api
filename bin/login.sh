@@ -2,7 +2,8 @@
 
 USERNAME="admin"
 PASSWORD="admin"
-SERVER="35.247.197.28"
+SERVER="192.168.15.172"
+
 TOKEN=$(curl -s -X POST http://${SERVER}:8080/api/authenticate \
   -H "Content-Type: application/json" \
   -d "{\"username\":\"$USERNAME\",\"password\":\"$PASSWORD\"}" \
