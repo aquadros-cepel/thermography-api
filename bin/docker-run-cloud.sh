@@ -17,7 +17,7 @@ fi
 
 echo ""
 echo "👉 Parando containers antigos (se existirem)"
-docker compose -f $COMPOSE_FILE down -v --remove-orphans 2>/dev/null || true
+docker compose -f $COMPOSE_FILE down --remove-orphans 2>/dev/null || true
 
 echo ""
 echo "👉 Subindo ambiente Docker"

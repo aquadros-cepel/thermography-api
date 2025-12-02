@@ -4,9 +4,9 @@ services:
     image: postgres:17.4
     volumes:
       # Volume nomeado para persistência de dados (recomendado para cloud)
-      #- postgres-data:/var/lib/postgresql/data/
+      - postgres-data:/var/lib/postgresql/data/
       # Para desenvolvimento local, descomente a linha abaixo e comente a acima:
-      - ~/volumes/thermographyApi/postgresql/:/var/lib/postgresql/data/
+      # - ~/volumes/thermographyApi/postgresql/:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=thermographyApi
       - POSTGRES_DB=thermographyApi
@@ -19,10 +19,10 @@ services:
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
-      - 127.0.0.1:5432:5432
+      - 5432:5432
     restart: unless-stopped
 
-# Volume nomeado para persistência de dados do PostgreSQL
+# Volume nomeado para persistência de dados do PostgreSQLdo
 volumes:
   postgres-data:
     driver: local
