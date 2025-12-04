@@ -6,7 +6,7 @@ echo "  Deploy para Máquina na Nuvem"
 echo "======================================"
 
 # Configurações
-REMOTE_HOST="35.247.197.28"
+REMOTE_HOST="34.95.132.119"
 REMOTE_USER="tech.thermography"
 SSH_KEY="~/.ssh/tech.thermography"
 REMOTE_DIR="/home/tech.thermography/thermography-api"
