@@ -83,9 +83,23 @@ entity InspectionRecord {
     expectedStartDate LocalDate required
     expectedEndDate LocalDate required
 	started Boolean
-    startedAt Instant    
+    startedAt Instant
 	finished Boolean
 	finishedAt Instant
+}
+entity InspectionRecordGroup {
+    id UUID required    
+    code String
+    name String required
+    description String
+    orderIndex Integer
+    finished Boolean
+	finishedAt Instant
+}
+entity InspectionRecordGroupEquipment {
+    id UUID required
+	orderIndex Integer
+    status EquipmentInspectionStatus
 }
 entity EquipmentTypeTranslation {
     id UUID required
@@ -202,6 +216,9 @@ enum ConditionType {
     HIGH_RISK
     IMMINENT_HIGH_RISK
 }
+enum EquipmentInspectionStatus {
+    INSPECTED, NOT_INSPECTED, OUT_OF_OPERATION, INACCESSIBLE, OTHER
+}
 relationship OneToOne {
     EquipmentComponent{componentTemperatureLimits} to EquipmentComponentTemperatureLimits
     UserInfo{user} to User with builtInEntity // FK Optional
@@ -228,24 +245,33 @@ relationship ManyToOne {
 	InspectionRouteGroupEquipment {inspectionRouteGroup} to InspectionRouteGroup{equipments}
     InspectionRouteGroupEquipment {equipment} to Equipment
 
+	//Registros de Inspeção
+	InspectionRecord {plant required } to Plant
+    InspectionRecord {inspectionRoute } to InspectionRoute //FK Optional (Caso a rota seja excluída após o registro existir
+    InspectionRecord {createdBy required } to UserInfo
 	InspectionRecord {startedBy } to UserInfo          //FK Optional (Quando ainda não iniciou a rota)
   	InspectionRecord {finishedBy } to UserInfo         //FK Optional (Quando ainda não finalizou a rota)
+    InspectionRecordGroup{inspectionRecord} to InspectionRecord{groups}	//FK Optional
+    // Auto-relacionamento (um grupo pode conter subgrupos)
+	InspectionRecordGroup{parentGroup} to InspectionRecordGroup{subGroups} //FK Optional
+	InspectionRecordGroupEquipment {inspectionRecordGroup} to InspectionRecordGroup{equipments}
+    InspectionRecordGroupEquipment {equipment} to Equipment
 	
     Thermogram {equipment required } to Equipment
     Thermogram {createdBy required } to UserInfo
     ROI {thermogram required } to Thermogram
     
     ThermographicInspectionRecord {plant required } to Plant
-    ThermographicInspectionRecord {route } to InspectionRecord		//FK optional
+    ThermographicInspectionRecord {route } to InspectionRecord			//FK optional
     ThermographicInspectionRecord {equipment required } to Equipment
     ThermographicInspectionRecord {component } to EquipmentComponent	//FK optional
     ThermographicInspectionRecord {createdBy required } to UserInfo
     ThermographicInspectionRecord {finishedBy required } to UserInfo
     ThermographicInspectionRecord {thermogram required} to Thermogram
-  	ThermographicInspectionRecord {thermogramRef} to Thermogram			  //FK optional
+  	ThermographicInspectionRecord {thermogramRef} to Thermogram			//FK optional
     
-    UserInfo {company} to Company				      //FK optional
-    BusinessUnit {company} to Company		  //FK optional
+    UserInfo {company} to Company			//FK optional
+    BusinessUnit {company} to Company		//FK optional
     Plant {businessUnit} to BusinessUnit	//FK optional
     
     RiskRecommendationTranslation{riskPeriodicityDeadline} to RiskPeriodicityDeadline
