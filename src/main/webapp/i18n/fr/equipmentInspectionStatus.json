@@ -1,0 +1,12 @@
+{
+  "thermographyApiApp": {
+    "EquipmentInspectionStatus": {
+      "null": "",
+      "INSPECTED": "INSPECTED",
+      "NOT_INSPECTED": "NOT_INSPECTED",
+      "OUT_OF_OPERATION": "OUT_OF_OPERATION",
+      "INACCESSIBLE": "INACCESSIBLE",
+      "OTHER": "OTHER"
+    }
+  }
+}

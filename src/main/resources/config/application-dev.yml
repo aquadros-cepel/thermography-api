@@ -55,7 +55,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
   mail:
     host: localhost
     port: 25

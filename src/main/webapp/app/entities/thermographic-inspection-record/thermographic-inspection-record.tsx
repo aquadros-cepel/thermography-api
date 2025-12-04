@@ -234,7 +234,7 @@ export const ThermographicInspectionRecord = () => {
                   </td>
                   <td>
                     {thermographicInspectionRecord.route ? (
-                      <Link to={`/inspection-route-record/${thermographicInspectionRecord.route.id}`}>
+                      <Link to={`/inspection-record/${thermographicInspectionRecord.route.id}`}>
                         {thermographicInspectionRecord.route.id}
                       </Link>
                     ) : (

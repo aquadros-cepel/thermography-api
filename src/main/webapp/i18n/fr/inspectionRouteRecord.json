@@ -1,8 +1,8 @@
 {
   "thermographyApiApp": {
-    "inspectionRouteRecord": {
+    "inspectionRecord": {
       "home": {
-        "title": "InspectionRouteRecords",
+        "title": "InspectionRecords",
         "refreshListLabel": "Actualiser la liste",
         "createLabel": "Créer un nouveau Inspection Route Record",
         "createOrEditLabel": "Créer ou éditer un Inspection Route Record",

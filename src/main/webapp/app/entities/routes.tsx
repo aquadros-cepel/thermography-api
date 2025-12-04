@@ -20,7 +20,9 @@ import ROI from './roi';
 import ThermographicInspectionRecord from './thermographic-inspection-record';
 import UserInfo from './user-info';
 import InspectionRouteGroupEquipment from './inspection-route-group-equipment';
-import InspectionRouteRecord from './inspection-route-record';
+import InspectionRecord from './inspection-record';
+import InspectionRecordGroup from './inspection-record-group';
+import InspectionRecordGroupEquipment from './inspection-record-group-equipment';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 export default () => {
@@ -45,7 +47,9 @@ export default () => {
         <Route path="thermographic-inspection-record/*" element={<ThermographicInspectionRecord />} />
         <Route path="user-info/*" element={<UserInfo />} />
         <Route path="inspection-route-group-equipment/*" element={<InspectionRouteGroupEquipment />} />
-        <Route path="inspection-route-record/*" element={<InspectionRouteRecord />} />
+        <Route path="inspection-record/*" element={<InspectionRecord />} />
+        <Route path="inspection-record-group/*" element={<InspectionRecordGroup />} />
+        <Route path="inspection-record-group-equipment/*" element={<InspectionRecordGroupEquipment />} />
         {/* jhipster-needle-add-route-path - JHipster will add routes here */}
       </ErrorBoundaryRoutes>
     </div>

@@ -81,7 +81,7 @@ public class ThermographicInspectionRecord implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "startedBy", "finishedBy" }, allowSetters = true)
-    private InspectionRouteRecord route;
+    private InspectionRecord route;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -308,16 +308,16 @@ public class ThermographicInspectionRecord implements Serializable {
         return this;
     }
 
-    public InspectionRouteRecord getRoute() {
+    public InspectionRecord getRoute() {
         return this.route;
     }
 
-    public void setRoute(InspectionRouteRecord inspectionRouteRecord) {
-        this.route = inspectionRouteRecord;
+    public void setRoute(InspectionRecord inspectionRecord) {
+        this.route = inspectionRecord;
     }
 
-    public ThermographicInspectionRecord route(InspectionRouteRecord inspectionRouteRecord) {
-        this.setRoute(inspectionRouteRecord);
+    public ThermographicInspectionRecord route(InspectionRecord inspectionRecord) {
+        this.setRoute(inspectionRecord);
         return this;
     }
 
@@ -399,7 +399,8 @@ public class ThermographicInspectionRecord implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -414,7 +415,8 @@ public class ThermographicInspectionRecord implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -422,20 +424,20 @@ public class ThermographicInspectionRecord implements Serializable {
     @Override
     public String toString() {
         return "ThermographicInspectionRecord{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", type='" + getType() + "'" +
-            ", serviceOrder='" + getServiceOrder() + "'" +
-            ", createdAt='" + getCreatedAt() + "'" +
-            ", analysisDescription='" + getAnalysisDescription() + "'" +
-            ", condition='" + getCondition() + "'" +
-            ", deltaT=" + getDeltaT() +
-            ", periodicity=" + getPeriodicity() +
-            ", deadlineExecution='" + getDeadlineExecution() + "'" +
-            ", nextMonitoring='" + getNextMonitoring() + "'" +
-            ", recommendations='" + getRecommendations() + "'" +
-            ", finished='" + getFinished() + "'" +
-            ", finishedAt='" + getFinishedAt() + "'" +
-            "}";
+                "id=" + getId() +
+                ", name='" + getName() + "'" +
+                ", type='" + getType() + "'" +
+                ", serviceOrder='" + getServiceOrder() + "'" +
+                ", createdAt='" + getCreatedAt() + "'" +
+                ", analysisDescription='" + getAnalysisDescription() + "'" +
+                ", condition='" + getCondition() + "'" +
+                ", deltaT=" + getDeltaT() +
+                ", periodicity=" + getPeriodicity() +
+                ", deadlineExecution='" + getDeadlineExecution() + "'" +
+                ", nextMonitoring='" + getNextMonitoring() + "'" +
+                ", recommendations='" + getRecommendations() + "'" +
+                ", finished='" + getFinished() + "'" +
+                ", finishedAt='" + getFinishedAt() + "'" +
+                "}";
     }
 }

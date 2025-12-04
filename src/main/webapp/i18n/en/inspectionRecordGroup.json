@@ -1,0 +1,33 @@
+{
+  "thermographyApiApp": {
+    "inspectionRecordGroup": {
+      "home": {
+        "title": "Inspection Record Groups",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Inspection Record Group",
+        "createOrEditLabel": "Create or edit a Inspection Record Group",
+        "notFound": "No Inspection Record Groups found"
+      },
+      "created": "A new Inspection Record Group is created with identifier {{ param }}",
+      "updated": "A Inspection Record Group is updated with identifier {{ param }}",
+      "deleted": "A Inspection Record Group is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Inspection Record Group {{ id }}?"
+      },
+      "detail": {
+        "title": "Inspection Record Group"
+      },
+      "id": "Id",
+      "code": "Code",
+      "name": "Name",
+      "description": "Description",
+      "orderIndex": "Order Index",
+      "finished": "Finished",
+      "finishedAt": "Finished At",
+      "inspectionRecord": "Inspection Record",
+      "parentGroup": "Parent Group",
+      "subGroups": "Sub Groups",
+      "equipments": "Equipments"
+    }
+  }
+}

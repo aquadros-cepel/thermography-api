@@ -8,7 +8,7 @@ import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateT
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntities as getPlants } from 'app/entities/plant/plant.reducer';
-import { getEntities as getInspectionRouteRecords } from 'app/entities/inspection-route-record/inspection-route-record.reducer';
+import { getEntities as getInspectionRecords } from 'app/entities/inspection-record/inspection-record.reducer';
 import { getEntities as getEquipment } from 'app/entities/equipment/equipment.reducer';
 import { getEntities as getEquipmentComponents } from 'app/entities/equipment-component/equipment-component.reducer';
 import { getEntities as getUserInfos } from 'app/entities/user-info/user-info.reducer';
@@ -26,7 +26,7 @@ export const ThermographicInspectionRecordUpdate = () => {
   const isNew = id === undefined;
 
   const plants = useAppSelector(state => state.plant.entities);
-  const inspectionRouteRecords = useAppSelector(state => state.inspectionRouteRecord.entities);
+  const inspectionRecords = useAppSelector(state => state.inspectionRecord.entities);
   const equipment = useAppSelector(state => state.equipment.entities);
   const equipmentComponents = useAppSelector(state => state.equipmentComponent.entities);
   const userInfos = useAppSelector(state => state.userInfo.entities);
@@ -50,7 +50,7 @@ export const ThermographicInspectionRecordUpdate = () => {
     }
 
     dispatch(getPlants({}));
-    dispatch(getInspectionRouteRecords({}));
+    dispatch(getInspectionRecords({}));
     dispatch(getEquipment({}));
     dispatch(getEquipmentComponents({}));
     dispatch(getUserInfos({}));
@@ -77,7 +77,7 @@ export const ThermographicInspectionRecordUpdate = () => {
       ...thermographicInspectionRecordEntity,
       ...values,
       plant: plants.find(it => it.id.toString() === values.plant?.toString()),
-      route: inspectionRouteRecords.find(it => it.id.toString() === values.route?.toString()),
+      route: inspectionRecords.find(it => it.id.toString() === values.route?.toString()),
       equipment: equipment.find(it => it.id.toString() === values.equipment?.toString()),
       component: equipmentComponents.find(it => it.id.toString() === values.component?.toString()),
       createdBy: userInfos.find(it => it.id.toString() === values.createdBy?.toString()),
@@ -289,8 +289,8 @@ export const ThermographicInspectionRecordUpdate = () => {
                 type="select"
               >
                 <option value="" key="0" />
-                {inspectionRouteRecords
-                  ? inspectionRouteRecords.map(otherEntity => (
+                {inspectionRecords
+                  ? inspectionRecords.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
                         {otherEntity.id}
                       </option>

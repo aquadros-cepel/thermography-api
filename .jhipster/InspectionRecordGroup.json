@@ -1,0 +1,70 @@
+{
+  "annotations": {
+    "changelogDate": "20251203141816"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "code",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "orderIndex",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "finished",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "finishedAt",
+      "fieldType": "Instant"
+    }
+  ],
+  "name": "InspectionRecordGroup",
+  "relationships": [
+    {
+      "otherEntityName": "inspectionRecord",
+      "otherEntityRelationshipName": "groups",
+      "relationshipName": "inspectionRecord",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "inspectionRecordGroup",
+      "otherEntityRelationshipName": "subGroups",
+      "relationshipName": "parentGroup",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "inspectionRecordGroup",
+      "otherEntityRelationshipName": "parentGroup",
+      "relationshipName": "subGroups",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "inspectionRecordGroupEquipment",
+      "otherEntityRelationshipName": "inspectionRecordGroup",
+      "relationshipName": "equipments",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no"
+}

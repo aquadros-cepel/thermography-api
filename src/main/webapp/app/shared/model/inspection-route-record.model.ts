@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { IUserInfo } from 'app/shared/model/user-info.model';
 
-export interface IInspectionRouteRecord {
+export interface IInspectionRecord {
   id?: string;
   code?: string | null;
   name?: string;
@@ -18,7 +18,7 @@ export interface IInspectionRouteRecord {
   finishedBy?: IUserInfo | null;
 }
 
-export const defaultValue: Readonly<IInspectionRouteRecord> = {
+export const defaultValue: Readonly<IInspectionRecord> = {
   started: false,
   finished: false,
 };

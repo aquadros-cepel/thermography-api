@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { IPlant } from 'app/shared/model/plant.model';
-import { IInspectionRouteRecord } from 'app/shared/model/inspection-route-record.model';
+import { IInspectionRecord } from 'app/shared/model/inspection-record.model';
 import { IEquipment } from 'app/shared/model/equipment.model';
 import { IEquipmentComponent } from 'app/shared/model/equipment-component.model';
 import { IUserInfo } from 'app/shared/model/user-info.model';
@@ -24,7 +24,7 @@ export interface IThermographicInspectionRecord {
   finished?: boolean | null;
   finishedAt?: dayjs.Dayjs | null;
   plant?: IPlant;
-  route?: IInspectionRouteRecord | null;
+  route?: IInspectionRecord | null;
   equipment?: IEquipment;
   component?: IEquipmentComponent | null;
   createdBy?: IUserInfo;

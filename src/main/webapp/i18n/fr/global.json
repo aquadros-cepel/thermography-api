@@ -25,7 +25,9 @@
         "thermographicInspectionRecord": "Thermographic Inspection Record",
         "userInfo": "User Info",
         "inspectionRouteGroupEquipment": "Inspection Route Group Equipment",
-        "inspectionRouteRecord": "Inspection Route Record"
+        "inspectionRecord": "Inspection Record",
+        "inspectionRecordGroup": "Inspection Record Group",
+        "inspectionRecordGroupEquipment": "Inspection Record Group Equipment"
       },
       "account": {
         "main": "Compte",

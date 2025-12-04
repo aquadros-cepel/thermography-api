@@ -1,0 +1,39 @@
+{
+  "annotations": {
+    "changelogDate": "20251203141817"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "orderIndex",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "EquipmentInspectionStatus",
+      "fieldValues": "INSPECTED,NOT_INSPECTED,OUT_OF_OPERATION,INACCESSIBLE,OTHER"
+    }
+  ],
+  "name": "InspectionRecordGroupEquipment",
+  "relationships": [
+    {
+      "otherEntityName": "inspectionRecordGroup",
+      "otherEntityRelationshipName": "equipments",
+      "relationshipName": "inspectionRecordGroup",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "equipment",
+      "relationshipName": "equipment",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no"
+}
