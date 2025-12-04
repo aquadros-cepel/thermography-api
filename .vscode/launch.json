@@ -1,0 +1,41 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Debug Spring Boot App",
+      "request": "launch",
+      "mainClass": "com.tech.thermography.ThermographyApiApp",
+      "projectName": "thermography-api",
+      "args": "--spring.profiles.active=dev",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Debug Spring Boot App (with Maven)",
+      "request": "launch",
+      "mainClass": "com.tech.thermography.ThermographyApiApp",
+      "projectName": "thermography-api",
+      "preLaunchTask": "maven: spring-boot:run",
+      "args": "--spring.profiles.active=dev"
+    },
+    {
+      "type": "java",
+      "name": "Attach to Remote Java Application",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5005
+    },
+    {
+      "type": "java",
+      "name": "Debug Tests",
+      "request": "launch",
+      "mainClass": "",
+      "projectName": "thermography-api",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "stopOnEntry": false,
+      "args": ""
+    }
+  ]
+}
