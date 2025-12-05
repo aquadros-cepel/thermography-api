@@ -488,7 +488,7 @@ public class InspectionRecordResource {
         Set<InspectionRecordGroup> recordSubGroups = new HashSet<>();
         for (InspectionRouteGroup routeSubGroup : routeGroup.getSubGroups()) {
             if (Boolean.TRUE.equals(routeSubGroup.getIncluded())) {
-                InspectionRecordGroup recordSubGroup = copyRouteGroupToRecordGroup(routeSubGroup, inspectionRecord);
+                InspectionRecordGroup recordSubGroup = copyRouteGroupToRecordGroup(routeSubGroup, null);
                 recordSubGroup.setParentGroup(recordGroup);
                 recordSubGroups.add(recordSubGroup);
             }

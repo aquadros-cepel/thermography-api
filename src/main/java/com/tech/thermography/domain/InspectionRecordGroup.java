@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -54,6 +55,7 @@ public class InspectionRecordGroup implements Serializable {
     private Instant finishedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "inspection_record_id", nullable = true)
     @JsonIgnoreProperties(value = { "plant", "createdBy", "startedBy", "finishedBy", "groups" }, allowSetters = true)
     @com.fasterxml.jackson.annotation.JsonIncludeProperties(value = { "id" })
     private InspectionRecord inspectionRecord;
