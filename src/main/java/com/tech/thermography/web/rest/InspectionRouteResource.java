@@ -1,6 +1,5 @@
 package com.tech.thermography.web.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tech.thermography.domain.Equipment;
 import com.tech.thermography.domain.EquipmentGroup;
 import com.tech.thermography.domain.InspectionRoute;
@@ -16,9 +15,7 @@ import com.tech.thermography.repository.InspectionRouteGroupEquipmentRepository;
 import com.tech.thermography.repository.InspectionRouteGroupRepository;
 import com.tech.thermography.repository.InspectionRouteRepository;
 import com.tech.thermography.repository.PlantRepository;
-import com.tech.thermography.repository.UserInfoRepository;
-import com.tech.thermography.security.SecurityUtils;
-import com.tech.thermography.service.UserService;
+import com.tech.thermography.service.AuthenticatedUserService;
 import com.tech.thermography.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -56,7 +53,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * {@link com.tech.thermography.domain.InspectionRoute}.
  */
 @RestController
-@RequestMapping("/api/inspection-routes/")
+@RequestMapping("/api/inspection-routes")
 @Transactional
 public class InspectionRouteResource {
 
@@ -73,9 +70,7 @@ public class InspectionRouteResource {
     private final EquipmentGroupRepository equipmentGroupRepository;
     private final EquipmentRepository equipmentRepository;
     private final PlantRepository plantRepository;
-    private final UserInfoRepository userInfoRepository;
-    private final UserService userService;
-    private final ObjectMapper objectMapper;
+    private final AuthenticatedUserService authenticatedUserService;
 
     public InspectionRouteResource(
         InspectionRouteRepository inspectionRouteRepository,
@@ -84,9 +79,7 @@ public class InspectionRouteResource {
         EquipmentGroupRepository equipmentGroupRepository,
         EquipmentRepository equipmentRepository,
         PlantRepository plantRepository,
-        UserInfoRepository userInfoRepository,
-        UserService userService,
-        ObjectMapper objectMapper
+        AuthenticatedUserService authenticatedUserService
     ) {
         this.inspectionRouteRepository = inspectionRouteRepository;
         this.inspectionRouteGroupRepository = inspectionRouteGroupRepository;
@@ -94,9 +87,7 @@ public class InspectionRouteResource {
         this.equipmentGroupRepository = equipmentGroupRepository;
         this.equipmentRepository = equipmentRepository;
         this.plantRepository = plantRepository;
-        this.userInfoRepository = userInfoRepository;
-        this.userService = userService;
-        this.objectMapper = objectMapper;
+        this.authenticatedUserService = authenticatedUserService;
     }
 
     /**
@@ -322,9 +313,10 @@ public class InspectionRouteResource {
         @RequestBody InspectionRoute inspectionRoute
     ) {
         InspectionRoute inspectionRouteSaved = saveRoute(inspectionRoute, false);
+
         try {
             return ResponseEntity.created(new URI("/api/inspection-routes/" + inspectionRouteSaved.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, inspectionRoute.getId().toString()))
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, inspectionRoute.getId().toString()))
                 .body(inspectionRoute);
         } catch (Exception e) {
             LOG.error("Erro ao criar Rota", e);
@@ -363,22 +355,12 @@ public class InspectionRouteResource {
 
     public InspectionRoute saveRoute(InspectionRoute inspectionRoute, boolean isNew) {
         try {
-            // 1. Pegar o login do usuário autenticado
-            String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("Usuário não autenticado"));
+            UserInfo userInfo = authenticatedUserService.requireCurrentUserInfo();
 
-            // 2. Buscar o usuário completo no banco (entidade JPA)
-            User user = userService.getUserWithAuthoritiesByLogin(login).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
-            // Get UserInfo by authenticated user
-            UserInfo userInfo = null;
-            if (user != null) {
-                userInfo = userInfoRepository.findByUser(user).orElse(null);
-
-                if (userInfo == null) {
-                    LOG.debug("UserInfo not found for authenticated user id: {}", user.getId());
-                }
-            } else {
-                LOG.debug("Authenticated user is null, cannot set createdBy for InspectionRoute");
+            if (userInfo == null) {
+                User user = authenticatedUserService.getCurrentUser();
+                LOG.debug("UserInfo not found for authenticated user id: {}", user.getId());
+                return null;
             }
 
             if (isNew) inspectionRoute.setId(null);
