@@ -1,25 +1,18 @@
 package com.tech.thermography.web.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tech.thermography.domain.InspectionRecord;
 import com.tech.thermography.domain.InspectionRecordGroup;
 import com.tech.thermography.domain.InspectionRecordGroupEquipment;
 import com.tech.thermography.domain.InspectionRoute;
 import com.tech.thermography.domain.InspectionRouteGroup;
 import com.tech.thermography.domain.InspectionRouteGroupEquipment;
-import com.tech.thermography.domain.User;
 import com.tech.thermography.domain.UserInfo;
 import com.tech.thermography.domain.enumeration.Periodicity;
-import com.tech.thermography.repository.EquipmentGroupRepository;
-import com.tech.thermography.repository.EquipmentRepository;
 import com.tech.thermography.repository.InspectionRecordGroupEquipmentRepository;
 import com.tech.thermography.repository.InspectionRecordGroupRepository;
 import com.tech.thermography.repository.InspectionRecordRepository;
 import com.tech.thermography.repository.InspectionRouteRepository;
-import com.tech.thermography.repository.PlantRepository;
-import com.tech.thermography.repository.UserInfoRepository;
-import com.tech.thermography.security.SecurityUtils;
-import com.tech.thermography.service.UserService;
+import com.tech.thermography.service.AuthenticatedUserService;
 import com.tech.thermography.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -71,39 +64,22 @@ public class InspectionRecordResource {
     private final InspectionRecordGroupRepository inspectionRecordGroupRepository;
     private final InspectionRecordGroupEquipmentRepository inspectionRecordGroupEquipmentRepository;
 
-    private final PlantRepository plantRepository;
     private final InspectionRouteRepository inspectionRouteRepository;
-    private final EquipmentGroupRepository equipmentGroupRepository;
-    private final EquipmentRepository equipmentRepository;
 
-    private final UserInfoRepository userInfoRepository;
-    private final UserService userService;
-    private final ObjectMapper objectMapper;
+    private final AuthenticatedUserService authenticatedUserService;
 
     public InspectionRecordResource(
         InspectionRecordRepository inspectionRecordRepository,
         InspectionRecordGroupRepository inspectionRecordGroupRepository,
         InspectionRecordGroupEquipmentRepository inspectionRecordGroupEquipmentRepository,
-        PlantRepository plantRepository,
         InspectionRouteRepository inspectionRouteRepository,
-        EquipmentGroupRepository equipmentGroupRepository,
-        EquipmentRepository equipmentRepository,
-        UserInfoRepository userInfoRepository,
-        UserService userService,
-        ObjectMapper objectMapper
+        AuthenticatedUserService authenticatedUserService
     ) {
         this.inspectionRecordRepository = inspectionRecordRepository;
         this.inspectionRecordGroupRepository = inspectionRecordGroupRepository;
         this.inspectionRecordGroupEquipmentRepository = inspectionRecordGroupEquipmentRepository;
-
-        this.plantRepository = plantRepository;
         this.inspectionRouteRepository = inspectionRouteRepository;
-        this.equipmentGroupRepository = equipmentGroupRepository;
-        this.equipmentRepository = equipmentRepository;
-
-        this.userInfoRepository = userInfoRepository;
-        this.userService = userService;
-        this.objectMapper = objectMapper;
+        this.authenticatedUserService = authenticatedUserService;
     }
 
     /**
@@ -158,6 +134,19 @@ public class InspectionRecordResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
+        UserInfo userInfo = authenticatedUserService.requireCurrentUserInfo();
+        if (userInfo == null) {
+            throw new BadRequestAlertException("UserInfo not found", ENTITY_NAME, "idnotfound");
+        }
+
+        InspectionRecord existingRecord = inspectionRecordRepository
+            .findById(inspectionRecord.getId())
+            .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
+
+        if (existingRecord.getStarted() == null && inspectionRecord.getStarted() != null) inspectionRecord.setStartedBy(userInfo);
+
+        if (existingRecord.getFinished() == null && inspectionRecord.getFinished() != null) inspectionRecord.setFinishedBy(userInfo);
+
         inspectionRecord = inspectionRecordRepository.save(inspectionRecord);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, inspectionRecord.getId().toString()))
@@ -197,6 +186,11 @@ public class InspectionRecordResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
+        UserInfo userInfo = authenticatedUserService.requireCurrentUserInfo();
+        if (userInfo == null) {
+            throw new BadRequestAlertException("UserInfo not found", ENTITY_NAME, "idnotfound");
+        }
+
         Optional<InspectionRecord> result = inspectionRecordRepository
             .findById(inspectionRecord.getId())
             .map(existingInspectionRecord -> {
@@ -233,6 +227,13 @@ public class InspectionRecordResource {
                 if (inspectionRecord.getFinishedAt() != null) {
                     existingInspectionRecord.setFinishedAt(inspectionRecord.getFinishedAt());
                 }
+                if (existingInspectionRecord.getStarted() == null && inspectionRecord.getStarted() != null) inspectionRecord.setStartedBy(
+                    userInfo
+                );
+
+                if (
+                    existingInspectionRecord.getFinished() == null && inspectionRecord.getFinished() != null
+                ) inspectionRecord.setFinishedBy(userInfo);
 
                 return existingInspectionRecord;
             })
@@ -338,7 +339,7 @@ public class InspectionRecordResource {
 
         for (InspectionRouteGroup routeGroup : inspectionRoute.getGroups()) {
             if (Boolean.TRUE.equals(routeGroup.getIncluded())) {
-                InspectionRecordGroup recordGroup = copyRouteGroupToRecordGroup(routeGroup, inspectionRecord);
+                InspectionRecordGroup recordGroup = copyRecordGroupToRecordGroup(routeGroup, inspectionRecord);
                 recordGroups.add(recordGroup);
             }
         }
@@ -356,42 +357,52 @@ public class InspectionRecordResource {
         }
     }
 
+    @PutMapping("/actions/update-record/{id}")
+    public ResponseEntity<InspectionRecord> updateRecord(
+        @PathVariable(value = "id", required = false) final UUID id,
+        @RequestBody InspectionRecord inspectionRecord
+    ) {
+        InspectionRecord inspectionRecordSaved = saveRecord(inspectionRecord, false);
+
+        try {
+            return ResponseEntity.created(new URI("/api/inspection-record/" + inspectionRecordSaved.getId()))
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, inspectionRecord.getId().toString()))
+                .body(inspectionRecord);
+        } catch (Exception e) {
+            LOG.error("Erro ao editar registro de inspeção", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     public InspectionRecord saveRecord(InspectionRecord inspectionRecord, boolean isNew) {
         try {
-            // 1. Pegar o login do usuário autenticado
-            String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("Usuário não autenticado"));
-
-            // 2. Buscar o usuário completo no banco (entidade JPA)
-            User user = userService.getUserWithAuthoritiesByLogin(login).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
-            // Get UserInfo by authenticated user
-            UserInfo userInfo = null;
-            if (user != null) {
-                userInfo = userInfoRepository.findByUser(user).orElse(null);
-
-                if (userInfo == null) {
-                    LOG.debug("UserInfo not found for authenticated user id: {}", user.getId());
-                }
-            } else {
-                LOG.debug("Authenticated user is null, cannot set createdBy for InspectionRecord");
+            UserInfo userInfo = authenticatedUserService.requireCurrentUserInfo();
+            if (userInfo == null) {
+                throw new BadRequestAlertException("UserInfo not found", ENTITY_NAME, "idnotfound");
             }
 
-            if (isNew) inspectionRecord.setId(null);
-
-            inspectionRecord.setCreatedAt(Instant.now());
-            inspectionRecord.setCreatedBy(userInfo);
-            LOG.debug("InspectionRecord.name = ", inspectionRecord.getName());
+            if (isNew) {
+                inspectionRecord.setId(null);
+                inspectionRecord.setCreatedAt(Instant.now());
+                inspectionRecord.setCreatedBy(userInfo);
+            } else {
+                inspectionRecord.setFinishedAt(Instant.now());
+                inspectionRecord.setFinishedBy(userInfo);
+            }
 
             InspectionRecord inspectionRecordSaved = inspectionRecordRepository.save(inspectionRecord);
 
             for (InspectionRecordGroup group : inspectionRecord.getGroups()) {
                 if (isNew) group.setId(null);
+                else group.setFinishedAt(Instant.now());
+
                 group.setInspectionRecord(inspectionRecordSaved);
 
                 InspectionRecordGroup groupSaved = inspectionRecordGroupRepository.save(group);
 
                 for (InspectionRecordGroup subGroup : group.getSubGroups()) {
                     if (isNew) subGroup.setId(null);
+                    else group.setFinishedAt(Instant.now());
 
                     subGroup.setParentGroup(groupSaved);
                     InspectionRecordGroup subGroupSaved = inspectionRecordGroupRepository.save(subGroup);
@@ -476,7 +487,7 @@ public class InspectionRecordResource {
      * Copia um InspectionRouteGroup para InspectionRecordGroup incluindo subgroups
      * e equipments
      */
-    private InspectionRecordGroup copyRouteGroupToRecordGroup(InspectionRouteGroup routeGroup, InspectionRecord inspectionRecord) {
+    private InspectionRecordGroup copyRecordGroupToRecordGroup(InspectionRouteGroup routeGroup, InspectionRecord inspectionRecord) {
         InspectionRecordGroup recordGroup = new InspectionRecordGroup();
         recordGroup.setCode(routeGroup.getCode());
         recordGroup.setName(routeGroup.getName());
@@ -488,7 +499,7 @@ public class InspectionRecordResource {
         Set<InspectionRecordGroup> recordSubGroups = new HashSet<>();
         for (InspectionRouteGroup routeSubGroup : routeGroup.getSubGroups()) {
             if (Boolean.TRUE.equals(routeSubGroup.getIncluded())) {
-                InspectionRecordGroup recordSubGroup = copyRouteGroupToRecordGroup(routeSubGroup, null);
+                InspectionRecordGroup recordSubGroup = copyRecordGroupToRecordGroup(routeSubGroup, null);
                 recordSubGroup.setParentGroup(recordGroup);
                 recordSubGroups.add(recordSubGroup);
             }
