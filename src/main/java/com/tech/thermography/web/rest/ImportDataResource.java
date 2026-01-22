@@ -5,8 +5,10 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -82,6 +84,37 @@ public class ImportDataResource {
         } catch (RuntimeException e) {
             LOG.error("Error importing equipments", e);
             return ResponseEntity.badRequest().body("Error importing equipments: " + e.getMessage());
+        }
+    }
+
+    /**
+     * {@code POST /import/components} : Import componentes from an uploaded CSV
+     * file.
+     *
+     * @param file the uploaded CSV file
+     * @return the ResponseEntity with status 200 (OK) and the import result message
+     */
+    @PostMapping("/components")
+    public ResponseEntity<String> importComponents(@RequestParam("file") MultipartFile file) {
+        LOG.debug("REST request to import components from uploaded file: {}", file.getOriginalFilename());
+
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("Uploaded file is empty");
+        }
+
+        if (!file.getOriginalFilename().toLowerCase().endsWith(".csv")) {
+            return ResponseEntity.badRequest().body("Only CSV files are allowed");
+        }
+
+        try {
+            String result = importDataService.importComponents(file.getInputStream());
+            return ResponseEntity.ok(result);
+        } catch (IOException e) {
+            LOG.error("Error processing uploaded file", e);
+            return ResponseEntity.internalServerError().body("Error processing uploaded file: " + e.getMessage());
+        } catch (RuntimeException e) {
+            LOG.error("Error importing components", e);
+            return ResponseEntity.badRequest().body("Error importing components: " + e.getMessage());
         }
     }
 }

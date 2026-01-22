@@ -1,10 +1,14 @@
 package com.tech.thermography.service;
 
 import com.tech.thermography.domain.Equipment;
+import com.tech.thermography.domain.EquipmentComponent;
+import com.tech.thermography.domain.EquipmentComponentTemperatureLimits;
 import com.tech.thermography.domain.EquipmentGroup;
 import com.tech.thermography.domain.Plant;
 import com.tech.thermography.domain.enumeration.EquipmentType;
 import com.tech.thermography.domain.enumeration.PhaseType;
+import com.tech.thermography.repository.EquipmentComponentRepository;
+import com.tech.thermography.repository.EquipmentComponentTemperatureLimitsRepository;
 import com.tech.thermography.repository.EquipmentGroupRepository;
 import com.tech.thermography.repository.EquipmentRepository;
 import com.tech.thermography.repository.PlantRepository;
@@ -38,15 +42,21 @@ public class ImportDataService {
     private final PlantRepository plantRepository;
     private final EquipmentRepository equipmentRepository;
     private final EquipmentGroupRepository equipmentGroupRepository;
+    private final EquipmentComponentRepository equipmentComponentRepository;
+    private final EquipmentComponentTemperatureLimitsRepository equipmentComponentTemperatureLimitsRepository;
 
     public ImportDataService(
         PlantRepository plantRepository,
         EquipmentRepository equipmentRepository,
-        EquipmentGroupRepository equipmentGroupRepository
+        EquipmentGroupRepository equipmentGroupRepository,
+        EquipmentComponentRepository equipmentComponentRepository,
+        EquipmentComponentTemperatureLimitsRepository equipmentComponentTemperatureLimitsRepository
     ) {
         this.plantRepository = plantRepository;
         this.equipmentRepository = equipmentRepository;
         this.equipmentGroupRepository = equipmentGroupRepository;
+        this.equipmentComponentRepository = equipmentComponentRepository;
+        this.equipmentComponentTemperatureLimitsRepository = equipmentComponentTemperatureLimitsRepository;
     }
 
     /**
@@ -382,5 +392,69 @@ public class ImportDataService {
             this.code = code;
             this.name = name;
         }
+    }
+
+    /**
+     * Imports components from an uploaded file InputStream.
+     *
+     * @param inputStream the InputStream of the uploaded CSV file
+     * @return a success message with the number of imported components
+     * @throws RuntimeException if an error occurs during import
+     */
+    public String importComponents(InputStream inputStream) {
+        LOG.info("Starting import of components from uploaded file");
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            return importComponentsFromReader(reader);
+        } catch (IOException e) {
+            LOG.error("Error reading uploaded CSV file", e);
+            throw new RuntimeException("Failed to import components from uploaded file", e);
+        }
+    }
+
+    /**
+     * Common method to import components from a BufferedReader.
+     *
+     * @param reader the BufferedReader to read from
+     * @return a success message with the number of imported components
+     * @throws IOException if an error occurs during reading
+     */
+    private String importComponentsFromReader(BufferedReader reader) throws IOException {
+        String line;
+        boolean firstLine = true;
+        int importedCount = 0;
+
+        while ((line = reader.readLine()) != null) {
+            if (firstLine) {
+                firstLine = false; // Skip header
+                continue;
+            }
+
+            String[] fields = line.split(";");
+            if (fields.length != 7) {
+                LOG.warn("Skipping invalid line: {}", line);
+                continue;
+            }
+
+            EquipmentComponent equipmentComponent = new EquipmentComponent();
+            equipmentComponent.setDescription(fields[0].trim());
+            equipmentComponent.setCode(fields[1].trim());
+            equipmentComponent.setName(fields[2].trim());
+            equipmentComponent = equipmentComponentRepository.save(equipmentComponent);
+
+            EquipmentComponentTemperatureLimits equipmentComponentTemperatureLimits = new EquipmentComponentTemperatureLimits();
+            equipmentComponentTemperatureLimits.setEquipmentComponent(equipmentComponent);
+            equipmentComponentTemperatureLimits.setName(fields[0].trim());
+            equipmentComponentTemperatureLimits.setNormal("NA");
+            equipmentComponentTemperatureLimits.setLowRisk(fields[3].trim());
+            equipmentComponentTemperatureLimits.setMediumRisk(fields[4].trim());
+            equipmentComponentTemperatureLimits.setHighRisk(fields[5].trim());
+            equipmentComponentTemperatureLimits.setImminentHighRisk(fields[6].trim());
+            equipmentComponentTemperatureLimitsRepository.save(equipmentComponentTemperatureLimits);
+            importedCount++;
+        }
+
+        LOG.info("Successfully imported {} components", importedCount);
+        return "Successfully imported " + importedCount + " components";
     }
 }
