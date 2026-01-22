@@ -1,89 +1,89 @@
 EQUIPAMENTOS;SIGLA;COMPONENTES;BAIXO RISCO DELTA T °C ;MÉDIO RISCO DELTA T °C ;ALTO RISCO DELTA T °C ;RISCO IMINENTE DELTA T °C 
-Autotransformadores, Transformadores e Reatores de Potência;TF;Topo de Bucha;> 2 ≤ 5;> 5 ≤ 15;> 15 ≤ 25;> 25
-Autotransformadores, Transformadores e Reatores de Potência;TF;Terminais Topo de Bucha;> 5 ≤ 10;> 10 ≤ 25;> 25 ≤ 50;> 50
-Autotransformadores, Transformadores e Reatores de Potência;TF;Corpo Bucha;NA;NA;> 2 ≤ 7;> 7
-Autotransformadores, Transformadores e Reatores de Potência;TF;Conexão Bucha de Neutro;> 2 ≤ 10;> 10 ≤ 25;> 25 ≤ 50;> 50
-Autotransformadores, Transformadores e Reatores de Potência;TF;Tanques e Tubulações;> 2 ≤ 5;> 5 ≤ 10;> 10;NA
-Autotransformadores, Transformadores e Reatores de Potência;TF;Tanques de Expansão ;> 2 ≤ 5;> 5 ≤ 10;> 10;NA
-Autotransformadores, Transformadores e Reatores de Potência;TF;Relé Bolshois;> 2 ≤ 5;> 5 ≤ 10;> 10;NA
-Autotransformadores, Transformadores e Reatores de Potência;TF;Conexões de Aterramento;> 5 ≤ 10;> 10 ≤ 40;> 40;NA
-Autotransformadores, Transformadores e Reatores de Potência;TF;Conexões e Componentes Acionamento Comutador;> 5 ≤ 10;> 10 ≤ 30;> 30;NA
-Transformadores de Corrente;TC;Coluna Isolante ;NA;NA;> 2 ≤ 7;> 7
-Transformadores de Corrente;TC;Tanque ;> 2 ≤ 5;> 5 ≤ 10;> 10;NA
-Transformadores de Corrente;TC;Domo (Membrana Volumétrica);> 2 ≤ 5;> 5 ≤ 10;> 10;NA
-Transformadores de Corrente;TC;Conexões Terminais Primários;> 5 ≤ 10;> 10 ≤ 20;> 20 ≤ 40;> 40
-Transformadores de Corrente;TC;Conexões Terminais Secundários;> 2 ≤ 5;NA;NA;> 5
-Transformadores de Corrente;TC;Conexões Aterramento;> 5 ≤ 10;> 10 ≤ 40;> 40;NA
-Transformadores de Potencial (DCP,TP, TPI, TPC);TP;Colunas Capacitivas ;NA;NA;> 2 ≤ 7;> 7
-Transformadores de Potencial (DCP,TP, TPI, TPC);TP;Tanque ;> 2 ≤ 5;> 5 ≤ 10;> 10;NA
-Transformadores de Potencial (DCP,TP, TPI, TPC);TP;Domo (Membrana Volumétrica);> 2 ≤ 5;> 5 ≤ 10;> 10;NA
-Transformadores de Potencial (DCP,TP, TPI, TPC);TP;Conexões Terminais Primários;> 5 ≤ 10;> 10 ≤ 20;> 20 ≤ 40;> 40
-Transformadores de Potencial (DCP,TP, TPI, TPC);TP;Conexões Terminais Secundários;> 2 ≤ 5;NA;NA;> 5
-Transformadores de Potencial (DCP,TP, TPI, TPC);TP;Conexões Aterramento;> 5 ≤ 10;> 10 ≤ 40;> 40;NA
-Disjuntores;DJ;Conexões Terminais dos Polos;> 5 ≤ 10;> 10 ≤ 30;> 30 ≤ 50;> 50
-Disjuntores;DJ;Corpo das Câmeras de Contato ;NA;NA;> 2 ≤ 7;> 7
-Disjuntores;DJ;Capacitores de Equalização;NA;NA;> 2 ≤ 7;> 7
-Disjuntores;DJ;Resistor Pré Inserção;NA;NA;> 2 ≤ 7;> 7
-Disjuntores;DJ;Conexões de Aterramento;> 5 ≤ 10;> 10 ≤ 40;> 40;NA
-Disjuntores;DJ;Conexões, Tubulações e Componentes Painel de Acionamento;> 2 ≤ 5;> 5 ≤ 10;> 10;NA
-Seccionadoras;SC;Conexões Terminais;> 5 ≤ 15;> 10 ≤ 40;> 40 ≤ 70;> 70
-Seccionadoras;SC;Contatos Principais Seccionadoras;> 5 ≤ 10;> 10 ≤ 20;> 20 ≤ 50;> 50
-Seccionadoras;SC;Contatos e Cordoalhas Articulação Laminas;> 5 ≤ 15;> 10 ≤ 40;> 40 ≤ 70;> 70
-Seccionadoras;SC;Conexões de Aterramento;> 5 ≤ 10;> 10 ≤ 40;> 40;NA
-Seccionadoras;SC;Conexões e Componentes Sistema de Acionamento;> 2 ≤ 5;> 5 ≤ 10;> 10;NA
-Seccionadoras;SC;Isoladores de Sustentação;NA;NA;> 2 ≤ 7;> 7
-Para-Raios;PR;Conexão com Terminais;> 5 ≤ 10;> 10 ≤ 20;> 20 ≤ 40;> 40
-Para-Raios;PR;Flanges;> 2 ≤ 5;> 5 ≤ 10;> 10 ≤ 20;> 20
-Para-Raios;PR;Corpo Para-Raios;NA;NA;> 2 ≤ 7;> 7
-Para-Raios;PR;Conexões de Aterramento;> 5 ≤ 10;> 10 ≤ 40;> 40;NA
-Capacitores;CA;Conexões do Banco de Capacitores;> 5 ≤ 10;> 10 ≤ 25;> 25 ≤ 50;> 50
-Capacitores;CA;Conexão das Interligações Capacitores e Barramentos;> 5 ≤ 10;> 10 ≤ 25;> 25 ≤ 50;> 50
-Capacitores;CA;Conexões Terminais Bucha Capacitores;> 2 ≤ 5;> 5 ≤ 15;> 15 ≤ 40;> 40
-Capacitores;CA;Reator Limitador;> 2 ≤ 5;> 5 ≤ 10;> 10;NA
-Capacitores;CA;Isoladores de Sustentação;NA;NA;> 2 ≤ 7;> 7
-Capacitores;CA;Conexões de Aterramento;> 5 ≤ 10;> 10 ≤ 40;> 40;NA
-Banco de Baterias;BT;Conexões dos Elementos;> 2 ≤ 5;> 5 ≤ 10;> 10 ≤ 20;> 20
-Banco de Baterias;BT;Corpo dos Elementos;NA;NA;> 2 ≤ 7;> 7
-Banco de Baterias;BT;Conexões de Interligação do Rack;> 2 ≤ 5;> 5 ≤ 10;> 10 ≤ 20;> 20
-Banco de Baterias;BT;Conexões de Aterramento;> 5 ≤ 10;> 10 ≤ 40;> 40;NA
-Painéis Serviços Auxiares, Comando e Controle;PA;Componentes em Geral;> 5 ≤ 10;NA;> 10 ≤ 40;> 40
-Painéis Serviços Auxiares, Comando e Controle;PA;Conexões Elétricas;> 2 ≤ 5;> 5 ≤ 15;> 15 ≤ 40;> 40
-Painéis Serviços Auxiares, Comando e Controle;PA;Bornes;> 5 ≤ 10;> 10 ≤ 30;> 30;NA
-Painéis Serviços Auxiares, Comando e Controle;PA;Conexões de Aterramento;> 5 ≤ 10;> 10 ≤ 40;> 40;NA
-Geradores de Emergência (Diesel);GE;Estator;> 2 ≤ 5;> 5 ≤ 10;> 10 ≤ 20;> 20
-Geradores de Emergência (Diesel);GE;Motor;> 2 ≤ 5;> 5 ≤ 10;> 10 ≤ 20;> 20
-Geradores de Emergência (Diesel);GE;Conexões Elétricas;> 5 ≤ 10;> 10 ≤ 20;> 20 ≤ 50;> 50
-Geradores de Emergência (Diesel);GE;Radiador;> 2 ≤ 5;> 5 ≤ 10;> 10;NA
-Geradores de Emergência (Diesel);GE;Conexões de Aterramento;> 5 ≤ 10;> 10 ≤ 40;> 40;NA
-Geradores de Emergência (Diesel);GE;Bateria;NA;NA;> 2 ≤ 7;> 7
-Cubículos;CB;Conexões do Barramentos;> 5 ≤ 10;> 10 ≤ 20;> 20 ≤ 50;> 50
-Cubículos;CB;Buchas de Passagem (Muflas);NA;NA;> 2 ≤ 7;> 7
-Cubículos;CB;Isoladores de Sustentação;NA;NA;> 2 ≤ 7;> 7
-Cubículos;CB;Contatos de Disjuntores;> 5 ≤ 10;> 10 ≤ 20;> 20 ≤ 50;> 50
-Cubículos;CB;Terminais Primários dos TC`s, TP`s;> 5 ≤ 10;> 10 ≤ 20;> 20 ≤ 40;> 40
-Cubículos;CB;Conexões Para-Raios;> 5 ≤ 10;> 10 ≤ 20;> 20 ≤ 40;> 40
-Cubículos;CB;Corpo Para-Raios;NA;NA;> 2 ≤ 7;> 7
-Cubículos;CB;Muflas;NA;NA;> 2 ≤ 7;> 7
-Cubículos;CB;Conexões de Aterramento;> 5 ≤ 10;> 10 ≤ 40;> 40;NA
-Barramentos Aéreos;BR;Conexões e Pingados em Geral;> 5 ≤ 15;> 10 ≤ 40;> 40 ≤ 70;> 70
-Barramentos Aéreos;BR;Isoladores Aéreos de Vidro;NA;NA;> 2 ≤ 10;> 10
-Barramentos Aéreos;BR;Isoladores Aéreos Porcelana/Polimérico;NA;NA;> 2 ≤ 7;> 7
-Barramentos Aéreos;BR;Isoladores de Sustentação;NA;NA;> 2 ≤ 7;> 7
-Barramentos Aéreos;BR;Conexões de Aterramento;> 5 ≤ 10;> 10 ≤ 40;> 40;NA
-Barramentos Aéreos;BR;Cabos e Condutores em Geral;≤ 5;> 5 ≤ 50;> 50;NA
-Redes de Distribuição;RD;Conexões e Pingados em Geral;> 5 ≤ 15;> 15 ≤ 45;> 45 ≤ 70;> 70
-Redes de Distribuição;RD;Isoladores Aéreos de Vidro;NA;NA;> 2 ≤ 10;> 10
-Redes de Distribuição;RD;Isoladores Aéreos Porcelana/Polimérico;NA;NA;> 2 ≤ 7;> 7
-Redes de Distribuição;RD;Isoladores de Sustentação;NA;NA;> 2 ≤ 7;> 7
-Redes de Distribuição;RD;Conexões de Aterramento;> 5 ≤ 10;> 10 ≤ 40;> 40;NA
-Redes de Distribuição;RD;Espaçadores de Cabo;NA;> 2 ≤ 5;> 5 ≤ 10;> 10
-Redes de Distribuição;RD;Emenda de Cabos;> 2 ≤ 5;> 5 ≤ 10;> 10 ≤ 20;> 20
-Redes de Distribuição;RD;Cabos e Condutores em Geral;≤ 5;> 5 ≤ 30;> 30 ≤ 50;NA
-Torres de Transmissão;TR;Conexões e Pingados em Geral;> 5 ≤ 15;> 10 ≤ 40;> 40 ≤ 70;> 70
-Torres de Transmissão;TR;Isoladores Aéreos de Vidro;NA;NA;> 2 ≤ 10;> 10
-Torres de Transmissão;TR;Isoladores Aéreos Porcelana/Polimérico;NA;NA;> 2 ≤ 7;> 7
-Torres de Transmissão;TR;Isoladores de Sustentação;NA;NA;> 2 ≤ 7;> 7
-Torres de Transmissão;TR;Conexões de Aterramento;> 5 ≤ 10;> 10 ≤ 40;> 40;NA
-Torres de Transmissão;TR;Espaçadores de Cabo;NA;> 2 ≤ 5;> 5 ≤ 10;> 10
-Torres de Transmissão;TR;Emenda de Cabos;> 2 ≤ 5;> 5 ≤ 10;> 10 ≤ 20;> 20
-Torres de Transmissão;TR;Cabos e Condutores em Geral;≤ 5;> 5 ≤ 30;> 30 ≤ 50;NA
+Autotransformadores, Transformadores e Reatores de Potência;TF;Topo de Bucha;>2 ≤5;>5 ≤15;>15 ≤25;>25
+Autotransformadores, Transformadores e Reatores de Potência;TF;Terminais Topo de Bucha;>5 ≤10;>10 ≤25;>25 ≤50;>50
+Autotransformadores, Transformadores e Reatores de Potência;TF;Corpo Bucha;NA;NA;>2 ≤7;>7
+Autotransformadores, Transformadores e Reatores de Potência;TF;Conexão Bucha de Neutro;>2 ≤10;>10 ≤25;>25 ≤50;>50
+Autotransformadores, Transformadores e Reatores de Potência;TF;Tanques e Tubulações;>2 ≤5;>5 ≤10;>10;NA
+Autotransformadores, Transformadores e Reatores de Potência;TF;Tanques de Expansão ;>2 ≤5;>5 ≤10;>10;NA
+Autotransformadores, Transformadores e Reatores de Potência;TF;Relé Bolshois;>2 ≤5;>5 ≤10;>10;NA
+Autotransformadores, Transformadores e Reatores de Potência;TF;Conexões de Aterramento;>5 ≤10;>10 ≤40;>40;NA
+Autotransformadores, Transformadores e Reatores de Potência;TF;Conexões e Componentes Acionamento Comutador;>5 ≤10;>10 ≤30;>30;NA
+Transformadores de Corrente;TC;Coluna Isolante ;NA;NA;>2 ≤7;>7
+Transformadores de Corrente;TC;Tanque ;>2 ≤5;>5 ≤10;>10;NA
+Transformadores de Corrente;TC;Domo (Membrana Volumétrica);>2 ≤5;>5 ≤10;>10;NA
+Transformadores de Corrente;TC;Conexões Terminais Primários;>5 ≤10;>10 ≤20;>20 ≤40;>40
+Transformadores de Corrente;TC;Conexões Terminais Secundários;>2 ≤5;NA;NA;>5
+Transformadores de Corrente;TC;Conexões Aterramento;>5 ≤10;>10 ≤40;>40;NA
+Transformadores de Potencial (DCP,TP, TPI, TPC);TP;Colunas Capacitivas ;NA;NA;>2 ≤7;>7
+Transformadores de Potencial (DCP,TP, TPI, TPC);TP;Tanque ;>2 ≤5;>5 ≤10;>10;NA
+Transformadores de Potencial (DCP,TP, TPI, TPC);TP;Domo (Membrana Volumétrica);>2 ≤5;>5 ≤10;>10;NA
+Transformadores de Potencial (DCP,TP, TPI, TPC);TP;Conexões Terminais Primários;>5 ≤10;>10 ≤20;>20 ≤40;>40
+Transformadores de Potencial (DCP,TP, TPI, TPC);TP;Conexões Terminais Secundários;>2 ≤5;NA;NA;>5
+Transformadores de Potencial (DCP,TP, TPI, TPC);TP;Conexões Aterramento;>5 ≤10;>10 ≤40;>40;NA
+Disjuntores;DJ;Conexões Terminais dos Polos;>5 ≤10;>10 ≤30;>30 ≤50;>50
+Disjuntores;DJ;Corpo das Câmeras de Contato ;NA;NA;>2 ≤7;>7
+Disjuntores;DJ;Capacitores de Equalização;NA;NA;>2 ≤7;>7
+Disjuntores;DJ;Resistor Pré Inserção;NA;NA;>2 ≤7;>7
+Disjuntores;DJ;Conexões de Aterramento;>5 ≤10;>10 ≤40;>40;NA
+Disjuntores;DJ;Conexões, Tubulações e Componentes Painel de Acionamento;>2 ≤5;>5 ≤10;>10;NA
+Seccionadoras;SC;Conexões Terminais;>5 ≤15;>10 ≤40;>40 ≤70;>70
+Seccionadoras;SC;Contatos Principais Seccionadoras;>5 ≤10;>10 ≤20;>20 ≤50;>50
+Seccionadoras;SC;Contatos e Cordoalhas Articulação Laminas;>5 ≤15;>10 ≤40;>40 ≤70;>70
+Seccionadoras;SC;Conexões de Aterramento;>5 ≤10;>10 ≤40;>40;NA
+Seccionadoras;SC;Conexões e Componentes Sistema de Acionamento;>2 ≤5;>5 ≤10;>10;NA
+Seccionadoras;SC;Isoladores de Sustentação;NA;NA;>2 ≤7;>7
+Para-Raios;PR;Conexão com Terminais;>5 ≤10;>10 ≤20;>20 ≤40;>40
+Para-Raios;PR;Flanges;>2 ≤5;>5 ≤10;>10 ≤20;>20
+Para-Raios;PR;Corpo Para-Raios;NA;NA;>2 ≤7;>7
+Para-Raios;PR;Conexões de Aterramento;>5 ≤10;>10 ≤40;>40;NA
+Capacitores;CA;Conexões do Banco de Capacitores;>5 ≤10;>10 ≤25;>25 ≤50;>50
+Capacitores;CA;Conexão das Interligações Capacitores e Barramentos;>5 ≤10;>10 ≤25;>25 ≤50;>50
+Capacitores;CA;Conexões Terminais Bucha Capacitores;>2 ≤5;>5 ≤15;>15 ≤40;>40
+Capacitores;CA;Reator Limitador;>2 ≤5;>5 ≤10;>10;NA
+Capacitores;CA;Isoladores de Sustentação;NA;NA;>2 ≤7;>7
+Capacitores;CA;Conexões de Aterramento;>5 ≤10;>10 ≤40;>40;NA
+Banco de Baterias;BT;Conexões dos Elementos;>2 ≤5;>5 ≤10;>10 ≤20;>20
+Banco de Baterias;BT;Corpo dos Elementos;NA;NA;>2 ≤7;>7
+Banco de Baterias;BT;Conexões de Interligação do Rack;>2 ≤5;>5 ≤10;>10 ≤20;>20
+Banco de Baterias;BT;Conexões de Aterramento;>5 ≤10;>10 ≤40;>40;NA
+Painéis Serviços Auxiares, Comando e Controle;PA;Componentes em Geral;>5 ≤10;NA;>10 ≤40;>40
+Painéis Serviços Auxiares, Comando e Controle;PA;Conexões Elétricas;>2 ≤5;>5 ≤15;>15 ≤40;>40
+Painéis Serviços Auxiares, Comando e Controle;PA;Bornes;>5 ≤10;>10 ≤30;>30;NA
+Painéis Serviços Auxiares, Comando e Controle;PA;Conexões de Aterramento;>5 ≤10;>10 ≤40;>40;NA
+Geradores de Emergência (Diesel);GE;Estator;>2 ≤5;>5 ≤10;>10 ≤20;>20
+Geradores de Emergência (Diesel);GE;Motor;>2 ≤5;>5 ≤10;>10 ≤20;>20
+Geradores de Emergência (Diesel);GE;Conexões Elétricas;>5 ≤10;>10 ≤20;>20 ≤50;>50
+Geradores de Emergência (Diesel);GE;Radiador;>2 ≤5;>5 ≤10;>10;NA
+Geradores de Emergência (Diesel);GE;Conexões de Aterramento;>5 ≤10;>10 ≤40;>40;NA
+Geradores de Emergência (Diesel);GE;Bateria;NA;NA;>2 ≤7;>7
+Cubículos;CB;Conexões do Barramentos;>5 ≤10;>10 ≤20;>20 ≤50;>50
+Cubículos;CB;Buchas de Passagem (Muflas);NA;NA;>2 ≤7;>7
+Cubículos;CB;Isoladores de Sustentação;NA;NA;>2 ≤7;>7
+Cubículos;CB;Contatos de Disjuntores;>5 ≤10;>10 ≤20;>20 ≤50;>50
+Cubículos;CB;Terminais Primários dos TC`s, TP`s;>5 ≤10;>10 ≤20;>20 ≤40;>40
+Cubículos;CB;Conexões Para-Raios;>5 ≤10;>10 ≤20;>20 ≤40;>40
+Cubículos;CB;Corpo Para-Raios;NA;NA;>2 ≤7;>7
+Cubículos;CB;Muflas;NA;NA;>2 ≤7;>7
+Cubículos;CB;Conexões de Aterramento;>5 ≤10;>10 ≤40;>40;NA
+Barramentos Aéreos;BR;Conexões e Pingados em Geral;>5 ≤15;>10 ≤40;>40 ≤70;>70
+Barramentos Aéreos;BR;Isoladores Aéreos de Vidro;NA;NA;>2 ≤10;>10
+Barramentos Aéreos;BR;Isoladores Aéreos Porcelana/Polimérico;NA;NA;>2 ≤7;>7
+Barramentos Aéreos;BR;Isoladores de Sustentação;NA;NA;>2 ≤7;>7
+Barramentos Aéreos;BR;Conexões de Aterramento;>5 ≤10;>10 ≤40;>40;NA
+Barramentos Aéreos;BR;Cabos e Condutores em Geral;≤5;>5 ≤50;>50;NA
+Redes de Distribuição;RD;Conexões e Pingados em Geral;>5 ≤15;>15 ≤45;>45 ≤70;>70
+Redes de Distribuição;RD;Isoladores Aéreos de Vidro;NA;NA;>2 ≤10;>10
+Redes de Distribuição;RD;Isoladores Aéreos Porcelana/Polimérico;NA;NA;>2 ≤7;>7
+Redes de Distribuição;RD;Isoladores de Sustentação;NA;NA;>2 ≤7;>7
+Redes de Distribuição;RD;Conexões de Aterramento;>5 ≤10;>10 ≤40;>40;NA
+Redes de Distribuição;RD;Espaçadores de Cabo;NA;>2 ≤5;>5 ≤10;>10
+Redes de Distribuição;RD;Emenda de Cabos;>2 ≤5;>5 ≤10;>10 ≤20;>20
+Redes de Distribuição;RD;Cabos e Condutores em Geral;≤5;>5 ≤30;>30 ≤50;NA
+Torres de Transmissão;TR;Conexões e Pingados em Geral;>5 ≤15;>10 ≤40;>40 ≤70;>70
+Torres de Transmissão;TR;Isoladores Aéreos de Vidro;NA;NA;>2 ≤10;>10
+Torres de Transmissão;TR;Isoladores Aéreos Porcelana/Polimérico;NA;NA;>2 ≤7;>7
+Torres de Transmissão;TR;Isoladores de Sustentação;NA;NA;>2 ≤7;>7
+Torres de Transmissão;TR;Conexões de Aterramento;>5 ≤10;>10 ≤40;>40;NA
+Torres de Transmissão;TR;Espaçadores de Cabo;NA;>2 ≤5;>5 ≤10;>10
+Torres de Transmissão;TR;Emenda de Cabos;>2 ≤5;>5 ≤10;>10 ≤20;>20
+Torres de Transmissão;TR;Cabos e Condutores em Geral;≤5;>5 ≤30;>30 ≤50;NA
