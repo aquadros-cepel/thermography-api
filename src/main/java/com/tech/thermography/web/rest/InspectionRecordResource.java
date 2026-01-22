@@ -143,9 +143,13 @@ public class InspectionRecordResource {
             .findById(inspectionRecord.getId())
             .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
 
-        if (existingRecord.getStarted() == null && inspectionRecord.getStarted() != null) inspectionRecord.setStartedBy(userInfo);
+        if (
+            existingRecord.getStarted() == null && inspectionRecord.getStarted() != null && inspectionRecord.getStarted()
+        ) inspectionRecord.setStartedBy(userInfo);
 
-        if (existingRecord.getFinished() == null && inspectionRecord.getFinished() != null) inspectionRecord.setFinishedBy(userInfo);
+        if (
+            existingRecord.getFinished() == null && inspectionRecord.getFinished() != null && inspectionRecord.getFinished()
+        ) inspectionRecord.setFinishedBy(userInfo);
 
         inspectionRecord = inspectionRecordRepository.save(inspectionRecord);
         return ResponseEntity.ok()
