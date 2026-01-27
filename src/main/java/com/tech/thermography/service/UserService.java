@@ -3,7 +3,9 @@ package com.tech.thermography.service;
 import com.tech.thermography.config.Constants;
 import com.tech.thermography.domain.Authority;
 import com.tech.thermography.domain.User;
+import com.tech.thermography.domain.UserInfo;
 import com.tech.thermography.repository.AuthorityRepository;
+import com.tech.thermography.repository.UserInfoRepository;
 import com.tech.thermography.repository.UserRepository;
 import com.tech.thermography.security.AuthoritiesConstants;
 import com.tech.thermography.security.SecurityUtils;
@@ -11,7 +13,11 @@ import com.tech.thermography.service.dto.AdminUserDTO;
 import com.tech.thermography.service.dto.UserDTO;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,16 +47,20 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
+    private final UserInfoRepository userInfoRepository;
+
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
-        CacheManager cacheManager
+        CacheManager cacheManager,
+        UserInfoRepository userInfoRepository
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.userInfoRepository = userInfoRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -175,8 +185,17 @@ public class UserService {
             user.setAuthorities(authorities);
         }
         userRepository.save(user);
+
+        // Create associated UserInfo with default values
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUser(user);
+        userInfo.setPosition("System Administrator");
+        userInfo.setPhoneNumber("+55 11 99999-9999");
+        userInfoRepository.save(userInfo);
+
         this.clearUserCaches(user);
         LOG.debug("Created Information for User: {}", user);
+        LOG.debug("Created UserInfo for User: {}", userInfo);
         return user;
     }
 
@@ -229,7 +248,8 @@ public class UserService {
     }
 
     /**
-     * Update basic information (first name, last name, email, language) for the current user.
+     * Update basic information (first name, last name, email, language) for the
+     * current user.
      *
      * @param firstName first name of user.
      * @param lastName  last name of user.
@@ -308,6 +328,7 @@ public class UserService {
 
     /**
      * Gets a list of all the authorities.
+     *
      * @return a list of all the authorities.
      */
     @Transactional(readOnly = true)

@@ -16,7 +16,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
@@ -45,7 +53,9 @@ public class UserInfoResource {
      * {@code POST  /user-infos} : Create a new userInfo.
      *
      * @param userInfo the userInfo to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new userInfo, or with status {@code 400 (Bad Request)} if the userInfo has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new userInfo, or with status {@code 400 (Bad Request)} if
+     *         the userInfo has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
@@ -63,11 +73,14 @@ public class UserInfoResource {
     /**
      * {@code PUT  /user-infos/:id} : Updates an existing userInfo.
      *
-     * @param id the id of the userInfo to save.
+     * @param id       the id of the userInfo to save.
      * @param userInfo the userInfo to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated userInfo,
-     * or with status {@code 400 (Bad Request)} if the userInfo is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the userInfo couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated userInfo,
+     *         or with status {@code 400 (Bad Request)} if the userInfo is not
+     *         valid,
+     *         or with status {@code 500 (Internal Server Error)} if the userInfo
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
@@ -94,14 +107,18 @@ public class UserInfoResource {
     }
 
     /**
-     * {@code PATCH  /user-infos/:id} : Partial updates given fields of an existing userInfo, field will ignore if it is null
+     * {@code PATCH  /user-infos/:id} : Partial updates given fields of an existing
+     * userInfo, field will ignore if it is null
      *
-     * @param id the id of the userInfo to save.
+     * @param id       the id of the userInfo to save.
      * @param userInfo the userInfo to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated userInfo,
-     * or with status {@code 400 (Bad Request)} if the userInfo is not valid,
-     * or with status {@code 404 (Not Found)} if the userInfo is not found,
-     * or with status {@code 500 (Internal Server Error)} if the userInfo couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated userInfo,
+     *         or with status {@code 400 (Bad Request)} if the userInfo is not
+     *         valid,
+     *         or with status {@code 404 (Not Found)} if the userInfo is not found,
+     *         or with status {@code 500 (Internal Server Error)} if the userInfo
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
@@ -144,24 +161,26 @@ public class UserInfoResource {
     /**
      * {@code GET  /user-infos} : get all the userInfos.
      *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of userInfos in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of userInfos in body.
      */
     @GetMapping("")
     public List<UserInfo> getAllUserInfos() {
         LOG.debug("REST request to get all UserInfos");
-        return userInfoRepository.findAll();
+        return userInfoRepository.findAllWithUser();
     }
 
     /**
      * {@code GET  /user-infos/:id} : get the "id" userInfo.
      *
      * @param id the id of the userInfo to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the userInfo, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the userInfo, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
     public ResponseEntity<UserInfo> getUserInfo(@PathVariable("id") UUID id) {
         LOG.debug("REST request to get UserInfo : {}", id);
-        Optional<UserInfo> userInfo = userInfoRepository.findById(id);
+        Optional<UserInfo> userInfo = userInfoRepository.findByIdWithUser(id);
         return ResponseUtil.wrapOrNotFound(userInfo);
     }
 

@@ -7,6 +7,7 @@ public class UserInfoDTO {
     private UUID id;
     private String position;
     private String phoneNumber;
+    private String name;
 
     public UUID getId() {
         return id;
@@ -30,5 +31,13 @@ public class UserInfoDTO {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

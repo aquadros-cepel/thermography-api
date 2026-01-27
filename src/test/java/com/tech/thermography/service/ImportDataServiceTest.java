@@ -2,11 +2,16 @@ package com.tech.thermography.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.tech.thermography.domain.Equipment;
 import com.tech.thermography.domain.EquipmentGroup;
 import com.tech.thermography.domain.Plant;
+import com.tech.thermography.repository.EquipmentComponentRepository;
+import com.tech.thermography.repository.EquipmentComponentTemperatureLimitsRepository;
 import com.tech.thermography.repository.EquipmentGroupRepository;
 import com.tech.thermography.repository.EquipmentRepository;
 import com.tech.thermography.repository.PlantRepository;
@@ -33,11 +38,23 @@ class ImportDataServiceTest {
     @Mock
     private EquipmentGroupRepository equipmentGroupRepository;
 
+    @Mock
+    private EquipmentComponentRepository equipmentComponentRepository;
+
+    @Mock
+    private EquipmentComponentTemperatureLimitsRepository equipmentComponentTemperatureLimitsRepository;
+
     private ImportDataService importDataService;
 
     @BeforeEach
     void setUp() {
-        importDataService = new ImportDataService(plantRepository, equipmentRepository, equipmentGroupRepository);
+        importDataService = new ImportDataService(
+            plantRepository,
+            equipmentRepository,
+            equipmentGroupRepository,
+            equipmentComponentRepository,
+            equipmentComponentTemperatureLimitsRepository
+        );
     }
 
     @Test
