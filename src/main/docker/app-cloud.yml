@@ -7,7 +7,7 @@ services:
     container_name: thermographyapi-app
     environment:
       - _JAVA_OPTIONS=-Xmx1024m -Xms512m
-      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - SPRING_PROFILES_ACTIVE=dev,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/thermographyApi
       - SPRING_DATASOURCE_USERNAME=thermographyApi
@@ -17,7 +17,7 @@ services:
       # Kafka desabilitado
       - KAFKA_ENABLED=false
     ports:
-      - 8080:8080
+      - 8081:8080 # Porta 8081 EXTERNA (GCP) → Porta 8080 INTERNA (container/Spring Boot)
     healthcheck:
       test:
         - CMD
