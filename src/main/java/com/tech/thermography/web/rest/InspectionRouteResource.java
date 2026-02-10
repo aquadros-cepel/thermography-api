@@ -71,6 +71,7 @@ public class InspectionRouteResource {
     private final EquipmentRepository equipmentRepository;
     private final PlantRepository plantRepository;
     private final AuthenticatedUserService authenticatedUserService;
+    private final InspectionRecordResource inspectionRecordResource;
 
     public InspectionRouteResource(
         InspectionRouteRepository inspectionRouteRepository,
@@ -79,7 +80,8 @@ public class InspectionRouteResource {
         EquipmentGroupRepository equipmentGroupRepository,
         EquipmentRepository equipmentRepository,
         PlantRepository plantRepository,
-        AuthenticatedUserService authenticatedUserService
+        AuthenticatedUserService authenticatedUserService,
+        InspectionRecordResource inspectionRecordResource
     ) {
         this.inspectionRouteRepository = inspectionRouteRepository;
         this.inspectionRouteGroupRepository = inspectionRouteGroupRepository;
@@ -88,6 +90,7 @@ public class InspectionRouteResource {
         this.equipmentRepository = equipmentRepository;
         this.plantRepository = plantRepository;
         this.authenticatedUserService = authenticatedUserService;
+        this.inspectionRecordResource = inspectionRecordResource;
     }
 
     /**
@@ -298,6 +301,9 @@ public class InspectionRouteResource {
     public ResponseEntity<InspectionRoute> createRoute(@RequestBody InspectionRoute inspectionRoute) {
         InspectionRoute inspectionRouteSaved = saveRoute(inspectionRoute, true);
         try {
+            if (inspectionRouteSaved != null && inspectionRouteSaved.getId() != null) {
+                inspectionRecordResource.createRecord(inspectionRouteSaved.getId());
+            }
             return ResponseEntity.created(new URI("/api/inspection-routes/" + inspectionRouteSaved.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, inspectionRoute.getId().toString()))
                 .body(inspectionRoute);
