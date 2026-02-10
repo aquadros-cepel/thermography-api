@@ -1,15 +1,27 @@
 package com.tech.thermography.web.rest;
 
-import com.tech.thermography.service.ImportDataService;
 import java.io.IOException;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.tech.thermography.service.ImportDataService;
+import com.tech.thermography.web.rest.dto.ApiUploadedFileMetaDTO;
+import com.tech.thermography.web.rest.dto.FileValidationResultDTO;
+import com.tech.thermography.web.rest.dto.ImportRequestDTO;
+import com.tech.thermography.web.rest.dto.ImportResponseDTO;
+import com.tech.thermography.web.rest.dto.RevalidateRequestDTO;
+import com.tech.thermography.web.rest.dto.UploadResponseDTO;
+import com.tech.thermography.web.rest.dto.ValidateRequestDTO;
+import com.tech.thermography.web.rest.dto.ValidateResponseDTO;
 
 /**
  * REST controller for importing data from CSV files.
@@ -94,7 +106,7 @@ public class ImportDataResource {
      * @param file the uploaded CSV file
      * @return the ResponseEntity with status 200 (OK) and the import result message
      */
-    @PostMapping("/components")
+    @PostMapping("/")
     public ResponseEntity<String> importComponents(@RequestParam("file") MultipartFile file) {
         LOG.debug("REST request to import components from uploaded file: {}", file.getOriginalFilename());
 
@@ -117,4 +129,62 @@ public class ImportDataResource {
             return ResponseEntity.badRequest().body("Error importing components: " + e.getMessage());
         }
     }
+
+    @PostMapping("/equipments/excel")
+    public ResponseEntity<String> importEquipmentsExcel(@RequestParam("file") MultipartFile file) {
+        LOG.debug("REST request to import equipments from uploaded Excel file: {}", file.getOriginalFilename());
+
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("Uploaded file is empty");
+        }
+
+        String filename = file.getOriginalFilename();
+        if (filename == null
+                || !(filename.toLowerCase().endsWith(".xls") || filename.toLowerCase().endsWith(".xlsx"))) {
+            return ResponseEntity.badRequest().body("Only Excel files (.xls, .xlsx) are allowed");
+        }
+
+        try {
+            String result = importDataService.importEquipmentsExcel(file.getInputStream());
+            return ResponseEntity.ok(result);
+        } catch (IOException e) {
+            LOG.error("Error processing uploaded file", e);
+            return ResponseEntity.internalServerError().body("Error processing uploaded file: " + e.getMessage());
+        } catch (RuntimeException e) {
+            LOG.error("Error importing equipments", e);
+            return ResponseEntity.badRequest().body("Error importing equipments: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/equipments/files")
+    public ResponseEntity<UploadResponseDTO> uploadEquipmentFiles(@RequestParam("files") List<MultipartFile> files) {
+        LOG.debug("REST request to upload equipments excel files");
+
+        UploadResponseDTO response = new UploadResponseDTO();
+        List<ApiUploadedFileMetaDTO> uploaded = importDataService.storeUploadedFiles(files);
+        response.files = uploaded;
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/equipments/validate")
+    public ResponseEntity<ValidateResponseDTO> validateEquipments(@RequestBody ValidateRequestDTO request) {
+        LOG.debug("REST request to validate equipments excel files");
+        ValidateResponseDTO response = importDataService.validateFiles(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/equipments/revalidate")
+    public ResponseEntity<FileValidationResultDTO> revalidateEquipments(@RequestBody RevalidateRequestDTO request) {
+        LOG.debug("REST request to revalidate equipments data");
+        FileValidationResultDTO response = importDataService.revalidate(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/equipments/import")
+    public ResponseEntity<ImportResponseDTO> importEquipments(@RequestBody ImportRequestDTO request) {
+        LOG.debug("REST request to import equipments from validated excel files");
+        ImportResponseDTO response = importDataService.importFiles(request);
+        return ResponseEntity.ok(response);
+    }
+
 }
