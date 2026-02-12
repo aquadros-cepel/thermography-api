@@ -1,8 +1,14 @@
 package com.tech.thermography.web.rest;
 
+import com.tech.thermography.service.ImportDataService;
+import com.tech.thermography.web.rest.dto.ApiUploadedFileMetaDTO;
+import com.tech.thermography.web.rest.dto.FileValidationResultDTO;
+import com.tech.thermography.web.rest.dto.RevalidateRequestDTO;
+import com.tech.thermography.web.rest.dto.UploadResponseDTO;
+import com.tech.thermography.web.rest.dto.ValidateRequestDTO;
+import com.tech.thermography.web.rest.dto.ValidateResponseDTO;
 import java.io.IOException;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -12,16 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.tech.thermography.service.ImportDataService;
-import com.tech.thermography.web.rest.dto.ApiUploadedFileMetaDTO;
-import com.tech.thermography.web.rest.dto.FileValidationResultDTO;
-import com.tech.thermography.web.rest.dto.ImportRequestDTO;
-import com.tech.thermography.web.rest.dto.ImportResponseDTO;
-import com.tech.thermography.web.rest.dto.RevalidateRequestDTO;
-import com.tech.thermography.web.rest.dto.UploadResponseDTO;
-import com.tech.thermography.web.rest.dto.ValidateRequestDTO;
-import com.tech.thermography.web.rest.dto.ValidateResponseDTO;
 
 /**
  * REST controller for importing data from CSV files.
@@ -52,7 +48,8 @@ public class ImportDataResource {
             return ResponseEntity.badRequest().body("Uploaded file is empty");
         }
 
-        if (!file.getOriginalFilename().toLowerCase().endsWith(".csv")) {
+        String filename = file.getOriginalFilename();
+        if (filename == null || !filename.toLowerCase().endsWith(".csv")) {
             return ResponseEntity.badRequest().body("Only CSV files are allowed");
         }
 
@@ -83,7 +80,8 @@ public class ImportDataResource {
             return ResponseEntity.badRequest().body("Uploaded file is empty");
         }
 
-        if (!file.getOriginalFilename().toLowerCase().endsWith(".csv")) {
+        String filename = file.getOriginalFilename();
+        if (filename == null || !filename.toLowerCase().endsWith(".csv")) {
             return ResponseEntity.badRequest().body("Only CSV files are allowed");
         }
 
@@ -114,7 +112,8 @@ public class ImportDataResource {
             return ResponseEntity.badRequest().body("Uploaded file is empty");
         }
 
-        if (!file.getOriginalFilename().toLowerCase().endsWith(".csv")) {
+        String filename = file.getOriginalFilename();
+        if (filename == null || !filename.toLowerCase().endsWith(".csv")) {
             return ResponseEntity.badRequest().body("Only CSV files are allowed");
         }
 
@@ -130,8 +129,96 @@ public class ImportDataResource {
         }
     }
 
+    // @PostMapping("/equipments/excel")
+    // public ResponseEntity<String> importEquipmentsExcel(@RequestParam("file")
+    // MultipartFile file) {
+    // LOG.debug("REST request to import equipments from uploaded Excel file: {}",
+    // file.getOriginalFilename());
+
+    // if (file.isEmpty()) {
+    // return ResponseEntity.badRequest().body("Uploaded file is empty");
+    // }
+
+    // String filename = file.getOriginalFilename();
+    // if (filename == null
+    // || !(filename.toLowerCase().endsWith(".xls") ||
+    // filename.toLowerCase().endsWith(".xlsx"))) {
+    // return ResponseEntity.badRequest().body("Only Excel files (.xls, .xlsx) are
+    // allowed");
+    // }
+
+    // try {
+    // String result =
+    // importDataService.importEquipmentsExcel(file.getInputStream());
+    // return ResponseEntity.ok(result);
+    // } catch (IOException e) {
+    // LOG.error("Error processing uploaded file", e);
+    // return ResponseEntity.internalServerError().body("Error processing uploaded
+    // file: " + e.getMessage());
+    // } catch (RuntimeException e) {
+    // LOG.error("Error importing equipments", e);
+    // return ResponseEntity.badRequest().body("Error importing equipments: " +
+    // e.getMessage());
+    // }
+    // }
+
+    /**
+     * {@code POST /import/equipments/validate} : Validate equipments from an
+     * uploaded Excel file.
+     *
+     * @param file the uploaded Excel file
+     * @return the ResponseEntity with status 200 (OK) and the validation result
+     */
+    @PostMapping("/equipments/excel/validate")
+    public ResponseEntity<FileValidationResultDTO> validateEquipments(@RequestParam("file") MultipartFile file) {
+        LOG.debug("REST request to validate equipments from uploaded Excel file: {}", file.getOriginalFilename());
+
+        if (file.isEmpty()) {
+            FileValidationResultDTO error = new FileValidationResultDTO();
+            error.isValid = false;
+            error.issues = java.util.List.of();
+            error.rowsToFix = java.util.List.of();
+            return ResponseEntity.badRequest().body(error);
+        }
+
+        String filename = file.getOriginalFilename();
+        if (filename == null || !(filename.toLowerCase().endsWith(".xls") || filename.toLowerCase().endsWith(".xlsx"))) {
+            FileValidationResultDTO error = new FileValidationResultDTO();
+            error.isValid = false;
+            error.issues = java.util.List.of();
+            error.rowsToFix = java.util.List.of();
+            return ResponseEntity.badRequest().body(error);
+        }
+
+        try {
+            FileValidationResultDTO result = importDataService.validateEquipmentsFile(file.getInputStream());
+            return ResponseEntity.ok(result);
+        } catch (IOException e) {
+            LOG.error("Error processing uploaded file", e);
+            FileValidationResultDTO error = new FileValidationResultDTO();
+            error.isValid = false;
+            error.issues = java.util.List.of();
+            error.rowsToFix = java.util.List.of();
+            return ResponseEntity.internalServerError().body(error);
+        } catch (RuntimeException e) {
+            LOG.error("Error validating equipments", e);
+            FileValidationResultDTO error = new FileValidationResultDTO();
+            error.isValid = false;
+            error.issues = java.util.List.of();
+            error.rowsToFix = java.util.List.of();
+            return ResponseEntity.badRequest().body(error);
+        }
+    }
+
+    /**
+     * {@code POST /import/equipments/import} : Import equipments from an uploaded
+     * Excel file.
+     *
+     * @param file the uploaded Excel file
+     * @return the ResponseEntity with status 200 (OK) and the import result message
+     */
     @PostMapping("/equipments/excel")
-    public ResponseEntity<String> importEquipmentsExcel(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> importEquipmentsFromFile(@RequestParam("file") MultipartFile file) {
         LOG.debug("REST request to import equipments from uploaded Excel file: {}", file.getOriginalFilename());
 
         if (file.isEmpty()) {
@@ -139,8 +226,7 @@ public class ImportDataResource {
         }
 
         String filename = file.getOriginalFilename();
-        if (filename == null
-                || !(filename.toLowerCase().endsWith(".xls") || filename.toLowerCase().endsWith(".xlsx"))) {
+        if (filename == null || !(filename.toLowerCase().endsWith(".xls") || filename.toLowerCase().endsWith(".xlsx"))) {
             return ResponseEntity.badRequest().body("Only Excel files (.xls, .xlsx) are allowed");
         }
 
@@ -179,12 +265,4 @@ public class ImportDataResource {
         FileValidationResultDTO response = importDataService.revalidate(request);
         return ResponseEntity.ok(response);
     }
-
-    @PostMapping("/equipments/import")
-    public ResponseEntity<ImportResponseDTO> importEquipments(@RequestBody ImportRequestDTO request) {
-        LOG.debug("REST request to import equipments from validated excel files");
-        ImportResponseDTO response = importDataService.importFiles(request);
-        return ResponseEntity.ok(response);
-    }
-
 }

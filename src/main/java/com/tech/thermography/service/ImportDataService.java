@@ -1,31 +1,5 @@
 package com.tech.thermography.service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.tech.thermography.domain.Equipment;
 import com.tech.thermography.domain.EquipmentComponent;
 import com.tech.thermography.domain.EquipmentComponentTemperatureLimits;
@@ -41,15 +15,36 @@ import com.tech.thermography.repository.PlantRepository;
 import com.tech.thermography.web.rest.NotFoundException;
 import com.tech.thermography.web.rest.dto.ApiUploadedFileMetaDTO;
 import com.tech.thermography.web.rest.dto.EquipmentRowDataDTO;
-import com.tech.thermography.web.rest.dto.FileImportResultDTO;
 import com.tech.thermography.web.rest.dto.FileValidationResultDTO;
-import com.tech.thermography.web.rest.dto.ImportRequestDTO;
-import com.tech.thermography.web.rest.dto.ImportResponseDTO;
 import com.tech.thermography.web.rest.dto.RevalidateRequestDTO;
 import com.tech.thermography.web.rest.dto.ValidateRequestDTO;
 import com.tech.thermography.web.rest.dto.ValidateResponseDTO;
 import com.tech.thermography.web.rest.dto.ValidationIssueDTO;
 import com.tech.thermography.web.rest.dto.ValidationRowDTO;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Service for importing data from CSV files.
@@ -72,11 +67,12 @@ public class ImportDataService {
     private final EquipmentComponentTemperatureLimitsRepository equipmentComponentTemperatureLimitsRepository;
 
     public ImportDataService(
-            PlantRepository plantRepository,
-            EquipmentRepository equipmentRepository,
-            EquipmentGroupRepository equipmentGroupRepository,
-            EquipmentComponentRepository equipmentComponentRepository,
-            EquipmentComponentTemperatureLimitsRepository equipmentComponentTemperatureLimitsRepository) {
+        PlantRepository plantRepository,
+        EquipmentRepository equipmentRepository,
+        EquipmentGroupRepository equipmentGroupRepository,
+        EquipmentComponentRepository equipmentComponentRepository,
+        EquipmentComponentTemperatureLimitsRepository equipmentComponentTemperatureLimitsRepository
+    ) {
         this.plantRepository = plantRepository;
         this.equipmentRepository = equipmentRepository;
         this.equipmentGroupRepository = equipmentGroupRepository;
@@ -234,154 +230,55 @@ public class ImportDataService {
         }
     }
 
-    public List<ApiUploadedFileMetaDTO> storeUploadedFiles(List<MultipartFile> files) {
-        List<ApiUploadedFileMetaDTO> result = new ArrayList<>();
+    /**
+     * Validates equipments from an uploaded Excel file InputStream.
+     *
+     * @param inputStream the InputStream of the uploaded Excel file
+     * @return a FileValidationResultDTO with validation results
+     * @throws RuntimeException if an error occurs during validation
+     */
+    public FileValidationResultDTO validateEquipmentsFile(InputStream inputStream) {
+        LOG.info("Starting validation of equipments from uploaded Excel file");
 
-        for (MultipartFile file : files) {
-            if (file == null || file.isEmpty()) {
-                continue;
-            }
-            String filename = file.getOriginalFilename();
-            if (filename == null
-                    || !(filename.toLowerCase().endsWith(".xls") || filename.toLowerCase().endsWith(".xlsx"))) {
-                continue;
-            }
-            try {
-                UploadedFile uploadedFile = new UploadedFile();
-                uploadedFile.id = UUID.randomUUID().toString();
-                uploadedFile.name = filename;
-                uploadedFile.size = file.getSize();
-                uploadedFile.type = file.getContentType();
-                uploadedFile.content = file.getBytes();
-
-                uploadedFiles.put(uploadedFile.id, uploadedFile);
-
-                ApiUploadedFileMetaDTO meta = new ApiUploadedFileMetaDTO();
-                meta.id = uploadedFile.id;
-                meta.name = uploadedFile.name;
-                meta.size = uploadedFile.size;
-                meta.type = uploadedFile.type;
-                result.add(meta);
-            } catch (IOException e) {
-                LOG.warn("Failed to store uploaded file: {}", filename, e);
-            }
-        }
-
-        return result;
-    }
-
-    public ValidateResponseDTO validateFiles(ValidateRequestDTO request) {
-        ValidateResponseDTO response = new ValidateResponseDTO();
-        response.results = new ArrayList<>();
-
-        if (request == null || request.files == null) {
-            return response;
-        }
-
-        for (ValidateRequestDTO.FileRefDTO fileRef : request.files) {
-            FileValidationResultDTO result = new FileValidationResultDTO();
-            result.fileId = fileRef == null ? null : fileRef.id;
-
-            UploadedFile uploadedFile = result.fileId == null ? null : uploadedFiles.get(result.fileId);
-            if (uploadedFile == null) {
+        try (Workbook workbook = WorkbookFactory.create(inputStream)) {
+            Sheet sheet = workbook.getNumberOfSheets() > 0 ? workbook.getSheetAt(0) : null;
+            if (sheet == null) {
+                FileValidationResultDTO result = new FileValidationResultDTO();
                 result.isValid = false;
                 result.rowsToFix = List.of();
-                result.issues = List.of(buildIssue(result.fileId, null, 0, "file", "Arquivo não encontrado.", "error"));
-                response.results.add(result);
-                continue;
+                result.issues = List.of(buildIssue(null, null, 0, "file", "Planilha vazia.", "error"));
+                return result;
             }
 
-            List<ValidationRowDTO> rows = parseExcelToRows(uploadedFile.content);
-            cachedRowsByFileId.put(result.fileId, rows);
+            DataFormatter formatter = new DataFormatter();
+            Row headerRow = sheet.getRow(0);
+            if (headerRow == null) {
+                FileValidationResultDTO result = new FileValidationResultDTO();
+                result.isValid = false;
+                result.rowsToFix = List.of();
+                result.issues = List.of(buildIssue(null, null, 0, "file", "Planilha sem cabeçalho.", "error"));
+                return result;
+            }
 
-            ValidationSummary summary = validateRows(result.fileId, rows);
+            List<ValidationRowDTO> rows = parseExcelToRows(sheet, headerRow, formatter);
+            ValidationSummary summary = validateRows(null, rows);
+
+            FileValidationResultDTO result = new FileValidationResultDTO();
             result.isValid = summary.isValid;
             result.rowsToFix = summary.rowsToFix;
             result.issues = summary.issues;
-            response.results.add(result);
-        }
-
-        return response;
-    }
-
-    public FileValidationResultDTO revalidate(RevalidateRequestDTO request) {
-        FileValidationResultDTO result = new FileValidationResultDTO();
-        if (request == null) {
+            return result;
+        } catch (IOException e) {
+            LOG.error("Error reading uploaded Excel file", e);
+            FileValidationResultDTO result = new FileValidationResultDTO();
             result.isValid = false;
             result.rowsToFix = List.of();
-            result.issues = List.of(buildIssue(null, null, 0, "request", "Requisição inválida.", "error"));
+            result.issues = List.of(buildIssue(null, null, 0, "file", "Erro ao ler arquivo: " + e.getMessage(), "error"));
             return result;
         }
-
-        result.fileId = request.fileId;
-        List<ValidationRowDTO> rows = request.rows == null ? List.of() : request.rows;
-        List<ValidationRowDTO> cachedRows = result.fileId == null ? null : cachedRowsByFileId.get(result.fileId);
-        if (cachedRows != null && !rows.isEmpty()) {
-            Map<String, ValidationRowDTO> byRowId = new HashMap<>();
-            for (ValidationRowDTO cachedRow : cachedRows) {
-                if (cachedRow != null && cachedRow.rowId != null) {
-                    byRowId.put(cachedRow.rowId, cachedRow);
-                }
-            }
-            for (ValidationRowDTO updatedRow : rows) {
-                if (updatedRow != null && updatedRow.rowId != null) {
-                    byRowId.put(updatedRow.rowId, updatedRow);
-                }
-            }
-            cachedRows = new ArrayList<>(byRowId.values());
-            cachedRowsByFileId.put(result.fileId, cachedRows);
-        }
-
-        List<ValidationRowDTO> rowsToValidate = cachedRows == null ? rows : cachedRows;
-        ValidationSummary summary = validateRows(result.fileId, rowsToValidate);
-        result.isValid = summary.isValid;
-        result.rowsToFix = summary.rowsToFix;
-        result.issues = summary.issues;
-        return result;
     }
 
-    public ImportResponseDTO importFiles(ImportRequestDTO request) {
-        ImportResponseDTO response = new ImportResponseDTO();
-        response.results = new ArrayList<>();
-
-        if (request == null || request.files == null) {
-            return response;
-        }
-
-        for (ImportRequestDTO.FileImportRefDTO fileRef : request.files) {
-            FileImportResultDTO result = new FileImportResultDTO();
-            result.fileId = fileRef == null ? null : fileRef.fileId;
-
-            try {
-                List<ValidationRowDTO> rows = result.fileId == null ? null : cachedRowsByFileId.get(result.fileId);
-                if (rows == null) {
-                    UploadedFile uploadedFile = result.fileId == null ? null : uploadedFiles.get(result.fileId);
-                    if (uploadedFile != null) {
-                        rows = parseExcelToRows(uploadedFile.content);
-                    }
-                }
-
-                if (rows == null) {
-                    result.success = false;
-                    result.message = "Arquivo não encontrado para importação.";
-                } else {
-                    String message = importEquipmentsFromRows(rows);
-                    result.success = true;
-                    result.message = message;
-                }
-            } catch (RuntimeException e) {
-                result.success = false;
-                result.message = "Falha ao importar: " + e.getMessage();
-            }
-
-            response.results.add(result);
-        }
-
-        return response;
-    }
-
-    private String importEquipmentsFromReader(BufferedReader reader, DateTimeFormatter dateFormatter)
-            throws IOException {
+    private String importEquipmentsFromReader(BufferedReader reader, DateTimeFormatter dateFormatter) throws IOException {
         List<String> errorMessages = new ArrayList<>();
         int importedCount = 0;
         int totalRecords = 0;
@@ -425,40 +322,35 @@ public class ImportDataService {
 
                 // Enums and Parsed fields
                 String typeStr = values[8].trim();
-                if (!typeStr.isEmpty())
-                    equipment.setType(EquipmentType.valueOf(typeStr.toUpperCase()));
+                if (!typeStr.isEmpty()) equipment.setType(EquipmentType.valueOf(typeStr.toUpperCase()));
 
                 String phaseStr = values[13].trim();
-                if (!phaseStr.isEmpty() && !"NULL".equalsIgnoreCase(phaseStr))
-                    equipment.setPhaseType(
-                            PhaseType.valueOf(phaseStr.toUpperCase()));
+                if (!phaseStr.isEmpty() && !"NULL".equalsIgnoreCase(phaseStr)) equipment.setPhaseType(
+                    PhaseType.valueOf(phaseStr.toUpperCase())
+                );
 
                 String voltStr = values[12].trim();
-                if (!voltStr.isEmpty() && !"NULL".equalsIgnoreCase(voltStr))
-                    equipment.setVoltageClass(Float.parseFloat(voltStr));
+                if (!voltStr.isEmpty() && !"NULL".equalsIgnoreCase(voltStr)) equipment.setVoltageClass(Float.parseFloat(voltStr));
 
                 String dateStr = values[14].trim();
-                if (!dateStr.isEmpty() && !"NULL".equalsIgnoreCase(dateStr))
-                    equipment.setStartDate(LocalDate.parse(dateStr));
+                if (!dateStr.isEmpty() && !"NULL".equalsIgnoreCase(dateStr)) equipment.setStartDate(LocalDate.parse(dateStr));
 
                 String latStr = values[15].trim();
-                if (!latStr.isEmpty() && !"NULL".equalsIgnoreCase(latStr))
-                    equipment.setLatitude(Double.parseDouble(latStr));
+                if (!latStr.isEmpty() && !"NULL".equalsIgnoreCase(latStr)) equipment.setLatitude(Double.parseDouble(latStr));
 
                 String lonStr = values[16].trim();
-                if (!lonStr.isEmpty() && !"NULL".equalsIgnoreCase(lonStr))
-                    equipment.setLongitude(Double.parseDouble(lonStr));
+                if (!lonStr.isEmpty() && !"NULL".equalsIgnoreCase(lonStr)) equipment.setLongitude(Double.parseDouble(lonStr));
 
                 // Build Hierarchy
                 ImportPlant importPlant = plantsMap.computeIfAbsent(plantCode, k -> new ImportPlant(k));
 
                 if (!groupCode.isEmpty()) {
-                    ImportGroup importGroup = importPlant.groups.computeIfAbsent(groupCode,
-                            k -> new ImportGroup(k, groupName));
+                    ImportGroup importGroup = importPlant.groups.computeIfAbsent(groupCode, k -> new ImportGroup(k, groupName));
 
                     if (!subgroupCode.isEmpty()) {
-                        ImportSubgroup importSubgroup = importGroup.subgroups.computeIfAbsent(subgroupCode,
-                                k -> new ImportSubgroup(k, subgroupName));
+                        ImportSubgroup importSubgroup = importGroup.subgroups.computeIfAbsent(subgroupCode, k ->
+                            new ImportSubgroup(k, subgroupName)
+                        );
                         importSubgroup.equipments.add(equipment);
                     } else {
                         // Equipment directly under Group (if allowed/possible logic, though req says eq
@@ -477,11 +369,9 @@ public class ImportDataService {
                     }
                 }
             } catch (IllegalArgumentException e) {
-                errorMessages.add(String.format("Linha %d: Erro de conversão/enum. Detalhe: %s", totalRecords + 1,
-                        e.getMessage()));
+                errorMessages.add(String.format("Linha %d: Erro de conversão/enum. Detalhe: %s", totalRecords + 1, e.getMessage()));
             } catch (Exception e) {
-                errorMessages
-                        .add(String.format("Linha %d: Erro inesperado. Detalhe: %s", totalRecords + 1, e.getMessage()));
+                errorMessages.add(String.format("Linha %d: Erro inesperado. Detalhe: %s", totalRecords + 1, e.getMessage()));
             }
         }
 
@@ -491,11 +381,10 @@ public class ImportDataService {
             Plant plant;
             try {
                 plant = plantRepository
-                        .findByCode(importPlant.code)
-                        .orElseThrow(() -> new NotFoundException("Plant not found with code: " + importPlant.code));
+                    .findByCode(importPlant.code)
+                    .orElseThrow(() -> new NotFoundException("Plant not found with code: " + importPlant.code));
             } catch (NotFoundException e) {
-                errorMessages
-                        .add(String.format("Planta '%s' não encontrada. Equipamentos ignorados.", importPlant.code));
+                errorMessages.add(String.format("Planta '%s' não encontrada. Equipamentos ignorados.", importPlant.code));
                 continue;
             }
 
@@ -505,8 +394,7 @@ public class ImportDataService {
 
                 // Process Subgroups
                 for (ImportSubgroup importSubgroup : importGroup.subgroups.values()) {
-                    EquipmentGroup subgroup = findOrCreateGroup(importSubgroup.code, importSubgroup.name, plant,
-                            parentGroup);
+                    EquipmentGroup subgroup = findOrCreateGroup(importSubgroup.code, importSubgroup.name, plant, parentGroup);
 
                     // Save Equipments for Subgroup
                     for (Equipment eq : importSubgroup.equipments) {
@@ -529,10 +417,11 @@ public class ImportDataService {
 
         if (!errorMessages.isEmpty()) {
             return String.format(
-                    "Importação concluída com erros. Total lido: %d. Importados: %d. Erros:\n%s",
-                    totalRecords,
-                    importedCount,
-                    String.join("\n", errorMessages));
+                "Importação concluída com erros. Total lido: %d. Importados: %d. Erros:\n%s",
+                totalRecords,
+                importedCount,
+                String.join("\n", errorMessages)
+            );
         }
 
         return String.format("Importação concluída com sucesso. Total de %d equipamentos importados.", importedCount);
@@ -594,14 +483,17 @@ public class ImportDataService {
             String subgroupCode = safeString(data.subgroup_code);
 
             ImportPlant importPlant = plantsMap.computeIfAbsent(plantCode, k -> new ImportPlant(k));
-            importPlant.updateMetadata(safeString(data.plant_name), parseDouble(stringValue(data.latitude)),
-                    parseDouble(stringValue(data.longitude)));
+            importPlant.updateMetadata(
+                safeString(data.plant_name),
+                parseDouble(stringValue(data.latitude)),
+                parseDouble(stringValue(data.longitude))
+            );
 
-            ImportGroup importGroup = importPlant.groups.computeIfAbsent(groupCode,
-                    k -> new ImportGroup(k, safeString(data.group_name)));
+            ImportGroup importGroup = importPlant.groups.computeIfAbsent(groupCode, k -> new ImportGroup(k, safeString(data.group_name)));
 
-            ImportSubgroup importSubgroup = importGroup.subgroups.computeIfAbsent(subgroupCode,
-                    k -> new ImportSubgroup(k, safeString(data.subgroup_name)));
+            ImportSubgroup importSubgroup = importGroup.subgroups.computeIfAbsent(subgroupCode, k ->
+                new ImportSubgroup(k, safeString(data.subgroup_name))
+            );
 
             Equipment equipment = new Equipment();
             equipment.setCode(safeString(data.equipment_code));
@@ -613,11 +505,13 @@ public class ImportDataService {
         }
 
         for (ImportPlant importPlant : plantsMap.values()) {
-            Plant plant = plantRepository.findByCode(importPlant.code).orElseGet(() -> {
-                Plant newPlant = new Plant();
-                newPlant.setCode(importPlant.code);
-                return newPlant;
-            });
+            Plant plant = plantRepository
+                .findByCode(importPlant.code)
+                .orElseGet(() -> {
+                    Plant newPlant = new Plant();
+                    newPlant.setCode(importPlant.code);
+                    return newPlant;
+                });
 
             if (importPlant.name != null && !importPlant.name.isBlank()) {
                 plant.setName(importPlant.name);
@@ -635,8 +529,7 @@ public class ImportDataService {
                 EquipmentGroup parentGroup = findOrCreateGroup(importGroup.code, importGroup.name, plant, null);
 
                 for (ImportSubgroup importSubgroup : importGroup.subgroups.values()) {
-                    EquipmentGroup subgroup = findOrCreateGroup(importSubgroup.code, importSubgroup.name, plant,
-                            parentGroup);
+                    EquipmentGroup subgroup = findOrCreateGroup(importSubgroup.code, importSubgroup.name, plant, parentGroup);
 
                     for (Equipment eq : importSubgroup.equipments) {
                         eq.setPlant(plant);
@@ -685,24 +578,6 @@ public class ImportDataService {
         return value == null ? "" : value.trim();
     }
 
-    private List<ValidationRowDTO> parseExcelToRows(byte[] content) {
-        try (Workbook workbook = WorkbookFactory.create(new java.io.ByteArrayInputStream(content))) {
-            Sheet sheet = workbook.getNumberOfSheets() > 0 ? workbook.getSheetAt(0) : null;
-            if (sheet == null) {
-                return List.of();
-            }
-            DataFormatter formatter = new DataFormatter();
-            Row headerRow = sheet.getRow(0);
-            if (headerRow == null) {
-                return List.of();
-            }
-            return parseExcelToRows(sheet, headerRow, formatter);
-        } catch (IOException e) {
-            LOG.error("Failed to parse excel content", e);
-            return List.of();
-        }
-    }
-
     private List<ValidationRowDTO> parseExcelToRows(Sheet sheet, Row headerRow, DataFormatter formatter) {
         Map<String, Integer> headerIndex = buildHeaderIndex(headerRow, formatter);
         List<ValidationRowDTO> rows = new ArrayList<>();
@@ -737,6 +612,24 @@ public class ImportDataService {
         return rows;
     }
 
+    private List<ValidationRowDTO> parseExcelToRows(byte[] content) {
+        try (Workbook workbook = WorkbookFactory.create(new java.io.ByteArrayInputStream(content))) {
+            Sheet sheet = workbook.getNumberOfSheets() > 0 ? workbook.getSheetAt(0) : null;
+            if (sheet == null) {
+                return List.of();
+            }
+            DataFormatter formatter = new DataFormatter();
+            Row headerRow = sheet.getRow(0);
+            if (headerRow == null) {
+                return List.of();
+            }
+            return parseExcelToRows(sheet, headerRow, formatter);
+        } catch (IOException e) {
+            LOG.error("Failed to parse excel content", e);
+            return List.of();
+        }
+    }
+
     private ValidationSummary validateRows(String fileId, List<ValidationRowDTO> rows) {
         ValidationSummary summary = new ValidationSummary();
         summary.rowsToFix = new ArrayList<>();
@@ -755,36 +648,31 @@ public class ImportDataService {
             addRequiredIssue(fileId, row, "subgroup_code", data.subgroup_code, rowIssues);
             addRequiredIssue(fileId, row, "equipment_code", data.equipment_code, rowIssues);
 
-            if (isBlank(stringValue(data.latitude)) || parseDouble(stringValue(data.latitude)) == null) {
-                rowIssues
-                        .add(buildIssue(fileId, row, row.rowIndex, "latitude", "Latitude inválida ou vazia.", "error"));
+            if (parseDouble(stringValue(data.latitude)) == null) {
+                rowIssues.add(buildIssue(fileId, row, row.rowIndex, "latitude", "Latitude inválida ou vazia.", "error"));
             }
-            if (isBlank(stringValue(data.longitude)) || parseDouble(stringValue(data.longitude)) == null) {
-                rowIssues.add(
-                        buildIssue(fileId, row, row.rowIndex, "longitude", "Longitude inválida ou vazia.", "error"));
+            if (parseDouble(stringValue(data.longitude)) == null) {
+                rowIssues.add(buildIssue(fileId, row, row.rowIndex, "longitude", "Longitude inválida ou vazia.", "error"));
             }
 
             if (isBlank(data.group_name)) {
-                rowIssues.add(buildIssue(fileId, row, row.rowIndex, "group_name", "Campo 'group_name' está vazio.",
-                        "warning"));
+                rowIssues.add(buildIssue(fileId, row, row.rowIndex, "group_name", "Campo 'group_name' está vazio.", "warning"));
             }
             if (isBlank(data.subgroup_name)) {
-                rowIssues.add(buildIssue(fileId, row, row.rowIndex, "subgroup_name",
-                        "Campo 'subgroup_name' está vazio.", "warning"));
+                rowIssues.add(buildIssue(fileId, row, row.rowIndex, "subgroup_name", "Campo 'subgroup_name' está vazio.", "warning"));
             }
             if (isBlank(stringValue(data.equipment_name))) {
-                rowIssues.add(buildIssue(fileId, row, row.rowIndex, "equipment_name",
-                        "Campo 'equipment_name' está vazio.", "warning"));
+                rowIssues.add(buildIssue(fileId, row, row.rowIndex, "equipment_name", "Campo 'equipment_name' está vazio.", "warning"));
             }
             if (isBlank(data.equipment_description)) {
-                rowIssues.add(buildIssue(fileId, row, row.rowIndex, "equipment_description",
-                        "Campo 'equipment_description' está vazio.", "warning"));
+                rowIssues.add(
+                    buildIssue(fileId, row, row.rowIndex, "equipment_description", "Campo 'equipment_description' está vazio.", "warning")
+                );
             }
 
             EquipmentType equipmentType = parseEquipmentType(data.equipment_type);
             if (equipmentType == null) {
-                rowIssues.add(buildIssue(fileId, row, row.rowIndex, "equipment_type",
-                        "Tipo de equipamento inválido.", "error"));
+                rowIssues.add(buildIssue(fileId, row, row.rowIndex, "equipment_type", "Tipo de equipamento inválido.", "error"));
             }
 
             if (!rowIssues.isEmpty()) {
@@ -797,15 +685,20 @@ public class ImportDataService {
         return summary;
     }
 
-    private void addRequiredIssue(String fileId, ValidationRowDTO row, String field, String value,
-            List<ValidationIssueDTO> issues) {
+    private void addRequiredIssue(String fileId, ValidationRowDTO row, String field, String value, List<ValidationIssueDTO> issues) {
         if (isBlank(value)) {
             issues.add(buildIssue(fileId, row, row.rowIndex, field, "Campo obrigatório vazio.", "error"));
         }
     }
 
-    private ValidationIssueDTO buildIssue(String fileId, ValidationRowDTO row, int rowIndex, String field,
-            String message, String severity) {
+    private ValidationIssueDTO buildIssue(
+        String fileId,
+        ValidationRowDTO row,
+        int rowIndex,
+        String field,
+        String message,
+        String severity
+    ) {
         ValidationIssueDTO issue = new ValidationIssueDTO();
         issue.id = UUID.randomUUID().toString();
         issue.fileId = fileId;
@@ -932,6 +825,7 @@ public class ImportDataService {
     }
 
     private static class UploadedFile {
+
         String id;
         String name;
         long size;
@@ -940,6 +834,7 @@ public class ImportDataService {
     }
 
     private static class ValidationSummary {
+
         boolean isValid;
         List<ValidationRowDTO> rowsToFix;
         List<ValidationIssueDTO> issues;
@@ -1007,5 +902,110 @@ public class ImportDataService {
 
         LOG.info("Successfully imported {} components", importedCount);
         return "Successfully imported " + importedCount + " components";
+    }
+
+    public List<ApiUploadedFileMetaDTO> storeUploadedFiles(List<MultipartFile> files) {
+        List<ApiUploadedFileMetaDTO> result = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+            if (file == null || file.isEmpty()) {
+                continue;
+            }
+            String filename = file.getOriginalFilename();
+            if (filename == null || !(filename.toLowerCase().endsWith(".xls") || filename.toLowerCase().endsWith(".xlsx"))) {
+                continue;
+            }
+            try {
+                UploadedFile uploadedFile = new UploadedFile();
+                uploadedFile.id = UUID.randomUUID().toString();
+                uploadedFile.name = filename;
+                uploadedFile.size = file.getSize();
+                uploadedFile.type = file.getContentType();
+                uploadedFile.content = file.getBytes();
+
+                uploadedFiles.put(uploadedFile.id, uploadedFile);
+
+                ApiUploadedFileMetaDTO meta = new ApiUploadedFileMetaDTO();
+                meta.id = uploadedFile.id;
+                meta.name = uploadedFile.name;
+                meta.size = uploadedFile.size;
+                meta.type = uploadedFile.type;
+                result.add(meta);
+            } catch (IOException e) {
+                LOG.warn("Failed to store uploaded file: {}", filename, e);
+            }
+        }
+
+        return result;
+    }
+
+    public ValidateResponseDTO validateFiles(ValidateRequestDTO request) {
+        ValidateResponseDTO response = new ValidateResponseDTO();
+        response.results = new ArrayList<>();
+
+        if (request == null || request.files == null) {
+            return response;
+        }
+
+        for (ValidateRequestDTO.FileRefDTO fileRef : request.files) {
+            FileValidationResultDTO result = new FileValidationResultDTO();
+            result.fileId = fileRef == null ? null : fileRef.id;
+
+            UploadedFile uploadedFile = result.fileId == null ? null : uploadedFiles.get(result.fileId);
+            if (uploadedFile == null) {
+                result.isValid = false;
+                result.rowsToFix = List.of();
+                result.issues = List.of(buildIssue(result.fileId, null, 0, "file", "Arquivo não encontrado.", "error"));
+                response.results.add(result);
+                continue;
+            }
+
+            List<ValidationRowDTO> rows = parseExcelToRows(uploadedFile.content);
+            cachedRowsByFileId.put(result.fileId, rows);
+
+            ValidationSummary summary = validateRows(result.fileId, rows);
+            result.isValid = summary.isValid;
+            result.rowsToFix = summary.rowsToFix;
+            result.issues = summary.issues;
+            response.results.add(result);
+        }
+
+        return response;
+    }
+
+    public FileValidationResultDTO revalidate(RevalidateRequestDTO request) {
+        FileValidationResultDTO result = new FileValidationResultDTO();
+        if (request == null) {
+            result.isValid = false;
+            result.rowsToFix = List.of();
+            result.issues = List.of(buildIssue(null, null, 0, "request", "Requisição inválida.", "error"));
+            return result;
+        }
+
+        result.fileId = request.fileId;
+        List<ValidationRowDTO> rows = request.rows == null ? List.of() : request.rows;
+        List<ValidationRowDTO> cachedRows = result.fileId == null ? null : cachedRowsByFileId.get(result.fileId);
+        if (cachedRows != null && !rows.isEmpty()) {
+            Map<String, ValidationRowDTO> byRowId = new HashMap<>();
+            for (ValidationRowDTO cachedRow : cachedRows) {
+                if (cachedRow != null && cachedRow.rowId != null) {
+                    byRowId.put(cachedRow.rowId, cachedRow);
+                }
+            }
+            for (ValidationRowDTO updatedRow : rows) {
+                if (updatedRow != null && updatedRow.rowId != null) {
+                    byRowId.put(updatedRow.rowId, updatedRow);
+                }
+            }
+            cachedRows = new ArrayList<>(byRowId.values());
+            cachedRowsByFileId.put(result.fileId, cachedRows);
+        }
+
+        List<ValidationRowDTO> rowsToValidate = cachedRows == null ? rows : cachedRows;
+        ValidationSummary summary = validateRows(result.fileId, rowsToValidate);
+        result.isValid = summary.isValid;
+        result.rowsToFix = summary.rowsToFix;
+        result.issues = summary.issues;
+        return result;
     }
 }
