@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -32,7 +31,6 @@ public class Thermogram implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
     @Column(name = "id", nullable = false)
     private UUID id;
 
@@ -105,7 +103,7 @@ public class Thermogram implements Serializable {
     @JsonIgnoreProperties(value = { "user", "company" }, allowSetters = true)
     private UserInfo createdBy;
 
-    @OneToMany(mappedBy = "thermogram", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "thermogram", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "thermogram" }, allowSetters = true)
     @JsonProperty("rois")

@@ -3,6 +3,7 @@ package com.tech.thermography.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tech.thermography.domain.enumeration.ConditionType;
 import com.tech.thermography.domain.enumeration.ThermographicInspectionRecordType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -110,13 +111,13 @@ public class ThermographicInspectionRecord implements Serializable {
     @JsonIgnoreProperties(value = { "user", "company" }, allowSetters = true)
     private UserInfo finishedBy;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.REMOVE)
     @NotNull
-    @JsonIgnoreProperties(value = { "equipment", "createdBy" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "equipment", "createdBy", "rois" }, allowSetters = true)
     private Thermogram thermogram;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "equipment", "createdBy" }, allowSetters = true)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JsonIgnoreProperties(value = { "equipment", "createdBy", "rois" }, allowSetters = true)
     private Thermogram thermogramRef;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

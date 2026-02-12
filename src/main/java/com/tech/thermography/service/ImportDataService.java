@@ -15,7 +15,10 @@ import com.tech.thermography.repository.PlantRepository;
 import com.tech.thermography.web.rest.NotFoundException;
 import com.tech.thermography.web.rest.dto.ApiUploadedFileMetaDTO;
 import com.tech.thermography.web.rest.dto.EquipmentRowDataDTO;
+import com.tech.thermography.web.rest.dto.FileImportResultDTO;
 import com.tech.thermography.web.rest.dto.FileValidationResultDTO;
+import com.tech.thermography.web.rest.dto.ImportRequestDTO;
+import com.tech.thermography.web.rest.dto.ImportResponseDTO;
 import com.tech.thermography.web.rest.dto.RevalidateRequestDTO;
 import com.tech.thermography.web.rest.dto.ValidateRequestDTO;
 import com.tech.thermography.web.rest.dto.ValidateResponseDTO;
@@ -1007,5 +1010,45 @@ public class ImportDataService {
         result.rowsToFix = summary.rowsToFix;
         result.issues = summary.issues;
         return result;
+    }
+
+    public ImportResponseDTO importFiles(ImportRequestDTO request) {
+        ImportResponseDTO response = new ImportResponseDTO();
+        response.results = new ArrayList<>();
+
+        if (request == null || request.files == null) {
+            return response;
+        }
+
+        for (ImportRequestDTO.FileImportRefDTO fileRef : request.files) {
+            FileImportResultDTO result = new FileImportResultDTO();
+            result.fileId = fileRef == null ? null : fileRef.fileId;
+
+            try {
+                List<ValidationRowDTO> rows = result.fileId == null ? null : cachedRowsByFileId.get(result.fileId);
+                if (rows == null) {
+                    UploadedFile uploadedFile = result.fileId == null ? null : uploadedFiles.get(result.fileId);
+                    if (uploadedFile != null) {
+                        rows = parseExcelToRows(uploadedFile.content);
+                    }
+                }
+
+                if (rows == null) {
+                    result.success = false;
+                    result.message = "Arquivo não encontrado para importação.";
+                } else {
+                    String message = importEquipmentsFromRows(rows);
+                    result.success = true;
+                    result.message = message;
+                }
+            } catch (RuntimeException e) {
+                result.success = false;
+                result.message = "Falha ao importar: " + e.getMessage();
+            }
+
+            response.results.add(result);
+        }
+
+        return response;
     }
 }

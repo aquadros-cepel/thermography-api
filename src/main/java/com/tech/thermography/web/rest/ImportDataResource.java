@@ -3,6 +3,8 @@ package com.tech.thermography.web.rest;
 import com.tech.thermography.service.ImportDataService;
 import com.tech.thermography.web.rest.dto.ApiUploadedFileMetaDTO;
 import com.tech.thermography.web.rest.dto.FileValidationResultDTO;
+import com.tech.thermography.web.rest.dto.ImportRequestDTO;
+import com.tech.thermography.web.rest.dto.ImportResponseDTO;
 import com.tech.thermography.web.rest.dto.RevalidateRequestDTO;
 import com.tech.thermography.web.rest.dto.UploadResponseDTO;
 import com.tech.thermography.web.rest.dto.ValidateRequestDTO;
@@ -263,6 +265,13 @@ public class ImportDataResource {
     public ResponseEntity<FileValidationResultDTO> revalidateEquipments(@RequestBody RevalidateRequestDTO request) {
         LOG.debug("REST request to revalidate equipments data");
         FileValidationResultDTO response = importDataService.revalidate(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/equipments/import")
+    public ResponseEntity<ImportResponseDTO> importEquipments(@RequestBody ImportRequestDTO request) {
+        LOG.debug("REST request to import equipments from validated excel files");
+        ImportResponseDTO response = importDataService.importFiles(request);
         return ResponseEntity.ok(response);
     }
 }
