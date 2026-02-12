@@ -3,16 +3,18 @@ package com.tech.thermography.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.hibernate.annotations.Cache;
@@ -103,9 +105,11 @@ public class Thermogram implements Serializable {
     @JsonIgnoreProperties(value = { "user", "company" }, allowSetters = true)
     private UserInfo createdBy;
 
-    @Transient
+    @OneToMany(mappedBy = "thermogram", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "thermogram" }, allowSetters = true)
     @JsonProperty("rois")
-    private List<ROI> rois;
+    private List<ROI> rois = new ArrayList<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -401,11 +405,29 @@ public class Thermogram implements Serializable {
 
     @JsonSetter("rois")
     public void setRois(List<ROI> rois) {
+        if (this.rois != null) {
+            this.rois.forEach(roi -> roi.setThermogram(null));
+        }
+        if (rois != null) {
+            rois.forEach(roi -> roi.setThermogram(this));
+        }
         this.rois = rois;
     }
 
     public Thermogram rois(List<ROI> rois) {
         this.setRois(rois);
+        return this;
+    }
+
+    public Thermogram addRoi(ROI roi) {
+        this.rois.add(roi);
+        roi.setThermogram(this);
+        return this;
+    }
+
+    public Thermogram removeRoi(ROI roi) {
+        this.rois.remove(roi);
+        roi.setThermogram(null);
         return this;
     }
 

@@ -12,7 +12,6 @@ import com.tech.thermography.repository.EquipmentComponentRepository;
 import com.tech.thermography.repository.EquipmentRepository;
 import com.tech.thermography.repository.InspectionRecordRepository;
 import com.tech.thermography.repository.PlantRepository;
-import com.tech.thermography.repository.ROIRepository;
 import com.tech.thermography.repository.ThermogramRepository;
 import com.tech.thermography.repository.ThermographicInspectionRecordRepository;
 import com.tech.thermography.repository.UserInfoRepository;
@@ -22,6 +21,7 @@ import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -61,7 +61,6 @@ public class ThermographicInspectionRecordResource {
 
     private final ThermographicInspectionRecordRepository thermographicInspectionRecordRepository;
     private final ThermogramRepository thermogramRepository;
-    private final ROIRepository roiRepository;
     private final EquipmentRepository equipmentRepository;
     private final EquipmentComponentRepository equipmentComponentRepository;
     private final InspectionRecordRepository inspectionRecordRepository;
@@ -71,7 +70,6 @@ public class ThermographicInspectionRecordResource {
     public ThermographicInspectionRecordResource(
         ThermographicInspectionRecordRepository thermographicInspectionRecordRepository,
         ThermogramRepository thermogramRepository,
-        ROIRepository roiRepository,
         EquipmentRepository equipmentRepository,
         EquipmentComponentRepository equipmentComponentRepository,
         InspectionRecordRepository inspectionRecordRepository,
@@ -80,7 +78,6 @@ public class ThermographicInspectionRecordResource {
     ) {
         this.thermographicInspectionRecordRepository = thermographicInspectionRecordRepository;
         this.thermogramRepository = thermogramRepository;
-        this.roiRepository = roiRepository;
         this.equipmentRepository = equipmentRepository;
         this.equipmentComponentRepository = equipmentComponentRepository;
         this.inspectionRecordRepository = inspectionRecordRepository;
@@ -256,7 +253,14 @@ public class ThermographicInspectionRecordResource {
     @GetMapping("")
     public List<ThermographicInspectionRecord> getAllThermographicInspectionRecords() {
         LOG.debug("REST request to get all ThermographicInspectionRecords");
-        return thermographicInspectionRecordRepository.findAll();
+        List<ThermographicInspectionRecord> records = thermographicInspectionRecordRepository.findAllWithRelationships();
+
+        // Segunda query para carregar thermogramRef (quando existe) e seus ROIs
+        if (!records.isEmpty()) {
+            thermographicInspectionRecordRepository.findWithThermogramRef(records);
+        }
+
+        return records;
     }
 
     /**
@@ -387,10 +391,6 @@ public class ThermographicInspectionRecordResource {
 
         record = thermographicInspectionRecordRepository.save(record);
 
-        // Popular ROIs nos thermograms antes de retornar
-        populateThermogramRois(record.getThermogram());
-        populateThermogramRois(record.getThermogramRef());
-
         return ResponseEntity.created(new URI("/api/thermographic-inspection-records/" + record.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, record.getId().toString()))
             .body(record);
@@ -477,20 +477,28 @@ public class ThermographicInspectionRecordResource {
         thermogram.setEquipment(equipment);
         thermogram.setCreatedBy(createdBy);
 
-        // CRITICAL: Salvar o Thermogram ANTES de processar os ROIs
-        Thermogram saved = thermogramRepository.save(thermogram);
-        thermogramRepository.flush(); // Garantir que o ID foi gerado e commitado
-
-        LOG.debug("Thermogram saved with ID: {}", saved.getId());
-
-        // Processar ROIs do payload SOMENTE APÓS o Thermogram ter sido salvo com
-        // sucesso
+        // Processar ROIs do payload - limpar IDs para forçar criação de novos ROIs
         if (roisFromPayload != null && !roisFromPayload.isEmpty()) {
-            LOG.debug("Processing {} ROIs for Thermogram {}", roisFromPayload.size(), saved.getId());
-            processRois(roisFromPayload, saved);
-        } else {
-            LOG.debug("No ROIs to process for Thermogram {}", saved.getId());
+            LOG.debug("Setting {} ROIs for Thermogram", roisFromPayload.size());
+
+            // Criar novos ROIs sem ID (para evitar "detached entity")
+            List<ROI> newRois = new ArrayList<>();
+            for (ROI roiPayload : roisFromPayload) {
+                ROI newRoi = new ROI();
+                newRoi.setType(roiPayload.getType());
+                newRoi.setLabel(roiPayload.getLabel());
+                newRoi.setMaxTemp(roiPayload.getMaxTemp());
+                newRois.add(newRoi);
+            }
+
+            thermogram.setRois(newRois);
         }
+
+        // Salvar o Thermogram com os ROIs (cascade ALL irá salvar os ROIs automaticamente)
+        Thermogram saved = thermogramRepository.save(thermogram);
+        thermogramRepository.flush();
+
+        LOG.debug("Thermogram saved with ID: {} and {} ROIs", saved.getId(), saved.getRois().size());
 
         return saved;
     }
@@ -508,70 +516,5 @@ public class ThermographicInspectionRecordResource {
             return mainThermogram;
         }
         return processThermogram(thermogramRefPayload, equipment, createdBy);
-    }
-
-    private void processRois(List<ROI> roisPayload, Thermogram savedThermogram) {
-        if (roisPayload == null || roisPayload.isEmpty()) {
-            LOG.debug("No ROIs in payload");
-            return;
-        }
-
-        if (savedThermogram == null || savedThermogram.getId() == null) {
-            LOG.error("Cannot save ROIs: Thermogram not saved or ID is null");
-            throw new BadRequestAlertException("Thermogram deve ser salvo antes dos ROIs", ENTITY_NAME, "thermogramnotsaved");
-        }
-
-        LOG.debug("Saving {} ROIs for Thermogram ID: {}", roisPayload.size(), savedThermogram.getId());
-
-        for (ROI roiPayload : roisPayload) {
-            if (roiPayload == null) {
-                LOG.warn("Skipping null ROI");
-                continue;
-            }
-
-            // Validar campos obrigatórios
-            if (roiPayload.getType() == null || roiPayload.getType().trim().isEmpty()) {
-                LOG.warn("Skipping ROI with null/empty type");
-                continue;
-            }
-            if (roiPayload.getLabel() == null || roiPayload.getLabel().trim().isEmpty()) {
-                LOG.warn("Skipping ROI with null/empty label");
-                continue;
-            }
-            if (roiPayload.getMaxTemp() == null) {
-                LOG.warn("Skipping ROI {} with null maxTemp", roiPayload.getLabel());
-                continue;
-            }
-
-            ROI roi = new ROI();
-            roi.setType(roiPayload.getType());
-            roi.setLabel(roiPayload.getLabel());
-            roi.setMaxTemp(roiPayload.getMaxTemp());
-            roi.setThermogram(savedThermogram);
-
-            try {
-                ROI savedRoi = roiRepository.save(roi);
-                LOG.debug(
-                    "✓ Saved ROI: {} - {} with maxTemp: {} for Thermogram: {}",
-                    savedRoi.getId(),
-                    savedRoi.getLabel(),
-                    savedRoi.getMaxTemp(),
-                    savedThermogram.getId()
-                );
-            } catch (Exception e) {
-                LOG.error("✗ Failed to save ROI {} for Thermogram {}: {}", roiPayload.getLabel(), savedThermogram.getId(), e.getMessage());
-                throw new BadRequestAlertException("Erro ao salvar ROI: " + e.getMessage(), ENTITY_NAME, "roisaveerror");
-            }
-        }
-
-        roiRepository.flush(); // Garantir commit
-        LOG.debug("All ROIs saved and flushed for Thermogram {}", savedThermogram.getId());
-    }
-
-    private void populateThermogramRois(Thermogram thermogram) {
-        if (thermogram != null && thermogram.getId() != null) {
-            List<ROI> rois = roiRepository.findByThermogramId(thermogram.getId());
-            thermogram.setRois(rois);
-        }
     }
 }
