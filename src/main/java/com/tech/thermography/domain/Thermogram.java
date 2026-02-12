@@ -1,10 +1,17 @@
 package com.tech.thermography.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -93,6 +100,9 @@ public class Thermogram implements Serializable {
     @NotNull
     @JsonIgnoreProperties(value = { "user", "company" }, allowSetters = true)
     private UserInfo createdBy;
+
+    @Transient
+    private List<ROI> rois;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -382,7 +392,21 @@ public class Thermogram implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    public List<ROI> getRois() {
+        return this.rois;
+    }
+
+    public void setRois(List<ROI> rois) {
+        this.rois = rois;
+    }
+
+    public Thermogram rois(List<ROI> rois) {
+        this.setRois(rois);
+        return this;
+    }
+
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -397,7 +421,8 @@ public class Thermogram implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -405,26 +430,26 @@ public class Thermogram implements Serializable {
     @Override
     public String toString() {
         return "Thermogram{" +
-            "id=" + getId() +
-            ", imagePath='" + getImagePath() + "'" +
-            ", audioPath='" + getAudioPath() + "'" +
-            ", imageRefPath='" + getImageRefPath() + "'" +
-            ", minTemp=" + getMinTemp() +
-            ", avgTemp=" + getAvgTemp() +
-            ", maxTemp=" + getMaxTemp() +
-            ", emissivity=" + getEmissivity() +
-            ", subjectDistance=" + getSubjectDistance() +
-            ", atmosphericTemp=" + getAtmosphericTemp() +
-            ", reflectedTemp=" + getReflectedTemp() +
-            ", relativeHumidity=" + getRelativeHumidity() +
-            ", cameraLens='" + getCameraLens() + "'" +
-            ", cameraModel='" + getCameraModel() + "'" +
-            ", imageResolution='" + getImageResolution() + "'" +
-            ", selectedRoiId='" + getSelectedRoiId() + "'" +
-            ", maxTempRoi=" + getMaxTempRoi() +
-            ", createdAt='" + getCreatedAt() + "'" +
-            ", latitude=" + getLatitude() +
-            ", longitude=" + getLongitude() +
-            "}";
+                "id=" + getId() +
+                ", imagePath='" + getImagePath() + "'" +
+                ", audioPath='" + getAudioPath() + "'" +
+                ", imageRefPath='" + getImageRefPath() + "'" +
+                ", minTemp=" + getMinTemp() +
+                ", avgTemp=" + getAvgTemp() +
+                ", maxTemp=" + getMaxTemp() +
+                ", emissivity=" + getEmissivity() +
+                ", subjectDistance=" + getSubjectDistance() +
+                ", atmosphericTemp=" + getAtmosphericTemp() +
+                ", reflectedTemp=" + getReflectedTemp() +
+                ", relativeHumidity=" + getRelativeHumidity() +
+                ", cameraLens='" + getCameraLens() + "'" +
+                ", cameraModel='" + getCameraModel() + "'" +
+                ", imageResolution='" + getImageResolution() + "'" +
+                ", selectedRoiId='" + getSelectedRoiId() + "'" +
+                ", maxTempRoi=" + getMaxTempRoi() +
+                ", createdAt='" + getCreatedAt() + "'" +
+                ", latitude=" + getLatitude() +
+                ", longitude=" + getLongitude() +
+                "}";
     }
 }
