@@ -1,6 +1,8 @@
 package com.tech.thermography.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -102,6 +104,7 @@ public class Thermogram implements Serializable {
     private UserInfo createdBy;
 
     @Transient
+    @JsonProperty("rois")
     private List<ROI> rois;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -396,6 +399,7 @@ public class Thermogram implements Serializable {
         return this.rois;
     }
 
+    @JsonSetter("rois")
     public void setRois(List<ROI> rois) {
         this.rois = rois;
     }

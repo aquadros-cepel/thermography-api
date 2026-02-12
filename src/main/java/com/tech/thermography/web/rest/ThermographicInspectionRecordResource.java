@@ -1,15 +1,31 @@
 package com.tech.thermography.web.rest;
 
+import com.tech.thermography.domain.Equipment;
+import com.tech.thermography.domain.EquipmentComponent;
+import com.tech.thermography.domain.InspectionRecord;
+import com.tech.thermography.domain.Plant;
+import com.tech.thermography.domain.ROI;
+import com.tech.thermography.domain.Thermogram;
+import com.tech.thermography.domain.ThermographicInspectionRecord;
+import com.tech.thermography.domain.UserInfo;
+import com.tech.thermography.repository.EquipmentComponentRepository;
+import com.tech.thermography.repository.EquipmentRepository;
+import com.tech.thermography.repository.InspectionRecordRepository;
+import com.tech.thermography.repository.PlantRepository;
+import com.tech.thermography.repository.ROIRepository;
+import com.tech.thermography.repository.ThermogramRepository;
+import com.tech.thermography.repository.ThermographicInspectionRecordRepository;
+import com.tech.thermography.repository.UserInfoRepository;
+import com.tech.thermography.web.rest.errors.BadRequestAlertException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,30 +40,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.tech.thermography.domain.Equipment;
-import com.tech.thermography.domain.EquipmentComponent;
-import com.tech.thermography.domain.InspectionRecord;
-import com.tech.thermography.domain.Plant;
-import com.tech.thermography.domain.ROI;
-import com.tech.thermography.domain.Thermogram;
-import com.tech.thermography.domain.ThermographicInspectionRecord;
-import com.tech.thermography.domain.UserInfo;
-import com.tech.thermography.domain.enumeration.ConditionType;
-import com.tech.thermography.domain.enumeration.ThermographicInspectionRecordType;
-import com.tech.thermography.repository.EquipmentComponentRepository;
-import com.tech.thermography.repository.EquipmentRepository;
-import com.tech.thermography.repository.InspectionRecordRepository;
-import com.tech.thermography.repository.PlantRepository;
-import com.tech.thermography.repository.ROIRepository;
-import com.tech.thermography.repository.ThermogramRepository;
-import com.tech.thermography.repository.ThermographicInspectionRecordRepository;
-import com.tech.thermography.repository.UserInfoRepository;
-import com.tech.thermography.web.rest.dto.ThermographicInspectionRecordCreateDTO;
-import com.tech.thermography.web.rest.errors.BadRequestAlertException;
-
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
@@ -77,14 +69,15 @@ public class ThermographicInspectionRecordResource {
     private final UserInfoRepository userInfoRepository;
 
     public ThermographicInspectionRecordResource(
-            ThermographicInspectionRecordRepository thermographicInspectionRecordRepository,
-            ThermogramRepository thermogramRepository,
-            ROIRepository roiRepository,
-            EquipmentRepository equipmentRepository,
-            EquipmentComponentRepository equipmentComponentRepository,
-            InspectionRecordRepository inspectionRecordRepository,
-            PlantRepository plantRepository,
-            UserInfoRepository userInfoRepository) {
+        ThermographicInspectionRecordRepository thermographicInspectionRecordRepository,
+        ThermogramRepository thermogramRepository,
+        ROIRepository roiRepository,
+        EquipmentRepository equipmentRepository,
+        EquipmentComponentRepository equipmentComponentRepository,
+        InspectionRecordRepository inspectionRecordRepository,
+        PlantRepository plantRepository,
+        UserInfoRepository userInfoRepository
+    ) {
         this.thermographicInspectionRecordRepository = thermographicInspectionRecordRepository;
         this.thermogramRepository = thermogramRepository;
         this.roiRepository = roiRepository;
@@ -93,107 +86,6 @@ public class ThermographicInspectionRecordResource {
         this.inspectionRecordRepository = inspectionRecordRepository;
         this.plantRepository = plantRepository;
         this.userInfoRepository = userInfoRepository;
-    }
-
-    @PostMapping("/actions/create")
-    public ResponseEntity<ThermographicInspectionRecord> createThermographicInspectionRecordFromPayload(
-            @RequestBody ThermographicInspectionRecordCreateDTO payload) throws URISyntaxException {
-        LOG.debug("REST request to create ThermographicInspectionRecord from payload");
-
-        if (payload == null) {
-            throw new BadRequestAlertException("Payload inválido", ENTITY_NAME, "payloadnull");
-        }
-        if (payload.equipment == null || payload.equipment.id == null) {
-            throw new BadRequestAlertException("Equipment obrigatório", ENTITY_NAME, "equipmentnull");
-        }
-        if (payload.plant == null || payload.plant.id == null) {
-            throw new BadRequestAlertException("Plant obrigatória", ENTITY_NAME, "plantnull");
-        }
-        if (payload.createdBy == null || payload.createdBy.id == null) {
-            throw new BadRequestAlertException("CreatedBy obrigatório", ENTITY_NAME, "createdbynull");
-        }
-        if (payload.thermogram == null) {
-            throw new BadRequestAlertException("Thermogram obrigatório", ENTITY_NAME, "thermogramnull");
-        }
-
-        Equipment equipment = equipmentRepository
-                .findById(payload.equipment.id)
-                .orElseThrow(() -> new BadRequestAlertException("Equipment não encontrado", ENTITY_NAME,
-                        "equipmentnotfound"));
-
-        Plant plant = plantRepository
-                .findById(payload.plant.id)
-                .orElseThrow(() -> new BadRequestAlertException("Plant não encontrada", ENTITY_NAME, "plantnotfound"));
-
-        UserInfo createdBy = userInfoRepository
-                .findById(payload.createdBy.id)
-                .orElseThrow(() -> new BadRequestAlertException("UserInfo não encontrado", ENTITY_NAME,
-                        "createdbynotfound"));
-
-        UserInfo finishedBy = createdBy;
-        if (payload.finishedBy != null && payload.finishedBy.id != null) {
-            finishedBy = userInfoRepository
-                    .findById(payload.finishedBy.id)
-                    .orElseThrow(() -> new BadRequestAlertException("UserInfo finishedBy não encontrado", ENTITY_NAME,
-                            "finishedbynotfound"));
-        }
-
-        InspectionRecord route = null;
-        if (payload.route != null && payload.route.id != null) {
-            route = inspectionRecordRepository
-                    .findById(payload.route.id)
-                    .orElseThrow(() -> new BadRequestAlertException("InspectionRecord não encontrado", ENTITY_NAME,
-                            "routenotfound"));
-        }
-
-        EquipmentComponent component = null;
-        if (payload.component != null && payload.component.id != null) {
-            component = equipmentComponentRepository
-                    .findById(payload.component.id)
-                    .orElseThrow(() -> new BadRequestAlertException("Component não encontrado", ENTITY_NAME,
-                            "componentnotfound"));
-        }
-
-        Thermogram thermogram = buildThermogram(payload.thermogram, equipment, createdBy);
-        Thermogram thermogramRef = buildThermogramRef(payload.thermogramRef, thermogram, equipment, createdBy);
-
-        ThermographicInspectionRecord record = new ThermographicInspectionRecord();
-        record.setId(null);
-        record.setName(payload.name);
-        ThermographicInspectionRecordType recordType = parseRecordType(payload.type);
-        if (recordType == null) {
-            throw new BadRequestAlertException("Type inválido", ENTITY_NAME, "typeinvalid");
-        }
-        record.setType(recordType);
-        record.setServiceOrder(payload.serviceOrder);
-        record.setCreatedAt(parseInstant(payload.createdAt));
-        record.setAnalysisDescription(payload.analysisDescription);
-        ConditionType condition = parseCondition(payload.condition);
-        if (condition == null) {
-            throw new BadRequestAlertException("Condition inválido", ENTITY_NAME, "conditioninvalid");
-        }
-        record.setCondition(condition);
-        record.setDeltaT(payload.deltaT);
-        record.setPeriodicity(payload.periodicity);
-        record.setDeadlineExecution(parseLocalDate(payload.deadlineExecution));
-        record.setNextMonitoring(parseLocalDate(payload.nextMonitoring));
-        record.setRecommendations(payload.recommendations);
-        record.setFinished(payload.finished != null ? payload.finished : Boolean.FALSE);
-        record.setPlant(plant);
-        record.setEquipment(equipment);
-        record.setComponent(component);
-        record.setRoute(route);
-        record.setCreatedBy(createdBy);
-        record.setFinishedBy(finishedBy);
-        record.setThermogram(thermogram);
-        record.setThermogramRef(thermogramRef);
-
-        record = thermographicInspectionRecordRepository.save(record);
-
-        return ResponseEntity.created(new URI("/api/thermographic-inspection-records/" + record.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME,
-                        record.getId().toString()))
-                .body(record);
     }
 
     /**
@@ -210,19 +102,18 @@ public class ThermographicInspectionRecordResource {
      */
     @PostMapping("")
     public ResponseEntity<ThermographicInspectionRecord> createThermographicInspectionRecord(
-            @Valid @RequestBody ThermographicInspectionRecord thermographicInspectionRecord) throws URISyntaxException {
+        @Valid @RequestBody ThermographicInspectionRecord thermographicInspectionRecord
+    ) throws URISyntaxException {
         LOG.debug("REST request to save ThermographicInspectionRecord : {}", thermographicInspectionRecord);
         if (thermographicInspectionRecord.getId() != null) {
-            throw new BadRequestAlertException("A new thermographicInspectionRecord cannot already have an ID",
-                    ENTITY_NAME, "idexists");
+            throw new BadRequestAlertException("A new thermographicInspectionRecord cannot already have an ID", ENTITY_NAME, "idexists");
         }
         thermographicInspectionRecord = thermographicInspectionRecordRepository.save(thermographicInspectionRecord);
-        return ResponseEntity
-                .created(new URI("/api/thermographic-inspection-records/" + thermographicInspectionRecord.getId()))
-                .headers(
-                        HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME,
-                                thermographicInspectionRecord.getId().toString()))
-                .body(thermographicInspectionRecord);
+        return ResponseEntity.created(new URI("/api/thermographic-inspection-records/" + thermographicInspectionRecord.getId()))
+            .headers(
+                HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, thermographicInspectionRecord.getId().toString())
+            )
+            .body(thermographicInspectionRecord);
     }
 
     /**
@@ -243,8 +134,9 @@ public class ThermographicInspectionRecordResource {
      */
     @PutMapping("/{id}")
     public ResponseEntity<ThermographicInspectionRecord> updateThermographicInspectionRecord(
-            @PathVariable(value = "id", required = false) final UUID id,
-            @Valid @RequestBody ThermographicInspectionRecord thermographicInspectionRecord) throws URISyntaxException {
+        @PathVariable(value = "id", required = false) final UUID id,
+        @Valid @RequestBody ThermographicInspectionRecord thermographicInspectionRecord
+    ) throws URISyntaxException {
         LOG.debug("REST request to update ThermographicInspectionRecord : {}, {}", id, thermographicInspectionRecord);
         if (thermographicInspectionRecord.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -259,10 +151,10 @@ public class ThermographicInspectionRecordResource {
 
         thermographicInspectionRecord = thermographicInspectionRecordRepository.save(thermographicInspectionRecord);
         return ResponseEntity.ok()
-                .headers(
-                        HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME,
-                                thermographicInspectionRecord.getId().toString()))
-                .body(thermographicInspectionRecord);
+            .headers(
+                HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, thermographicInspectionRecord.getId().toString())
+            )
+            .body(thermographicInspectionRecord);
     }
 
     /**
@@ -286,11 +178,10 @@ public class ThermographicInspectionRecordResource {
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<ThermographicInspectionRecord> partialUpdateThermographicInspectionRecord(
-            @PathVariable(value = "id", required = false) final UUID id,
-            @NotNull @RequestBody ThermographicInspectionRecord thermographicInspectionRecord)
-            throws URISyntaxException {
-        LOG.debug("REST request to partial update ThermographicInspectionRecord partially : {}, {}", id,
-                thermographicInspectionRecord);
+        @PathVariable(value = "id", required = false) final UUID id,
+        @NotNull @RequestBody ThermographicInspectionRecord thermographicInspectionRecord
+    ) throws URISyntaxException {
+        LOG.debug("REST request to partial update ThermographicInspectionRecord partially : {}, {}", id, thermographicInspectionRecord);
         if (thermographicInspectionRecord.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -303,65 +194,56 @@ public class ThermographicInspectionRecordResource {
         }
 
         Optional<ThermographicInspectionRecord> result = thermographicInspectionRecordRepository
-                .findById(thermographicInspectionRecord.getId())
-                .map(existingThermographicInspectionRecord -> {
-                    if (thermographicInspectionRecord.getName() != null) {
-                        existingThermographicInspectionRecord.setName(thermographicInspectionRecord.getName());
-                    }
-                    if (thermographicInspectionRecord.getType() != null) {
-                        existingThermographicInspectionRecord.setType(thermographicInspectionRecord.getType());
-                    }
-                    if (thermographicInspectionRecord.getServiceOrder() != null) {
-                        existingThermographicInspectionRecord
-                                .setServiceOrder(thermographicInspectionRecord.getServiceOrder());
-                    }
-                    if (thermographicInspectionRecord.getCreatedAt() != null) {
-                        existingThermographicInspectionRecord
-                                .setCreatedAt(thermographicInspectionRecord.getCreatedAt());
-                    }
-                    if (thermographicInspectionRecord.getAnalysisDescription() != null) {
-                        existingThermographicInspectionRecord
-                                .setAnalysisDescription(thermographicInspectionRecord.getAnalysisDescription());
-                    }
-                    if (thermographicInspectionRecord.getCondition() != null) {
-                        existingThermographicInspectionRecord
-                                .setCondition(thermographicInspectionRecord.getCondition());
-                    }
-                    if (thermographicInspectionRecord.getDeltaT() != null) {
-                        existingThermographicInspectionRecord.setDeltaT(thermographicInspectionRecord.getDeltaT());
-                    }
-                    if (thermographicInspectionRecord.getPeriodicity() != null) {
-                        existingThermographicInspectionRecord
-                                .setPeriodicity(thermographicInspectionRecord.getPeriodicity());
-                    }
-                    if (thermographicInspectionRecord.getDeadlineExecution() != null) {
-                        existingThermographicInspectionRecord
-                                .setDeadlineExecution(thermographicInspectionRecord.getDeadlineExecution());
-                    }
-                    if (thermographicInspectionRecord.getNextMonitoring() != null) {
-                        existingThermographicInspectionRecord
-                                .setNextMonitoring(thermographicInspectionRecord.getNextMonitoring());
-                    }
-                    if (thermographicInspectionRecord.getRecommendations() != null) {
-                        existingThermographicInspectionRecord
-                                .setRecommendations(thermographicInspectionRecord.getRecommendations());
-                    }
-                    if (thermographicInspectionRecord.getFinished() != null) {
-                        existingThermographicInspectionRecord.setFinished(thermographicInspectionRecord.getFinished());
-                    }
-                    if (thermographicInspectionRecord.getFinishedAt() != null) {
-                        existingThermographicInspectionRecord
-                                .setFinishedAt(thermographicInspectionRecord.getFinishedAt());
-                    }
+            .findById(thermographicInspectionRecord.getId())
+            .map(existingThermographicInspectionRecord -> {
+                if (thermographicInspectionRecord.getName() != null) {
+                    existingThermographicInspectionRecord.setName(thermographicInspectionRecord.getName());
+                }
+                if (thermographicInspectionRecord.getType() != null) {
+                    existingThermographicInspectionRecord.setType(thermographicInspectionRecord.getType());
+                }
+                if (thermographicInspectionRecord.getServiceOrder() != null) {
+                    existingThermographicInspectionRecord.setServiceOrder(thermographicInspectionRecord.getServiceOrder());
+                }
+                if (thermographicInspectionRecord.getCreatedAt() != null) {
+                    existingThermographicInspectionRecord.setCreatedAt(thermographicInspectionRecord.getCreatedAt());
+                }
+                if (thermographicInspectionRecord.getAnalysisDescription() != null) {
+                    existingThermographicInspectionRecord.setAnalysisDescription(thermographicInspectionRecord.getAnalysisDescription());
+                }
+                if (thermographicInspectionRecord.getCondition() != null) {
+                    existingThermographicInspectionRecord.setCondition(thermographicInspectionRecord.getCondition());
+                }
+                if (thermographicInspectionRecord.getDeltaT() != null) {
+                    existingThermographicInspectionRecord.setDeltaT(thermographicInspectionRecord.getDeltaT());
+                }
+                if (thermographicInspectionRecord.getPeriodicity() != null) {
+                    existingThermographicInspectionRecord.setPeriodicity(thermographicInspectionRecord.getPeriodicity());
+                }
+                if (thermographicInspectionRecord.getDeadlineExecution() != null) {
+                    existingThermographicInspectionRecord.setDeadlineExecution(thermographicInspectionRecord.getDeadlineExecution());
+                }
+                if (thermographicInspectionRecord.getNextMonitoring() != null) {
+                    existingThermographicInspectionRecord.setNextMonitoring(thermographicInspectionRecord.getNextMonitoring());
+                }
+                if (thermographicInspectionRecord.getRecommendations() != null) {
+                    existingThermographicInspectionRecord.setRecommendations(thermographicInspectionRecord.getRecommendations());
+                }
+                if (thermographicInspectionRecord.getFinished() != null) {
+                    existingThermographicInspectionRecord.setFinished(thermographicInspectionRecord.getFinished());
+                }
+                if (thermographicInspectionRecord.getFinishedAt() != null) {
+                    existingThermographicInspectionRecord.setFinishedAt(thermographicInspectionRecord.getFinishedAt());
+                }
 
-                    return existingThermographicInspectionRecord;
-                })
-                .map(thermographicInspectionRecordRepository::save);
+                return existingThermographicInspectionRecord;
+            })
+            .map(thermographicInspectionRecordRepository::save);
 
         return ResponseUtil.wrapOrNotFound(
-                result,
-                HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME,
-                        thermographicInspectionRecord.getId().toString()));
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, thermographicInspectionRecord.getId().toString())
+        );
     }
 
     /**
@@ -389,8 +271,7 @@ public class ThermographicInspectionRecordResource {
     @GetMapping("/{id}")
     public ResponseEntity<ThermographicInspectionRecord> getThermographicInspectionRecord(@PathVariable("id") UUID id) {
         LOG.debug("REST request to get ThermographicInspectionRecord : {}", id);
-        Optional<ThermographicInspectionRecord> thermographicInspectionRecord = thermographicInspectionRecordRepository
-                .findById(id);
+        Optional<ThermographicInspectionRecord> thermographicInspectionRecord = thermographicInspectionRecordRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(thermographicInspectionRecord);
     }
 
@@ -406,179 +287,291 @@ public class ThermographicInspectionRecordResource {
         LOG.debug("REST request to delete ThermographicInspectionRecord : {}", id);
         thermographicInspectionRecordRepository.deleteById(id);
         return ResponseEntity.noContent()
-                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-                .build();
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
     }
 
-    private Thermogram buildThermogram(
-            ThermographicInspectionRecordCreateDTO.ThermogramDTO dto,
-            Equipment equipment,
-            UserInfo createdBy) {
-        if (dto == null) {
+    /**
+     * {@code POST  /thermographic-inspection-records/actions/create} : Create a new
+     * thermographicInspectionRecord from payload.
+     *
+     * @param payload the thermographicInspectionRecord to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new thermographicInspectionRecord, or with status
+     *         {@code 400 (Bad Request)} if the payload is invalid.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/actions/create")
+    public ResponseEntity<ThermographicInspectionRecord> createThermographicInspectionRecordFromPayload(
+        @RequestBody ThermographicInspectionRecord payload
+    ) throws URISyntaxException {
+        LOG.debug("REST request to create ThermographicInspectionRecord from payload");
+
+        if (payload == null) {
+            throw new BadRequestAlertException("Payload inválido", ENTITY_NAME, "payloadnull");
+        }
+        if (payload.getEquipment() == null || payload.getEquipment().getId() == null) {
+            throw new BadRequestAlertException("Equipment obrigatório", ENTITY_NAME, "equipmentnull");
+        }
+        if (payload.getPlant() == null || payload.getPlant().getId() == null) {
+            throw new BadRequestAlertException("Plant obrigatória", ENTITY_NAME, "plantnull");
+        }
+        if (payload.getCreatedBy() == null || payload.getCreatedBy().getId() == null) {
+            throw new BadRequestAlertException("CreatedBy obrigatório", ENTITY_NAME, "createdbynull");
+        }
+        if (payload.getThermogram() == null) {
+            throw new BadRequestAlertException("Thermogram obrigatório", ENTITY_NAME, "thermogramnull");
+        }
+
+        Equipment equipment = equipmentRepository
+            .findById(payload.getEquipment().getId())
+            .orElseThrow(() -> new BadRequestAlertException("Equipment não encontrado", ENTITY_NAME, "equipmentnotfound"));
+
+        Plant plant = plantRepository
+            .findById(payload.getPlant().getId())
+            .orElseThrow(() -> new BadRequestAlertException("Plant não encontrada", ENTITY_NAME, "plantnotfound"));
+
+        UserInfo createdBy = userInfoRepository
+            .findById(payload.getCreatedBy().getId())
+            .orElseThrow(() -> new BadRequestAlertException("UserInfo não encontrado", ENTITY_NAME, "createdbynotfound"));
+
+        UserInfo finishedBy = createdBy;
+        if (payload.getFinishedBy() != null && payload.getFinishedBy().getId() != null) {
+            finishedBy = userInfoRepository
+                .findById(payload.getFinishedBy().getId())
+                .orElseThrow(() -> new BadRequestAlertException("UserInfo finishedBy não encontrado", ENTITY_NAME, "finishedbynotfound"));
+        }
+
+        InspectionRecord route = null;
+        if (payload.getRoute() != null && payload.getRoute().getId() != null) {
+            String routeId = payload.getRoute().getId().toString();
+            if (!"-1".equals(routeId)) {
+                route = inspectionRecordRepository
+                    .findById(payload.getRoute().getId())
+                    .orElseThrow(() -> new BadRequestAlertException("InspectionRecord não encontrado", ENTITY_NAME, "routenotfound"));
+            }
+        }
+
+        EquipmentComponent component = null;
+        if (payload.getComponent() != null && payload.getComponent().getId() != null) {
+            component = equipmentComponentRepository
+                .findById(payload.getComponent().getId())
+                .orElseThrow(() -> new BadRequestAlertException("Component não encontrado", ENTITY_NAME, "componentnotfound"));
+        }
+
+        Thermogram thermogram = processThermogram(payload.getThermogram(), equipment, createdBy);
+        Thermogram thermogramRef = processThermogramRef(payload.getThermogramRef(), thermogram, equipment, createdBy);
+
+        ThermographicInspectionRecord record = new ThermographicInspectionRecord();
+        record.setId(null);
+        record.setName(payload.getName());
+        record.setType(payload.getType());
+        record.setServiceOrder(payload.getServiceOrder());
+        record.setCreatedAt(payload.getCreatedAt() != null ? payload.getCreatedAt() : Instant.now());
+        record.setAnalysisDescription(payload.getAnalysisDescription());
+        record.setCondition(payload.getCondition());
+        record.setDeltaT(payload.getDeltaT());
+        record.setPeriodicity(payload.getPeriodicity());
+        record.setDeadlineExecution(payload.getDeadlineExecution());
+        record.setNextMonitoring(payload.getNextMonitoring());
+        record.setRecommendations(payload.getRecommendations());
+        record.setFinished(payload.getFinished() != null ? payload.getFinished() : Boolean.FALSE);
+        record.setPlant(plant);
+        record.setEquipment(equipment);
+        record.setComponent(component);
+        record.setRoute(route);
+        record.setCreatedBy(createdBy);
+        record.setFinishedBy(finishedBy);
+        record.setThermogram(thermogram);
+        record.setThermogramRef(thermogramRef);
+
+        record = thermographicInspectionRecordRepository.save(record);
+
+        // Popular ROIs nos thermograms antes de retornar
+        populateThermogramRois(record.getThermogram());
+        populateThermogramRois(record.getThermogramRef());
+
+        return ResponseEntity.created(new URI("/api/thermographic-inspection-records/" + record.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, record.getId().toString()))
+            .body(record);
+    }
+
+    private Thermogram processThermogram(Thermogram thermogramPayload, Equipment equipment, UserInfo createdBy) {
+        if (thermogramPayload == null) {
             return null;
         }
 
+        // Guardar os ROIs antes de processar o thermogram
+        List<ROI> roisFromPayload = thermogramPayload.getRois();
+
+        LOG.debug("Processing Thermogram with {} ROIs", roisFromPayload != null ? roisFromPayload.size() : 0);
+
         Thermogram thermogram = null;
-        if (dto.id != null) {
-            thermogram = thermogramRepository.findById(dto.id).orElse(null);
+        if (thermogramPayload.getId() != null) {
+            thermogram = thermogramRepository.findById(thermogramPayload.getId()).orElse(null);
+            LOG.debug("Found existing Thermogram with ID: {}", thermogramPayload.getId());
         }
         if (thermogram == null) {
             thermogram = new Thermogram();
+            LOG.debug("Creating new Thermogram");
         }
 
-        if (dto.imagePath != null) {
-            thermogram.setImagePath(dto.imagePath);
+        if (thermogramPayload.getImagePath() != null) {
+            thermogram.setImagePath(thermogramPayload.getImagePath());
         }
-        if (dto.audioPath != null) {
-            thermogram.setAudioPath(dto.audioPath);
+        if (thermogramPayload.getAudioPath() != null) {
+            thermogram.setAudioPath(thermogramPayload.getAudioPath());
         }
-        if (dto.imageRefPath != null) {
-            thermogram.setImageRefPath(dto.imageRefPath);
+        if (thermogramPayload.getImageRefPath() != null) {
+            thermogram.setImageRefPath(thermogramPayload.getImageRefPath());
         }
-        if (dto.minTemp != null) {
-            thermogram.setMinTemp(dto.minTemp);
+        if (thermogramPayload.getMinTemp() != null) {
+            thermogram.setMinTemp(thermogramPayload.getMinTemp());
         }
-        if (dto.avgTemp != null) {
-            thermogram.setAvgTemp(dto.avgTemp);
+        if (thermogramPayload.getAvgTemp() != null) {
+            thermogram.setAvgTemp(thermogramPayload.getAvgTemp());
         }
-        if (dto.maxTemp != null) {
-            thermogram.setMaxTemp(dto.maxTemp);
+        if (thermogramPayload.getMaxTemp() != null) {
+            thermogram.setMaxTemp(thermogramPayload.getMaxTemp());
         }
-        if (dto.emissivity != null) {
-            thermogram.setEmissivity(dto.emissivity);
+        if (thermogramPayload.getEmissivity() != null) {
+            thermogram.setEmissivity(thermogramPayload.getEmissivity());
         }
-        if (dto.subjectDistance != null) {
-            thermogram.setSubjectDistance(dto.subjectDistance);
+        if (thermogramPayload.getSubjectDistance() != null) {
+            thermogram.setSubjectDistance(thermogramPayload.getSubjectDistance());
         }
-        if (dto.atmosphericTemp != null) {
-            thermogram.setAtmosphericTemp(dto.atmosphericTemp);
+        if (thermogramPayload.getAtmosphericTemp() != null) {
+            thermogram.setAtmosphericTemp(thermogramPayload.getAtmosphericTemp());
         }
-        if (dto.reflectedTemp != null) {
-            thermogram.setReflectedTemp(dto.reflectedTemp);
+        if (thermogramPayload.getReflectedTemp() != null) {
+            thermogram.setReflectedTemp(thermogramPayload.getReflectedTemp());
         }
-        if (dto.relativeHumidity != null) {
-            thermogram.setRelativeHumidity(dto.relativeHumidity);
+        if (thermogramPayload.getRelativeHumidity() != null) {
+            thermogram.setRelativeHumidity(thermogramPayload.getRelativeHumidity());
         }
-        if (dto.cameraLens != null) {
-            thermogram.setCameraLens(dto.cameraLens);
+        if (thermogramPayload.getCameraLens() != null) {
+            thermogram.setCameraLens(thermogramPayload.getCameraLens());
         }
-        if (dto.cameraModel != null) {
-            thermogram.setCameraModel(dto.cameraModel);
+        if (thermogramPayload.getCameraModel() != null) {
+            thermogram.setCameraModel(thermogramPayload.getCameraModel());
         }
-        if (dto.imageResolution != null) {
-            thermogram.setImageResolution(dto.imageResolution);
+        if (thermogramPayload.getImageResolution() != null) {
+            thermogram.setImageResolution(thermogramPayload.getImageResolution());
         }
-        if (dto.selectedRoiId != null) {
-            thermogram.setSelectedRoiId(dto.selectedRoiId);
+        if (thermogramPayload.getSelectedRoiId() != null) {
+            thermogram.setSelectedRoiId(thermogramPayload.getSelectedRoiId());
         }
-        if (dto.maxTempRoi != null) {
-            thermogram.setMaxTempRoi(dto.maxTempRoi);
+        if (thermogramPayload.getMaxTempRoi() != null) {
+            thermogram.setMaxTempRoi(thermogramPayload.getMaxTempRoi());
         }
-        if (dto.createdAt != null) {
-            thermogram.setCreatedAt(parseInstant(dto.createdAt));
+        if (thermogramPayload.getCreatedAt() != null) {
+            thermogram.setCreatedAt(thermogramPayload.getCreatedAt());
         }
-        if (dto.latitude != null) {
-            thermogram.setLatitude(dto.latitude);
+        if (thermogramPayload.getLatitude() != null) {
+            thermogram.setLatitude(thermogramPayload.getLatitude());
         }
-        if (dto.longitude != null) {
-            thermogram.setLongitude(dto.longitude);
+        if (thermogramPayload.getLongitude() != null) {
+            thermogram.setLongitude(thermogramPayload.getLongitude());
         }
 
         thermogram.setEquipment(equipment);
         thermogram.setCreatedBy(createdBy);
 
+        // CRITICAL: Salvar o Thermogram ANTES de processar os ROIs
         Thermogram saved = thermogramRepository.save(thermogram);
-        saveRois(dto, saved);
+        thermogramRepository.flush(); // Garantir que o ID foi gerado e commitado
+
+        LOG.debug("Thermogram saved with ID: {}", saved.getId());
+
+        // Processar ROIs do payload SOMENTE APÓS o Thermogram ter sido salvo com
+        // sucesso
+        if (roisFromPayload != null && !roisFromPayload.isEmpty()) {
+            LOG.debug("Processing {} ROIs for Thermogram {}", roisFromPayload.size(), saved.getId());
+            processRois(roisFromPayload, saved);
+        } else {
+            LOG.debug("No ROIs to process for Thermogram {}", saved.getId());
+        }
+
         return saved;
     }
 
-    private Thermogram buildThermogramRef(
-            ThermographicInspectionRecordCreateDTO.ThermogramDTO dto,
-            Thermogram mainThermogram,
-            Equipment equipment,
-            UserInfo createdBy) {
-        if (dto == null) {
+    private Thermogram processThermogramRef(
+        Thermogram thermogramRefPayload,
+        Thermogram mainThermogram,
+        Equipment equipment,
+        UserInfo createdBy
+    ) {
+        if (thermogramRefPayload == null) {
             return null;
         }
-        if (mainThermogram != null && dto.id != null && dto.id.equals(mainThermogram.getId())) {
+        if (mainThermogram != null && thermogramRefPayload.getId() != null && thermogramRefPayload.getId().equals(mainThermogram.getId())) {
             return mainThermogram;
         }
-        return buildThermogram(dto, equipment, createdBy);
+        return processThermogram(thermogramRefPayload, equipment, createdBy);
     }
 
-    private void saveRois(ThermographicInspectionRecordCreateDTO.ThermogramDTO dto, Thermogram thermogram) {
-        if (dto == null || dto.rois == null || dto.rois.isEmpty()) {
+    private void processRois(List<ROI> roisPayload, Thermogram savedThermogram) {
+        if (roisPayload == null || roisPayload.isEmpty()) {
+            LOG.debug("No ROIs in payload");
             return;
         }
-        for (ThermographicInspectionRecordCreateDTO.RoiDTO roiDto : dto.rois) {
-            if (roiDto == null) {
+
+        if (savedThermogram == null || savedThermogram.getId() == null) {
+            LOG.error("Cannot save ROIs: Thermogram not saved or ID is null");
+            throw new BadRequestAlertException("Thermogram deve ser salvo antes dos ROIs", ENTITY_NAME, "thermogramnotsaved");
+        }
+
+        LOG.debug("Saving {} ROIs for Thermogram ID: {}", roisPayload.size(), savedThermogram.getId());
+
+        for (ROI roiPayload : roisPayload) {
+            if (roiPayload == null) {
+                LOG.warn("Skipping null ROI");
                 continue;
             }
-            ROI roi = null;
-            if (roiDto.id != null) {
-                roi = roiRepository.findById(roiDto.id).orElse(null);
+
+            // Validar campos obrigatórios
+            if (roiPayload.getType() == null || roiPayload.getType().trim().isEmpty()) {
+                LOG.warn("Skipping ROI with null/empty type");
+                continue;
             }
-            if (roi == null) {
-                roi = new ROI();
+            if (roiPayload.getLabel() == null || roiPayload.getLabel().trim().isEmpty()) {
+                LOG.warn("Skipping ROI with null/empty label");
+                continue;
             }
-            if (roiDto.type != null) {
-                roi.setType(roiDto.type);
+            if (roiPayload.getMaxTemp() == null) {
+                LOG.warn("Skipping ROI {} with null maxTemp", roiPayload.getLabel());
+                continue;
             }
-            if (roiDto.label != null) {
-                roi.setLabel(roiDto.label);
+
+            ROI roi = new ROI();
+            roi.setType(roiPayload.getType());
+            roi.setLabel(roiPayload.getLabel());
+            roi.setMaxTemp(roiPayload.getMaxTemp());
+            roi.setThermogram(savedThermogram);
+
+            try {
+                ROI savedRoi = roiRepository.save(roi);
+                LOG.debug(
+                    "✓ Saved ROI: {} - {} with maxTemp: {} for Thermogram: {}",
+                    savedRoi.getId(),
+                    savedRoi.getLabel(),
+                    savedRoi.getMaxTemp(),
+                    savedThermogram.getId()
+                );
+            } catch (Exception e) {
+                LOG.error("✗ Failed to save ROI {} for Thermogram {}: {}", roiPayload.getLabel(), savedThermogram.getId(), e.getMessage());
+                throw new BadRequestAlertException("Erro ao salvar ROI: " + e.getMessage(), ENTITY_NAME, "roisaveerror");
             }
-            if (roiDto.maxTemp != null) {
-                roi.setMaxTemp(roiDto.maxTemp);
-            }
-            roi.setThermogram(thermogram);
-            roiRepository.save(roi);
         }
+
+        roiRepository.flush(); // Garantir commit
+        LOG.debug("All ROIs saved and flushed for Thermogram {}", savedThermogram.getId());
     }
 
-    private ThermographicInspectionRecordType parseRecordType(String value) {
-        if (value == null) {
-            return null;
-        }
-        try {
-            return ThermographicInspectionRecordType.valueOf(value);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-    }
-
-    private ConditionType parseCondition(String value) {
-        if (value == null) {
-            return null;
-        }
-        try {
-            return ConditionType.valueOf(value);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-    }
-
-    private Instant parseInstant(String value) {
-        if (value == null || value.isBlank()) {
-            return Instant.now();
-        }
-        try {
-            return Instant.parse(value);
-        } catch (Exception e) {
-            throw new BadRequestAlertException("createdAt inválido", ENTITY_NAME, "createdatinvalid");
-        }
-    }
-
-    private LocalDate parseLocalDate(String value) {
-        if (value == null || value.isBlank()) {
-            return null;
-        }
-        try {
-            if (value.contains("T")) {
-                return Instant.parse(value).atZone(ZoneOffset.UTC).toLocalDate();
-            }
-            return LocalDate.parse(value);
-        } catch (Exception e) {
-            throw new BadRequestAlertException("Data inválida", ENTITY_NAME, "dateinvalid");
+    private void populateThermogramRois(Thermogram thermogram) {
+        if (thermogram != null && thermogram.getId() != null) {
+            List<ROI> rois = roiRepository.findByThermogramId(thermogram.getId());
+            thermogram.setRois(rois);
         }
     }
 }

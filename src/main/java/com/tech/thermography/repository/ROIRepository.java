@@ -4,7 +4,7 @@ import com.tech.thermography.domain.ROI;
 import com.tech.thermography.domain.Thermogram;
 import java.util.List;
 import java.util.UUID;
-import org.springframework.data.jpa.repository.*;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
