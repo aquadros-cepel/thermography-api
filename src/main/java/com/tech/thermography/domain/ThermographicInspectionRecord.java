@@ -113,11 +113,11 @@ public class ThermographicInspectionRecord implements Serializable {
 
     @ManyToOne(optional = false, cascade = CascadeType.REMOVE)
     @NotNull
-    @JsonIgnoreProperties(value = { "equipment", "createdBy", "rois" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "equipment", "createdBy" }, allowSetters = true)
     private Thermogram thermogram;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JsonIgnoreProperties(value = { "equipment", "createdBy", "rois" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "equipment", "createdBy" }, allowSetters = true)
     private Thermogram thermogramRef;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
