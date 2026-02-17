@@ -125,6 +125,7 @@ entity EquipmentComponentTemperatureLimits{
 entity RiskPeriodicityDeadline {
     id UUID required
     name String
+    description String
     deadline Integer
     deadlineUnit DatetimeUnit
     periodicity Integer
