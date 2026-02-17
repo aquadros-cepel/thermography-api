@@ -5,6 +5,7 @@ import com.tech.thermography.domain.EquipmentComponent;
 import com.tech.thermography.domain.EquipmentComponentTemperatureLimits;
 import com.tech.thermography.domain.EquipmentGroup;
 import com.tech.thermography.domain.Plant;
+import com.tech.thermography.domain.RiskPeriodicityDeadline;
 import com.tech.thermography.domain.enumeration.EquipmentType;
 import com.tech.thermography.domain.enumeration.PhaseType;
 import com.tech.thermography.repository.EquipmentComponentRepository;
@@ -12,6 +13,7 @@ import com.tech.thermography.repository.EquipmentComponentTemperatureLimitsRepos
 import com.tech.thermography.repository.EquipmentGroupRepository;
 import com.tech.thermography.repository.EquipmentRepository;
 import com.tech.thermography.repository.PlantRepository;
+import com.tech.thermography.repository.RiskPeriodicityDeadlineRepository;
 import com.tech.thermography.web.rest.NotFoundException;
 import com.tech.thermography.web.rest.dto.ApiUploadedFileMetaDTO;
 import com.tech.thermography.web.rest.dto.EquipmentRowDataDTO;
@@ -68,19 +70,22 @@ public class ImportDataService {
     private final EquipmentGroupRepository equipmentGroupRepository;
     private final EquipmentComponentRepository equipmentComponentRepository;
     private final EquipmentComponentTemperatureLimitsRepository equipmentComponentTemperatureLimitsRepository;
+    private final RiskPeriodicityDeadlineRepository riskPeriodicityDeadlineRepository;
 
     public ImportDataService(
         PlantRepository plantRepository,
         EquipmentRepository equipmentRepository,
         EquipmentGroupRepository equipmentGroupRepository,
         EquipmentComponentRepository equipmentComponentRepository,
-        EquipmentComponentTemperatureLimitsRepository equipmentComponentTemperatureLimitsRepository
+        EquipmentComponentTemperatureLimitsRepository equipmentComponentTemperatureLimitsRepository,
+        RiskPeriodicityDeadlineRepository riskPeriodicityDeadlineRepository
     ) {
         this.plantRepository = plantRepository;
         this.equipmentRepository = equipmentRepository;
         this.equipmentGroupRepository = equipmentGroupRepository;
         this.equipmentComponentRepository = equipmentComponentRepository;
         this.equipmentComponentTemperatureLimitsRepository = equipmentComponentTemperatureLimitsRepository;
+        this.riskPeriodicityDeadlineRepository = riskPeriodicityDeadlineRepository;
     }
 
     /**
@@ -1050,5 +1055,72 @@ public class ImportDataService {
         }
 
         return response;
+    }
+
+    // --- RISKS CSV IMPORT ---
+    /**
+     * Import risks CSV into RiskPeriodicityDeadline table.
+     * Expected CSV header:
+     * name;description;deadline;deadline_unit;periodicity;periodicity_unit;recommendations
+     */
+    public String importRisks(InputStream inputStream) {
+        org.slf4j.LoggerFactory.getLogger(ImportDataService.class).info("Starting import of risks from uploaded file");
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            return importRisksFromReader(reader);
+        } catch (IOException e) {
+            org.slf4j.LoggerFactory.getLogger(ImportDataService.class).error("Error reading risks CSV", e);
+            throw new RuntimeException("Failed to import risks from uploaded file", e);
+        }
+    }
+
+    private String importRisksFromReader(BufferedReader reader) throws IOException {
+        String line;
+        boolean firstLine = true;
+        int imported = 0;
+        while ((line = reader.readLine()) != null) {
+            if (firstLine) {
+                firstLine = false;
+                continue;
+            }
+            String[] fields = line.split(";");
+            if (fields.length < 7) {
+                // skip invalid
+                continue;
+            }
+            RiskPeriodicityDeadline r = new RiskPeriodicityDeadline();
+            r.setName(fields[0].trim());
+            r.setDescription(fields[1].trim());
+            r.setDeadline(parseInteger(fields[2].trim()));
+            r.setDeadlineUnit(parseDatetimeUnit(fields[3].trim()));
+            r.setPeriodicity(parseInteger(fields[4].trim()));
+            r.setPeriodicityUnit(parseDatetimeUnit(fields[5].trim()));
+            r.setRecommendations(fields[6].trim());
+            riskPeriodicityDeadlineRepository.save(r);
+            imported++;
+        }
+        return "Successfully imported " + imported + " risks";
+    }
+
+    private Integer parseInteger(String v) {
+        if (v == null) return null;
+        String s = v.trim();
+        if (s.isEmpty() || "NULL".equalsIgnoreCase(s) || "-1".equals(s)) return null;
+        try {
+            return Integer.valueOf(s);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private com.tech.thermography.domain.enumeration.DatetimeUnit parseDatetimeUnit(String v) {
+        if (v == null) return null;
+        String s = v.trim().toLowerCase();
+        if (s.isEmpty() || "null".equals(s) || s.contains("defin") || s.equals("n/a")) return null;
+        if (s.contains("ano") || s.contains("year")) return com.tech.thermography.domain.enumeration.DatetimeUnit.YEAR;
+        if (s.contains("mes") || s.contains("month")) return com.tech.thermography.domain.enumeration.DatetimeUnit.MONTH;
+        if (s.contains("semana") || s.contains("week")) return com.tech.thermography.domain.enumeration.DatetimeUnit.WEEK;
+        if (s.contains("dia") || s.contains("day")) return com.tech.thermography.domain.enumeration.DatetimeUnit.DAY;
+        if (s.contains("hora") || s.contains("hour")) return com.tech.thermography.domain.enumeration.DatetimeUnit.HOUR;
+        return null;
     }
 }

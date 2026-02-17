@@ -274,4 +274,35 @@ public class ImportDataResource {
         ImportResponseDTO response = importDataService.importFiles(request);
         return ResponseEntity.ok(response);
     }
+
+    /**
+     * {@code POST /import/risks} : Import risks from an uploaded CSV file.
+     *
+     * @param file the uploaded CSV file
+     * @return the ResponseEntity with status 200 (OK) and the import result message
+     */
+    @PostMapping("/risks")
+    public ResponseEntity<String> importRisks(@RequestParam("file") MultipartFile file) {
+        LOG.debug("REST request to import risks from uploaded file: {}", file.getOriginalFilename());
+
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("Uploaded file is empty");
+        }
+
+        String filename = file.getOriginalFilename();
+        if (filename == null || !filename.toLowerCase().endsWith(".csv")) {
+            return ResponseEntity.badRequest().body("Only CSV files are allowed");
+        }
+
+        try {
+            String result = importDataService.importRisks(file.getInputStream());
+            return ResponseEntity.ok(result);
+        } catch (IOException e) {
+            LOG.error("Error processing uploaded file", e);
+            return ResponseEntity.internalServerError().body("Error processing uploaded file: " + e.getMessage());
+        } catch (RuntimeException e) {
+            LOG.error("Error importing risks", e);
+            return ResponseEntity.badRequest().body("Error importing risks: " + e.getMessage());
+        }
+    }
 }
