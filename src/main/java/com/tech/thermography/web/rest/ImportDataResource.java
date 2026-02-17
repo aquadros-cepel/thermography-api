@@ -106,7 +106,7 @@ public class ImportDataResource {
      * @param file the uploaded CSV file
      * @return the ResponseEntity with status 200 (OK) and the import result message
      */
-    @PostMapping("/")
+    @PostMapping("/components")
     public ResponseEntity<String> importComponents(@RequestParam("file") MultipartFile file) {
         LOG.debug("REST request to import components from uploaded file: {}", file.getOriginalFilename());
 

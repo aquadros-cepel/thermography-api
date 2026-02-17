@@ -36,7 +36,7 @@ VALUES
     (
         nextval('jhi_user_id_seq'),
         'admin',
-        '$2a$10$1N6pQ0L0ePQ0Kq0lG3N7UOby8xZAWZ35nZz5d.6Q1kBe4PvV5g7M6',
+        '$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC',
         'admin@localhost',
         true,
         'system',
