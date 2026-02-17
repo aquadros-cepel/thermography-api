@@ -105,6 +105,13 @@ export const RiskPeriodicityDeadlineUpdate = () => {
                 type="text"
               />
               <ValidatedField
+                label={translate('thermographyApiApp.riskPeriodicityDeadline.description')}
+                id="risk-periodicity-deadline-description"
+                name="description"
+                data-cy="description"
+                type="text"
+              />
+              <ValidatedField
                 label={translate('thermographyApiApp.riskPeriodicityDeadline.deadline')}
                 id="risk-periodicity-deadline-deadline"
                 name="deadline"

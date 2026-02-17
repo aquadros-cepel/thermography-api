@@ -57,6 +57,7 @@ public class RiskPeriodicityDeadlineAsserts {
         assertThat(actual)
             .as("Verify RiskPeriodicityDeadline relevant properties")
             .satisfies(a -> assertThat(a.getName()).as("check name").isEqualTo(expected.getName()))
+            .satisfies(a -> assertThat(a.getDescription()).as("check description").isEqualTo(expected.getDescription()))
             .satisfies(a -> assertThat(a.getDeadline()).as("check deadline").isEqualTo(expected.getDeadline()))
             .satisfies(a -> assertThat(a.getDeadlineUnit()).as("check deadlineUnit").isEqualTo(expected.getDeadlineUnit()))
             .satisfies(a -> assertThat(a.getPeriodicity()).as("check periodicity").isEqualTo(expected.getPeriodicity()))

@@ -36,6 +36,9 @@ class RiskPeriodicityDeadlineResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+
     private static final Integer DEFAULT_DEADLINE = 1;
     private static final Integer UPDATED_DEADLINE = 2;
 
@@ -79,6 +82,7 @@ class RiskPeriodicityDeadlineResourceIT {
     public static RiskPeriodicityDeadline createEntity() {
         return new RiskPeriodicityDeadline()
             .name(DEFAULT_NAME)
+            .description(DEFAULT_DESCRIPTION)
             .deadline(DEFAULT_DEADLINE)
             .deadlineUnit(DEFAULT_DEADLINE_UNIT)
             .periodicity(DEFAULT_PERIODICITY)
@@ -95,6 +99,7 @@ class RiskPeriodicityDeadlineResourceIT {
     public static RiskPeriodicityDeadline createUpdatedEntity() {
         return new RiskPeriodicityDeadline()
             .name(UPDATED_NAME)
+            .description(UPDATED_DESCRIPTION)
             .deadline(UPDATED_DEADLINE)
             .deadlineUnit(UPDATED_DEADLINE_UNIT)
             .periodicity(UPDATED_PERIODICITY)
@@ -172,6 +177,7 @@ class RiskPeriodicityDeadlineResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(riskPeriodicityDeadline.getId().toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].deadline").value(hasItem(DEFAULT_DEADLINE)))
             .andExpect(jsonPath("$.[*].deadlineUnit").value(hasItem(DEFAULT_DEADLINE_UNIT.toString())))
             .andExpect(jsonPath("$.[*].periodicity").value(hasItem(DEFAULT_PERIODICITY)))
@@ -192,6 +198,7 @@ class RiskPeriodicityDeadlineResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(riskPeriodicityDeadline.getId().toString()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.deadline").value(DEFAULT_DEADLINE))
             .andExpect(jsonPath("$.deadlineUnit").value(DEFAULT_DEADLINE_UNIT.toString()))
             .andExpect(jsonPath("$.periodicity").value(DEFAULT_PERIODICITY))
@@ -222,6 +229,7 @@ class RiskPeriodicityDeadlineResourceIT {
         em.detach(updatedRiskPeriodicityDeadline);
         updatedRiskPeriodicityDeadline
             .name(UPDATED_NAME)
+            .description(UPDATED_DESCRIPTION)
             .deadline(UPDATED_DEADLINE)
             .deadlineUnit(UPDATED_DEADLINE_UNIT)
             .periodicity(UPDATED_PERIODICITY)
@@ -307,9 +315,10 @@ class RiskPeriodicityDeadlineResourceIT {
         partialUpdatedRiskPeriodicityDeadline.setId(riskPeriodicityDeadline.getId());
 
         partialUpdatedRiskPeriodicityDeadline
+            .deadline(UPDATED_DEADLINE)
             .deadlineUnit(UPDATED_DEADLINE_UNIT)
-            .periodicityUnit(UPDATED_PERIODICITY_UNIT)
-            .recommendations(UPDATED_RECOMMENDATIONS);
+            .periodicity(UPDATED_PERIODICITY)
+            .periodicityUnit(UPDATED_PERIODICITY_UNIT);
 
         restRiskPeriodicityDeadlineMockMvc
             .perform(
@@ -342,6 +351,7 @@ class RiskPeriodicityDeadlineResourceIT {
 
         partialUpdatedRiskPeriodicityDeadline
             .name(UPDATED_NAME)
+            .description(UPDATED_DESCRIPTION)
             .deadline(UPDATED_DEADLINE)
             .deadlineUnit(UPDATED_DEADLINE_UNIT)
             .periodicity(UPDATED_PERIODICITY)

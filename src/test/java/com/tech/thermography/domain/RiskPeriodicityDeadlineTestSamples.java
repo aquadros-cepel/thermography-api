@@ -13,6 +13,7 @@ public class RiskPeriodicityDeadlineTestSamples {
         return new RiskPeriodicityDeadline()
             .id(UUID.fromString("23d8dc04-a48b-45d9-a01d-4b728f0ad4aa"))
             .name("name1")
+            .description("description1")
             .deadline(1)
             .periodicity(1)
             .recommendations("recommendations1");
@@ -22,6 +23,7 @@ public class RiskPeriodicityDeadlineTestSamples {
         return new RiskPeriodicityDeadline()
             .id(UUID.fromString("ad79f240-3727-46c3-b89f-2cf6ebd74367"))
             .name("name2")
+            .description("description2")
             .deadline(2)
             .periodicity(2)
             .recommendations("recommendations2");
@@ -31,6 +33,7 @@ public class RiskPeriodicityDeadlineTestSamples {
         return new RiskPeriodicityDeadline()
             .id(UUID.randomUUID())
             .name(UUID.randomUUID().toString())
+            .description(UUID.randomUUID().toString())
             .deadline(intCount.incrementAndGet())
             .periodicity(intCount.incrementAndGet())
             .recommendations(UUID.randomUUID().toString());

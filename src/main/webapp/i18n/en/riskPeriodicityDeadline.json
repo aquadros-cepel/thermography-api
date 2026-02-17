@@ -19,6 +19,7 @@
       },
       "id": "Id",
       "name": "Name",
+      "description": "Description",
       "deadline": "Deadline",
       "deadlineUnit": "Deadline Unit",
       "periodicity": "Periodicity",

@@ -125,12 +125,12 @@ entity EquipmentComponentTemperatureLimits{
 entity RiskPeriodicityDeadline {
     id UUID required
     name String
-    description String
+    description String maxlength(5000)
     deadline Integer
     deadlineUnit DatetimeUnit
     periodicity Integer
     periodicityUnit DatetimeUnit
-    recommendations String
+    recommendations String maxlength(5000)
 }
 entity RiskRecommendationTranslation {
     id UUID required

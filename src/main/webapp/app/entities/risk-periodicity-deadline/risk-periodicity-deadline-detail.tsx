@@ -38,6 +38,12 @@ export const RiskPeriodicityDeadlineDetail = () => {
           </dt>
           <dd>{riskPeriodicityDeadlineEntity.name}</dd>
           <dt>
+            <span id="description">
+              <Translate contentKey="thermographyApiApp.riskPeriodicityDeadline.description">Description</Translate>
+            </span>
+          </dt>
+          <dd>{riskPeriodicityDeadlineEntity.description}</dd>
+          <dt>
             <span id="deadline">
               <Translate contentKey="thermographyApiApp.riskPeriodicityDeadline.deadline">Deadline</Translate>
             </span>

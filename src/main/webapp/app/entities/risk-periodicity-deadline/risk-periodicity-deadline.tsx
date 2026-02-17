@@ -98,6 +98,10 @@ export const RiskPeriodicityDeadline = () => {
                   <Translate contentKey="thermographyApiApp.riskPeriodicityDeadline.name">Name</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('name')} />
                 </th>
+                <th className="hand" onClick={sort('description')}>
+                  <Translate contentKey="thermographyApiApp.riskPeriodicityDeadline.description">Description</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('description')} />
+                </th>
                 <th className="hand" onClick={sort('deadline')}>
                   <Translate contentKey="thermographyApiApp.riskPeriodicityDeadline.deadline">Deadline</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('deadline')} />
@@ -130,6 +134,7 @@ export const RiskPeriodicityDeadline = () => {
                     </Button>
                   </td>
                   <td>{riskPeriodicityDeadline.name}</td>
+                  <td>{riskPeriodicityDeadline.description}</td>
                   <td>{riskPeriodicityDeadline.deadline}</td>
                   <td>
                     <Translate contentKey={`thermographyApiApp.DatetimeUnit.${riskPeriodicityDeadline.deadlineUnit}`} />

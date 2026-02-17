@@ -1,7 +1,13 @@
 package com.tech.thermography.domain;
 
 import com.tech.thermography.domain.enumeration.DatetimeUnit;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.util.UUID;
 import org.hibernate.annotations.Cache;
@@ -26,6 +32,9 @@ public class RiskPeriodicityDeadline implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "description", length = 5000)
+    private String description;
+
     @Column(name = "deadline")
     private Integer deadline;
 
@@ -40,7 +49,7 @@ public class RiskPeriodicityDeadline implements Serializable {
     @Column(name = "periodicity_unit")
     private DatetimeUnit periodicityUnit;
 
-    @Column(name = "recommendations")
+    @Column(name = "recommendations", length = 5000)
     private String recommendations;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -69,6 +78,19 @@ public class RiskPeriodicityDeadline implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public RiskPeriodicityDeadline description(String description) {
+        this.setDescription(description);
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Integer getDeadline() {
@@ -163,6 +185,7 @@ public class RiskPeriodicityDeadline implements Serializable {
         return "RiskPeriodicityDeadline{" +
                 "id=" + getId() +
                 ", name='" + getName() + "'" +
+                ", description='" + getDescription() + "'" +
                 ", deadline=" + getDeadline() +
                 ", deadlineUnit='" + getDeadlineUnit() + "'" +
                 ", periodicity=" + getPeriodicity() +
