@@ -21,7 +21,6 @@ SET
 DEFAULT nextval
 ('jhi_user_id_seq');
 
-
 INSERT INTO jhi_user
     (
     id,
@@ -43,22 +42,6 @@ VALUES
         now()
 );
 
-
-
-
-INSERT INTO jhi_user_authority
-    (user_id, authority_name)
-SELECT id, 'ROLE_ADMIN'
-FROM jhi_user
-WHERE login = 'admin';
-
-INSERT INTO jhi_user_authority
-    (user_id, authority_name)
-SELECT id, 'ROLE_USER'
-FROM jhi_user
-WHERE login = 'admin';
-
-
 -- Insert UserInfo for admin user
 INSERT INTO user_info
     (
@@ -76,6 +59,19 @@ SELECT
     NULL
 FROM jhi_user u
 WHERE u.login = 'admin';
+
+INSERT INTO jhi_user_authority
+    (user_id, authority_name)
+SELECT id, 'ROLE_ADMIN'
+FROM jhi_user
+WHERE login = 'admin';
+
+INSERT INTO jhi_user_authority
+    (user_id, authority_name)
+SELECT id, 'ROLE_USER'
+FROM jhi_user
+WHERE login = 'admin';
+
 
 
 
