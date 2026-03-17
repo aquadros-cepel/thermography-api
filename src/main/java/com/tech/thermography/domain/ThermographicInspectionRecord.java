@@ -53,7 +53,7 @@ public class ThermographicInspectionRecord implements Serializable {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    @Column(name = "analysis_description")
+    @Column(name = "analysis_description", length = 5000)
     private String analysisDescription;
 
     @NotNull
@@ -74,7 +74,7 @@ public class ThermographicInspectionRecord implements Serializable {
     @Column(name = "next_monitoring")
     private LocalDate nextMonitoring;
 
-    @Column(name = "recommendations")
+    @Column(name = "recommendations", length = 5000)
     private String recommendations;
 
     @Column(name = "finished")
