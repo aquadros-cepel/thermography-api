@@ -25,6 +25,7 @@ INSERT INTO jhi_user
     (
     id,
     login,
+    first_name,
     password_hash,
     email,
     activated,
@@ -35,6 +36,7 @@ VALUES
     (
         nextval('jhi_user_id_seq'),
         'admin',
+        'Administrator',
         '$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC',
         'admin@localhost',
         true,

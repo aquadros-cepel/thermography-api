@@ -251,3 +251,15 @@ jhipster:
 # ===================================================================
 
 # application:
+
+# Increase multipart upload limits and Undertow post size to 10MB
+---
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+server:
+  undertow:
+    # max-http-post-size is in bytes; 10485760 == 10MB
+    max-http-post-size: 10485760

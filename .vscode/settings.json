@@ -36,5 +36,13 @@
   },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  // Use Java 21 runtime for the workspace (adjust path if different on your system)
+  "java.configuration.runtimes": [
+    {
+      "name": "JavaSE-21",
+      "path": "/usr/lib/jvm/java-21-openjdk-amd64",
+      "default": true
+    }
+  ]
 }

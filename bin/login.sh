@@ -2,7 +2,7 @@
 
 USERNAME="admin"
 PASSWORD="admin"
-SERVER="34.95.132.119"
+SERVER="34.39.196.181"
 #SERVER="localhost"
 
 TOKEN=$(curl -s -X POST http://${SERVER}:8081/api/authenticate \

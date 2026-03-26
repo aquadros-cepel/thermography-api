@@ -15,6 +15,7 @@ import com.tech.thermography.repository.EquipmentComponentTemperatureLimitsRepos
 import com.tech.thermography.repository.EquipmentGroupRepository;
 import com.tech.thermography.repository.EquipmentRepository;
 import com.tech.thermography.repository.PlantRepository;
+import com.tech.thermography.repository.RiskPeriodicityDeadlineRepository;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -44,6 +45,9 @@ class ImportDataServiceTest {
     @Mock
     private EquipmentComponentTemperatureLimitsRepository equipmentComponentTemperatureLimitsRepository;
 
+    @Mock
+    private RiskPeriodicityDeadlineRepository riskPeriodicityDeadlineRepository;
+
     private ImportDataService importDataService;
 
     @BeforeEach
@@ -53,7 +57,8 @@ class ImportDataServiceTest {
             equipmentRepository,
             equipmentGroupRepository,
             equipmentComponentRepository,
-            equipmentComponentTemperatureLimitsRepository
+            equipmentComponentTemperatureLimitsRepository,
+            riskPeriodicityDeadlineRepository
         );
     }
 
