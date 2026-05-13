@@ -1,4 +1,6 @@
 
+ON CONFLICT DO NOTHING
+
 INSERT INTO jhi_authority
     (name)
 VALUES
@@ -44,6 +46,20 @@ VALUES
         now()
 );
 
+
+INSERT INTO jhi_user_authority
+    (user_id, authority_name)
+SELECT id, 'ROLE_ADMIN'
+FROM jhi_user
+WHERE login = 'admin';
+
+INSERT INTO jhi_user_authority
+    (user_id, authority_name)
+SELECT id, 'ROLE_USER'
+FROM jhi_user
+WHERE login = 'admin';
+
+
 -- Insert UserInfo for admin user
 INSERT INTO user_info
     (
@@ -62,20 +78,113 @@ SELECT
 FROM jhi_user u
 WHERE u.login = 'admin';
 
+
+-- Insert additional users André Quadros, Christian Ducharme and Cleiner Assis
+INSERT INTO jhi_user
+(
+    id,
+    login,
+    first_name,
+    password_hash,
+    email,
+    activated,
+    created_by,
+    created_date
+)
+VALUES
+(
+    nextval('jhi_user_id_seq'),
+    'aquadros',
+    'André Quadros',
+    '$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC',
+    'quadros.andre@gmail.com',
+    true,
+    'system',
+    now()
+),
+(
+    nextval('jhi_user_id_seq'),
+    'ducharme',
+    'Christian Ducharme',
+    '$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC',
+    'christian.ducharme10@outlook.com',
+    true,
+    'system',
+    now()
+),
+(
+    nextval('jhi_user_id_seq'),
+    'cleiner',
+    'Cleiner Assis',
+    '$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC',
+    'cleinerassis@gmail.com',
+    true,
+    'system',
+    now()
+);
+
+-- Insert UserInfo for admin aquadros
+INSERT INTO user_info
+    (
+    id,
+    position,
+    phone_number,
+    user_id,
+    company_id
+    )
+SELECT
+    gen_random_uuid(),
+    'Administrador',
+    '+55 24 99246-9052',
+    u.id,
+    NULL
+FROM jhi_user u
+WHERE u.login = 'aquadros';
+
+-- Insert UserInfo for admin Christian Ducharme
+INSERT INTO user_info
+    (
+    id,
+    position,
+    phone_number,
+    user_id,
+    company_id
+    )
+SELECT
+    gen_random_uuid(),
+    'Administrador',
+    '+55 21 98749-1500',
+    u.id,
+    NULL
+FROM jhi_user u
+WHERE u.login = 'ducharme';
+
+-- Insert UserInfo for admin Cleiner Assis
+INSERT INTO user_info
+    (
+    id,
+    position,
+    phone_number,
+    user_id,
+    company_id
+    )
+SELECT
+    gen_random_uuid(),
+    'Administrador',
+    '+55 63 99913-0469',
+    u.id,
+    NULL
+FROM jhi_user u
+WHERE u.login = 'cleiner';
+
 INSERT INTO jhi_user_authority
-    (user_id, authority_name)
+(user_id, authority_name)
 SELECT id, 'ROLE_ADMIN'
 FROM jhi_user
-WHERE login = 'admin';
+WHERE login IN ('aquadros', 'ducharme', 'cleiner');
 
 INSERT INTO jhi_user_authority
-    (user_id, authority_name)
+(user_id, authority_name)
 SELECT id, 'ROLE_USER'
 FROM jhi_user
-WHERE login = 'admin';
-
-
-
-
-
-
+WHERE login IN ('aquadros', 'ducharme', 'cleiner');
