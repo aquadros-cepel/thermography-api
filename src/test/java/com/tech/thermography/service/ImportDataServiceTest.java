@@ -77,6 +77,9 @@ class ImportDataServiceTest {
         when(equipmentGroupRepository.findFirstByCodeAndPlantAndParentGroupIsNull(anyString(), any(Plant.class))).thenReturn(
             Optional.empty()
         );
+        when(equipmentGroupRepository.findFirstByCodeAndPlantAndParentGroup("SUB1", null, any(EquipmentGroup.class))).thenReturn(
+            Optional.empty()
+        );
         when(equipmentGroupRepository.findFirstByCodeAndPlantAndParentGroup(anyString(), any(Plant.class), any())).thenReturn(
             Optional.empty()
         );
