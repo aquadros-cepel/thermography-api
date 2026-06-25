@@ -161,6 +161,20 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+  mail:
+    host: smtp-relay.brevo.com
+    port: 587
+    username: afd4a7001@smtp-brevo.com
+    password: xsmtpsib-f1e669935b9f39a8cb45c8532e5d44516fffa398dadcccd58be7a9179a15f5a3-Cypo8ROKlfBiZdbv
+    protocol: smtp
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.starttls.required: true
+      mail.smtp.connectiontimeout: 5000
+      mail.smtp.timeout: 5000
+      mail.smtp.writetimeout: 5000
+
   messages:
     basename: i18n/messages
   main:
@@ -223,7 +237,7 @@ jhipster:
   #   allow-credentials: true
   #   max-age: 1800
   mail:
-    from: thermographyApi@localhost
+    from: no-reply@thermalenergyapp.com
   api-docs:
     default-include-pattern: /api/**
     management-include-pattern: /management/**
