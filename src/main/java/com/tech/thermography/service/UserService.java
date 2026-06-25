@@ -133,13 +133,21 @@ public class UserService {
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey(userDTO.getLangKey());
         // new user is not active
-        newUser.setActivated(false);
+        newUser.setActivated(userDTO.isActivated());
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
+
+        // Create associated UserInfo with default values
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUser(newUser);
+        userInfo.setPosition("");
+        userInfo.setPhoneNumber(userDTO.getPhoneNumber());
+        userInfoRepository.save(userInfo);
+
         this.clearUserCaches(newUser);
         LOG.debug("Created Information for User: {}", newUser);
         return newUser;
@@ -149,8 +157,15 @@ public class UserService {
         if (existingUser.isActivated()) {
             return false;
         }
+        UserInfo existingUserInfo = userInfoRepository.findByUser(existingUser).orElse(null);
+        if (existingUserInfo != null) {
+            userInfoRepository.delete(existingUserInfo);
+        }
         userRepository.delete(existingUser);
+
+        userInfoRepository.flush();
         userRepository.flush();
+
         this.clearUserCaches(existingUser);
         return true;
     }
