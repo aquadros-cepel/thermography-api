@@ -3,6 +3,7 @@ package com.tech.thermography.service;
 import com.tech.thermography.domain.User;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import org.slf4j.Logger;
@@ -39,6 +40,8 @@ public class MailService {
 
     private final SpringTemplateEngine templateEngine;
 
+    private HttpServletRequest request = null;
+
     public MailService(
         JHipsterProperties jHipsterProperties,
         JavaMailSender javaMailSender,
@@ -58,9 +61,10 @@ public class MailService {
 
     private void sendEmailSync(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
         LOG.debug(
-            "Send email[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
+            "Send email[multipart '{}' and html '{}'] from '{} to '{}' with subject '{}' and content={}",
             isMultipart,
             isHtml,
+            jHipsterProperties.getMail().getFrom(),
             to,
             subject,
             content
@@ -91,13 +95,30 @@ public class MailService {
             LOG.debug("Email doesn't exist for user '{}'", user.getLogin());
             return;
         }
+
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
         context.setVariable(USER, user);
-        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        // context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        context.setVariable(BASE_URL, resolveBaseUrl());
+
         String content = templateEngine.process(templateName, context);
         String subject = messageSource.getMessage(titleKey, null, locale);
         sendEmailSync(user.getEmail(), subject, content, false, true);
+    }
+
+    private String resolveBaseUrl() {
+        if (this.request == null) {
+            return jHipsterProperties.getMail().getBaseUrl();
+        }
+
+        String proto = request.getHeader("X-Forwarded-Proto");
+        if (proto == null) proto = request.getScheme();
+
+        String host = request.getHeader("X-Forwarded-Host");
+        if (host == null) host = request.getServerName();
+
+        return proto + "://" + host;
     }
 
     @Async
@@ -116,5 +137,9 @@ public class MailService {
     public void sendPasswordResetMail(User user) {
         LOG.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplateSync(user, "mail/passwordResetEmail", "email.reset.title");
+    }
+
+    public void setRequest(HttpServletRequest request) {
+        this.request = request;
     }
 }
