@@ -18,6 +18,7 @@ public class Company implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @NotNull
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)
@@ -33,8 +34,39 @@ public class Company implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @Lob
+    @Column(name = "logo")
+    private byte[] logo;
+
+    @Column(name = "logo_content_type")
+    private String logoContentType;
+
     @Column(name = "address")
     private String address;
+
+    @Column(name = "zip_code")
+    private String zipCode;
+
+    @Column(name = "street")
+    private String street;
+
+    @Column(name = "number")
+    private String number;
+
+    @Column(name = "complement")
+    private String complement;
+
+    @Column(name = "neighborhood")
+    private String neighborhood;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "state")
+    private String state;
+
+    @Column(name = "country")
+    private String country;
 
     @Column(name = "primary_phone_number")
     private String primaryPhoneNumber;
@@ -99,6 +131,32 @@ public class Company implements Serializable {
         this.description = description;
     }
 
+    public byte[] getLogo() {
+        return this.logo;
+    }
+
+    public Company logo(byte[] logo) {
+        this.setLogo(logo);
+        return this;
+    }
+
+    public void setLogo(byte[] logo) {
+        this.logo = logo;
+    }
+
+    public String getLogoContentType() {
+        return this.logoContentType;
+    }
+
+    public Company logoContentType(String logoContentType) {
+        this.logoContentType = logoContentType;
+        return this;
+    }
+
+    public void setLogoContentType(String logoContentType) {
+        this.logoContentType = logoContentType;
+    }
+
     public String getAddress() {
         return this.address;
     }
@@ -110,6 +168,110 @@ public class Company implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getZipCode() {
+        return this.zipCode;
+    }
+
+    public Company zipCode(String zipCode) {
+        this.setZipCode(zipCode);
+        return this;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getStreet() {
+        return this.street;
+    }
+
+    public Company street(String street) {
+        this.setStreet(street);
+        return this;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getNumber() {
+        return this.number;
+    }
+
+    public Company number(String number) {
+        this.setNumber(number);
+        return this;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public String getComplement() {
+        return this.complement;
+    }
+
+    public Company complement(String complement) {
+        this.setComplement(complement);
+        return this;
+    }
+
+    public void setComplement(String complement) {
+        this.complement = complement;
+    }
+
+    public String getNeighborhood() {
+        return this.neighborhood;
+    }
+
+    public Company neighborhood(String neighborhood) {
+        this.setNeighborhood(neighborhood);
+        return this;
+    }
+
+    public void setNeighborhood(String neighborhood) {
+        this.neighborhood = neighborhood;
+    }
+
+    public String getCity() {
+        return this.city;
+    }
+
+    public Company city(String city) {
+        this.setCity(city);
+        return this;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return this.state;
+    }
+
+    public Company state(String state) {
+        this.setState(state);
+        return this;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getCountry() {
+        return this.country;
+    }
+
+    public Company country(String country) {
+        this.setCountry(country);
+        return this;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getPrimaryPhoneNumber() {
@@ -178,7 +340,17 @@ public class Company implements Serializable {
             ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", logo='" + getLogo() + "'" +
+            ", logoContentType='" + getLogoContentType() + "'" +
             ", address='" + getAddress() + "'" +
+            ", zipCode='" + getZipCode() + "'" +
+            ", street='" + getStreet() + "'" +
+            ", number='" + getNumber() + "'" +
+            ", complement='" + getComplement() + "'" +
+            ", neighborhood='" + getNeighborhood() + "'" +
+            ", city='" + getCity() + "'" +
+            ", state='" + getState() + "'" +
+            ", country='" + getCountry() + "'" +
             ", primaryPhoneNumber='" + getPrimaryPhoneNumber() + "'" +
             ", secondaryPhoneNumber='" + getSecondaryPhoneNumber() + "'" +
             ", taxIdNumber='" + getTaxIdNumber() + "'" +

@@ -66,4 +66,18 @@
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>
+    <changeSet id="20261111130000-1" author="jhipster">
+        <addColumn tableName="company">
+            <column name="logo" type="${blobType}"/>
+            <column name="logo_content_type" type="varchar(255)"/>
+            <column name="zip_code" type="varchar(255)"/>
+            <column name="street" type="varchar(255)"/>
+            <column name="number" type="varchar(255)"/>
+            <column name="complement" type="varchar(255)"/>
+            <column name="neighborhood" type="varchar(255)"/>
+            <column name="city" type="varchar(255)"/>
+            <column name="state" type="varchar(255)"/>
+            <column name="country" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

@@ -12,6 +12,7 @@ import com.tech.thermography.IntegrationTest;
 import com.tech.thermography.domain.Company;
 import com.tech.thermography.repository.CompanyRepository;
 import jakarta.persistence.EntityManager;
+import java.util.Base64;
 import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,8 +41,37 @@ class CompanyResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
+    private static final byte[] DEFAULT_LOGO = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_LOGO = TestUtil.createByteArray(1, "1");
+    private static final String DEFAULT_LOGO_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_LOGO_CONTENT_TYPE = "image/png";
+
     private static final String DEFAULT_ADDRESS = "AAAAAAAAAA";
     private static final String UPDATED_ADDRESS = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ZIP_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_ZIP_CODE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_STREET = "AAAAAAAAAA";
+    private static final String UPDATED_STREET = "BBBBBBBBBB";
+
+    private static final String DEFAULT_NUMBER = "AAAAAAAAAA";
+    private static final String UPDATED_NUMBER = "BBBBBBBBBB";
+
+    private static final String DEFAULT_COMPLEMENT = "AAAAAAAAAA";
+    private static final String UPDATED_COMPLEMENT = "BBBBBBBBBB";
+
+    private static final String DEFAULT_NEIGHBORHOOD = "AAAAAAAAAA";
+    private static final String UPDATED_NEIGHBORHOOD = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CITY = "AAAAAAAAAA";
+    private static final String UPDATED_CITY = "BBBBBBBBBB";
+
+    private static final String DEFAULT_STATE = "AAAAAAAAAA";
+    private static final String UPDATED_STATE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_COUNTRY = "AAAAAAAAAA";
+    private static final String UPDATED_COUNTRY = "BBBBBBBBBB";
 
     private static final String DEFAULT_PRIMARY_PHONE_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_PRIMARY_PHONE_NUMBER = "BBBBBBBBBB";
@@ -82,7 +112,17 @@ class CompanyResourceIT {
             .code(DEFAULT_CODE)
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
+            .logo(DEFAULT_LOGO)
+            .logoContentType(DEFAULT_LOGO_CONTENT_TYPE)
             .address(DEFAULT_ADDRESS)
+            .zipCode(DEFAULT_ZIP_CODE)
+            .street(DEFAULT_STREET)
+            .number(DEFAULT_NUMBER)
+            .complement(DEFAULT_COMPLEMENT)
+            .neighborhood(DEFAULT_NEIGHBORHOOD)
+            .city(DEFAULT_CITY)
+            .state(DEFAULT_STATE)
+            .country(DEFAULT_COUNTRY)
             .primaryPhoneNumber(DEFAULT_PRIMARY_PHONE_NUMBER)
             .secondaryPhoneNumber(DEFAULT_SECONDARY_PHONE_NUMBER)
             .taxIdNumber(DEFAULT_TAX_ID_NUMBER);
@@ -99,7 +139,17 @@ class CompanyResourceIT {
             .code(UPDATED_CODE)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
+            .logo(UPDATED_LOGO)
+            .logoContentType(UPDATED_LOGO_CONTENT_TYPE)
             .address(UPDATED_ADDRESS)
+            .zipCode(UPDATED_ZIP_CODE)
+            .street(UPDATED_STREET)
+            .number(UPDATED_NUMBER)
+            .complement(UPDATED_COMPLEMENT)
+            .neighborhood(UPDATED_NEIGHBORHOOD)
+            .city(UPDATED_CITY)
+            .state(UPDATED_STATE)
+            .country(UPDATED_COUNTRY)
             .primaryPhoneNumber(UPDATED_PRIMARY_PHONE_NUMBER)
             .secondaryPhoneNumber(UPDATED_SECONDARY_PHONE_NUMBER)
             .taxIdNumber(UPDATED_TAX_ID_NUMBER);
@@ -188,7 +238,17 @@ class CompanyResourceIT {
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].logoContentType").value(hasItem(DEFAULT_LOGO_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].logo").value(hasItem(Base64.getEncoder().encodeToString(DEFAULT_LOGO))))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
+            .andExpect(jsonPath("$.[*].zipCode").value(hasItem(DEFAULT_ZIP_CODE)))
+            .andExpect(jsonPath("$.[*].street").value(hasItem(DEFAULT_STREET)))
+            .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER)))
+            .andExpect(jsonPath("$.[*].complement").value(hasItem(DEFAULT_COMPLEMENT)))
+            .andExpect(jsonPath("$.[*].neighborhood").value(hasItem(DEFAULT_NEIGHBORHOOD)))
+            .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY)))
+            .andExpect(jsonPath("$.[*].state").value(hasItem(DEFAULT_STATE)))
+            .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY)))
             .andExpect(jsonPath("$.[*].primaryPhoneNumber").value(hasItem(DEFAULT_PRIMARY_PHONE_NUMBER)))
             .andExpect(jsonPath("$.[*].secondaryPhoneNumber").value(hasItem(DEFAULT_SECONDARY_PHONE_NUMBER)))
             .andExpect(jsonPath("$.[*].taxIdNumber").value(hasItem(DEFAULT_TAX_ID_NUMBER)));
@@ -209,7 +269,17 @@ class CompanyResourceIT {
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.logoContentType").value(DEFAULT_LOGO_CONTENT_TYPE))
+            .andExpect(jsonPath("$.logo").value(Base64.getEncoder().encodeToString(DEFAULT_LOGO)))
             .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS))
+            .andExpect(jsonPath("$.zipCode").value(DEFAULT_ZIP_CODE))
+            .andExpect(jsonPath("$.street").value(DEFAULT_STREET))
+            .andExpect(jsonPath("$.number").value(DEFAULT_NUMBER))
+            .andExpect(jsonPath("$.complement").value(DEFAULT_COMPLEMENT))
+            .andExpect(jsonPath("$.neighborhood").value(DEFAULT_NEIGHBORHOOD))
+            .andExpect(jsonPath("$.city").value(DEFAULT_CITY))
+            .andExpect(jsonPath("$.state").value(DEFAULT_STATE))
+            .andExpect(jsonPath("$.country").value(DEFAULT_COUNTRY))
             .andExpect(jsonPath("$.primaryPhoneNumber").value(DEFAULT_PRIMARY_PHONE_NUMBER))
             .andExpect(jsonPath("$.secondaryPhoneNumber").value(DEFAULT_SECONDARY_PHONE_NUMBER))
             .andExpect(jsonPath("$.taxIdNumber").value(DEFAULT_TAX_ID_NUMBER));
@@ -238,7 +308,17 @@ class CompanyResourceIT {
             .code(UPDATED_CODE)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
+            .logo(UPDATED_LOGO)
+            .logoContentType(UPDATED_LOGO_CONTENT_TYPE)
             .address(UPDATED_ADDRESS)
+            .zipCode(UPDATED_ZIP_CODE)
+            .street(UPDATED_STREET)
+            .number(UPDATED_NUMBER)
+            .complement(UPDATED_COMPLEMENT)
+            .neighborhood(UPDATED_NEIGHBORHOOD)
+            .city(UPDATED_CITY)
+            .state(UPDATED_STATE)
+            .country(UPDATED_COUNTRY)
             .primaryPhoneNumber(UPDATED_PRIMARY_PHONE_NUMBER)
             .secondaryPhoneNumber(UPDATED_SECONDARY_PHONE_NUMBER)
             .taxIdNumber(UPDATED_TAX_ID_NUMBER);
@@ -317,9 +397,14 @@ class CompanyResourceIT {
 
         partialUpdatedCompany
             .description(UPDATED_DESCRIPTION)
+            .logo(UPDATED_LOGO)
+            .logoContentType(UPDATED_LOGO_CONTENT_TYPE)
             .address(UPDATED_ADDRESS)
+            .number(UPDATED_NUMBER)
+            .complement(UPDATED_COMPLEMENT)
+            .neighborhood(UPDATED_NEIGHBORHOOD)
+            .city(UPDATED_CITY)
             .primaryPhoneNumber(UPDATED_PRIMARY_PHONE_NUMBER)
-            .secondaryPhoneNumber(UPDATED_SECONDARY_PHONE_NUMBER)
             .taxIdNumber(UPDATED_TAX_ID_NUMBER);
 
         restCompanyMockMvc
@@ -352,7 +437,17 @@ class CompanyResourceIT {
             .code(UPDATED_CODE)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
+            .logo(UPDATED_LOGO)
+            .logoContentType(UPDATED_LOGO_CONTENT_TYPE)
             .address(UPDATED_ADDRESS)
+            .zipCode(UPDATED_ZIP_CODE)
+            .street(UPDATED_STREET)
+            .number(UPDATED_NUMBER)
+            .complement(UPDATED_COMPLEMENT)
+            .neighborhood(UPDATED_NEIGHBORHOOD)
+            .city(UPDATED_CITY)
+            .state(UPDATED_STATE)
+            .country(UPDATED_COUNTRY)
             .primaryPhoneNumber(UPDATED_PRIMARY_PHONE_NUMBER)
             .secondaryPhoneNumber(UPDATED_SECONDARY_PHONE_NUMBER)
             .taxIdNumber(UPDATED_TAX_ID_NUMBER);

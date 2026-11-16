@@ -133,8 +133,38 @@ public class CompanyResource {
                 if (company.getDescription() != null) {
                     existingCompany.setDescription(company.getDescription());
                 }
+                if (company.getLogo() != null) {
+                    existingCompany.setLogo(company.getLogo());
+                }
+                if (company.getLogoContentType() != null) {
+                    existingCompany.setLogoContentType(company.getLogoContentType());
+                }
                 if (company.getAddress() != null) {
                     existingCompany.setAddress(company.getAddress());
+                }
+                if (company.getZipCode() != null) {
+                    existingCompany.setZipCode(company.getZipCode());
+                }
+                if (company.getStreet() != null) {
+                    existingCompany.setStreet(company.getStreet());
+                }
+                if (company.getNumber() != null) {
+                    existingCompany.setNumber(company.getNumber());
+                }
+                if (company.getComplement() != null) {
+                    existingCompany.setComplement(company.getComplement());
+                }
+                if (company.getNeighborhood() != null) {
+                    existingCompany.setNeighborhood(company.getNeighborhood());
+                }
+                if (company.getCity() != null) {
+                    existingCompany.setCity(company.getCity());
+                }
+                if (company.getState() != null) {
+                    existingCompany.setState(company.getState());
+                }
+                if (company.getCountry() != null) {
+                    existingCompany.setCountry(company.getCountry());
                 }
                 if (company.getPrimaryPhoneNumber() != null) {
                     existingCompany.setPrimaryPhoneNumber(company.getPrimaryPhoneNumber());

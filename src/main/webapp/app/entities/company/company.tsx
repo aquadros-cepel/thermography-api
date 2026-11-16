@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Table } from 'reactstrap';
-import { Translate, getSortState } from 'react-jhipster';
+import { Translate, byteSize, getSortState, openFile } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { ASC, DESC } from 'app/shared/util/pagination.constants';
@@ -99,9 +99,45 @@ export const Company = () => {
                   <Translate contentKey="thermographyApiApp.company.description">Description</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('description')} />
                 </th>
+                <th className="hand" onClick={sort('logo')}>
+                  <Translate contentKey="thermographyApiApp.company.logo">Logo</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('logo')} />
+                </th>
                 <th className="hand" onClick={sort('address')}>
                   <Translate contentKey="thermographyApiApp.company.address">Address</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('address')} />
+                </th>
+                <th className="hand" onClick={sort('zipCode')}>
+                  <Translate contentKey="thermographyApiApp.company.zipCode">Zip Code</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('zipCode')} />
+                </th>
+                <th className="hand" onClick={sort('street')}>
+                  <Translate contentKey="thermographyApiApp.company.street">Street</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('street')} />
+                </th>
+                <th className="hand" onClick={sort('number')}>
+                  <Translate contentKey="thermographyApiApp.company.number">Number</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('number')} />
+                </th>
+                <th className="hand" onClick={sort('complement')}>
+                  <Translate contentKey="thermographyApiApp.company.complement">Complement</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('complement')} />
+                </th>
+                <th className="hand" onClick={sort('neighborhood')}>
+                  <Translate contentKey="thermographyApiApp.company.neighborhood">Neighborhood</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('neighborhood')} />
+                </th>
+                <th className="hand" onClick={sort('city')}>
+                  <Translate contentKey="thermographyApiApp.company.city">City</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('city')} />
+                </th>
+                <th className="hand" onClick={sort('state')}>
+                  <Translate contentKey="thermographyApiApp.company.state">State</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('state')} />
+                </th>
+                <th className="hand" onClick={sort('country')}>
+                  <Translate contentKey="thermographyApiApp.company.country">Country</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('country')} />
                 </th>
                 <th className="hand" onClick={sort('primaryPhoneNumber')}>
                   <Translate contentKey="thermographyApiApp.company.primaryPhoneNumber">Primary Phone Number</Translate>{' '}
@@ -129,7 +165,30 @@ export const Company = () => {
                   <td>{company.code}</td>
                   <td>{company.name}</td>
                   <td>{company.description}</td>
+                  <td>
+                    {company.logo ? (
+                      <div>
+                        {company.logoContentType ? (
+                          <a onClick={openFile(company.logoContentType, company.logo)}>
+                            <img src={`data:${company.logoContentType};base64,${company.logo}`} style={{ maxHeight: '30px' }} />
+                            &nbsp;
+                          </a>
+                        ) : null}
+                        <span>
+                          {company.logoContentType}, {byteSize(company.logo)}
+                        </span>
+                      </div>
+                    ) : null}
+                  </td>
                   <td>{company.address}</td>
+                  <td>{company.zipCode}</td>
+                  <td>{company.street}</td>
+                  <td>{company.number}</td>
+                  <td>{company.complement}</td>
+                  <td>{company.neighborhood}</td>
+                  <td>{company.city}</td>
+                  <td>{company.state}</td>
+                  <td>{company.country}</td>
                   <td>{company.primaryPhoneNumber}</td>
                   <td>{company.secondaryPhoneNumber}</td>
                   <td>{company.taxIdNumber}</td>

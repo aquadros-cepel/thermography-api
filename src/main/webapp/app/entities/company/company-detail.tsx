@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button, Col, Row } from 'reactstrap';
-import { Translate } from 'react-jhipster';
+import { Translate, byteSize, openFile } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
@@ -50,11 +50,78 @@ export const CompanyDetail = () => {
           </dt>
           <dd>{companyEntity.description}</dd>
           <dt>
+            <span id="logo">
+              <Translate contentKey="thermographyApiApp.company.logo">Logo</Translate>
+            </span>
+          </dt>
+          <dd>
+            {companyEntity.logo ? (
+              <div>
+                {companyEntity.logoContentType ? (
+                  <a onClick={openFile(companyEntity.logoContentType, companyEntity.logo)}>
+                    <img src={`data:${companyEntity.logoContentType};base64,${companyEntity.logo}`} style={{ maxHeight: '30px' }} />
+                  </a>
+                ) : null}
+                <span>
+                  {companyEntity.logoContentType}, {byteSize(companyEntity.logo)}
+                </span>
+              </div>
+            ) : null}
+          </dd>
+          <dt>
             <span id="address">
               <Translate contentKey="thermographyApiApp.company.address">Address</Translate>
             </span>
           </dt>
           <dd>{companyEntity.address}</dd>
+          <dt>
+            <span id="zipCode">
+              <Translate contentKey="thermographyApiApp.company.zipCode">Zip Code</Translate>
+            </span>
+          </dt>
+          <dd>{companyEntity.zipCode}</dd>
+          <dt>
+            <span id="street">
+              <Translate contentKey="thermographyApiApp.company.street">Street</Translate>
+            </span>
+          </dt>
+          <dd>{companyEntity.street}</dd>
+          <dt>
+            <span id="number">
+              <Translate contentKey="thermographyApiApp.company.number">Number</Translate>
+            </span>
+          </dt>
+          <dd>{companyEntity.number}</dd>
+          <dt>
+            <span id="complement">
+              <Translate contentKey="thermographyApiApp.company.complement">Complement</Translate>
+            </span>
+          </dt>
+          <dd>{companyEntity.complement}</dd>
+          <dt>
+            <span id="neighborhood">
+              <Translate contentKey="thermographyApiApp.company.neighborhood">Neighborhood</Translate>
+            </span>
+          </dt>
+          <dd>{companyEntity.neighborhood}</dd>
+          <dt>
+            <span id="city">
+              <Translate contentKey="thermographyApiApp.company.city">City</Translate>
+            </span>
+          </dt>
+          <dd>{companyEntity.city}</dd>
+          <dt>
+            <span id="state">
+              <Translate contentKey="thermographyApiApp.company.state">State</Translate>
+            </span>
+          </dt>
+          <dd>{companyEntity.state}</dd>
+          <dt>
+            <span id="country">
+              <Translate contentKey="thermographyApiApp.company.country">Country</Translate>
+            </span>
+          </dt>
+          <dd>{companyEntity.country}</dd>
           <dt>
             <span id="primaryPhoneNumber">
               <Translate contentKey="thermographyApiApp.company.primaryPhoneNumber">Primary Phone Number</Translate>

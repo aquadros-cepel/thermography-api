@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button, Col, Row } from 'reactstrap';
-import { Translate, ValidatedField, ValidatedForm, translate } from 'react-jhipster';
+import { Translate, ValidatedBlobField, ValidatedField, ValidatedForm, translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
@@ -108,11 +108,75 @@ export const CompanyUpdate = () => {
                 data-cy="description"
                 type="text"
               />
+              <ValidatedBlobField
+                label={translate('thermographyApiApp.company.logo')}
+                id="company-logo"
+                name="logo"
+                data-cy="logo"
+                isImage
+                accept="image/*"
+              />
               <ValidatedField
                 label={translate('thermographyApiApp.company.address')}
                 id="company-address"
                 name="address"
                 data-cy="address"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('thermographyApiApp.company.zipCode')}
+                id="company-zipCode"
+                name="zipCode"
+                data-cy="zipCode"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('thermographyApiApp.company.street')}
+                id="company-street"
+                name="street"
+                data-cy="street"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('thermographyApiApp.company.number')}
+                id="company-number"
+                name="number"
+                data-cy="number"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('thermographyApiApp.company.complement')}
+                id="company-complement"
+                name="complement"
+                data-cy="complement"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('thermographyApiApp.company.neighborhood')}
+                id="company-neighborhood"
+                name="neighborhood"
+                data-cy="neighborhood"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('thermographyApiApp.company.city')}
+                id="company-city"
+                name="city"
+                data-cy="city"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('thermographyApiApp.company.state')}
+                id="company-state"
+                name="state"
+                data-cy="state"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('thermographyApiApp.company.country')}
+                id="company-country"
+                name="country"
+                data-cy="country"
                 type="text"
               />
               <ValidatedField

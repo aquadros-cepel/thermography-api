@@ -23,7 +23,43 @@
       "fieldType": "String"
     },
     {
+      "fieldName": "logo",
+      "fieldType": "ImageBlob"
+    },
+    {
       "fieldName": "address",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "zipCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "street",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "number",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "complement",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "neighborhood",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "city",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "state",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "country",
       "fieldType": "String"
     },
     {
