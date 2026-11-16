@@ -56,6 +56,14 @@
       "fieldType": "Double"
     },
     {
+      "fieldName": "extOpticsTemp",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "extOpticsTrans",
+      "fieldType": "Double"
+    },
+    {
       "fieldName": "cameraLens",
       "fieldType": "String"
     },
