@@ -1,11 +1,19 @@
 package com.tech.thermography.web.rest;
 
-import static com.tech.thermography.domain.ThermogramAsserts.*;
+import static com.tech.thermography.domain.ThermogramAsserts.assertThermogramAllPropertiesEquals;
+import static com.tech.thermography.domain.ThermogramAsserts.assertThermogramAllUpdatablePropertiesEquals;
+import static com.tech.thermography.domain.ThermogramAsserts.assertThermogramUpdatableFieldsEquals;
 import static com.tech.thermography.web.rest.TestUtil.createUpdateProxyForBean;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tech.thermography.IntegrationTest;
@@ -384,7 +392,8 @@ class ThermogramResourceIT {
 
         // Update the thermogram
         Thermogram updatedThermogram = thermogramRepository.findById(thermogram.getId()).orElseThrow();
-        // Disconnect from session so that the updates on updatedThermogram are not directly saved in db
+        // Disconnect from session so that the updates on updatedThermogram are not
+        // directly saved in db
         em.detach(updatedThermogram);
         updatedThermogram
             .imagePath(UPDATED_IMAGE_PATH)
