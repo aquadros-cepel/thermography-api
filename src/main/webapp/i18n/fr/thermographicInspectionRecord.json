@@ -31,6 +31,10 @@
       "recommendations": "Recommendations",
       "finished": "Finished",
       "finishedAt": "Finished At",
+      "current": "Current",
+      "voltage": "Voltage",
+      "windSpeed": "Wind Speed",
+      "phase": "Phase",
       "plant": "Plant",
       "route": "Route",
       "equipment": "Equipment",
@@ -38,7 +42,9 @@
       "createdBy": "Created By",
       "finishedBy": "Finished By",
       "thermogram": "Thermogram",
-      "thermogramRef": "Thermogram Ref"
+      "thermogramRef": "Thermogram Ref",
+      "parentRecord": "Parent Record",
+      "childRecords": "Child Records"
     }
   }
 }

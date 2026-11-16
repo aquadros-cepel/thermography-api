@@ -13,8 +13,10 @@ import { getEntities as getEquipment } from 'app/entities/equipment/equipment.re
 import { getEntities as getEquipmentComponents } from 'app/entities/equipment-component/equipment-component.reducer';
 import { getEntities as getUserInfos } from 'app/entities/user-info/user-info.reducer';
 import { getEntities as getThermograms } from 'app/entities/thermogram/thermogram.reducer';
+import { getEntities as getThermographicInspectionRecords } from 'app/entities/thermographic-inspection-record/thermographic-inspection-record.reducer';
 import { ThermographicInspectionRecordType } from 'app/shared/model/enumerations/thermographic-inspection-record-type.model';
 import { ConditionType } from 'app/shared/model/enumerations/condition-type.model';
+import { PhaseType } from 'app/shared/model/enumerations/phase-type.model';
 import { createEntity, getEntity, reset, updateEntity } from './thermographic-inspection-record.reducer';
 
 export const ThermographicInspectionRecordUpdate = () => {
@@ -31,12 +33,14 @@ export const ThermographicInspectionRecordUpdate = () => {
   const equipmentComponents = useAppSelector(state => state.equipmentComponent.entities);
   const userInfos = useAppSelector(state => state.userInfo.entities);
   const thermograms = useAppSelector(state => state.thermogram.entities);
+  const thermographicInspectionRecords = useAppSelector(state => state.thermographicInspectionRecord.entities);
   const thermographicInspectionRecordEntity = useAppSelector(state => state.thermographicInspectionRecord.entity);
   const loading = useAppSelector(state => state.thermographicInspectionRecord.loading);
   const updating = useAppSelector(state => state.thermographicInspectionRecord.updating);
   const updateSuccess = useAppSelector(state => state.thermographicInspectionRecord.updateSuccess);
   const thermographicInspectionRecordTypeValues = Object.keys(ThermographicInspectionRecordType);
   const conditionTypeValues = Object.keys(ConditionType);
+  const phaseTypeValues = Object.keys(PhaseType);
 
   const handleClose = () => {
     navigate('/thermographic-inspection-record');
@@ -55,6 +59,7 @@ export const ThermographicInspectionRecordUpdate = () => {
     dispatch(getEquipmentComponents({}));
     dispatch(getUserInfos({}));
     dispatch(getThermograms({}));
+    dispatch(getThermographicInspectionRecords({}));
   }, []);
 
   useEffect(() => {
@@ -72,6 +77,15 @@ export const ThermographicInspectionRecordUpdate = () => {
       values.periodicity = Number(values.periodicity);
     }
     values.finishedAt = convertDateTimeToServer(values.finishedAt);
+    if (values.current !== undefined && typeof values.current !== 'number') {
+      values.current = Number(values.current);
+    }
+    if (values.voltage !== undefined && typeof values.voltage !== 'number') {
+      values.voltage = Number(values.voltage);
+    }
+    if (values.windSpeed !== undefined && typeof values.windSpeed !== 'number') {
+      values.windSpeed = Number(values.windSpeed);
+    }
 
     const entity = {
       ...thermographicInspectionRecordEntity,
@@ -84,6 +98,7 @@ export const ThermographicInspectionRecordUpdate = () => {
       finishedBy: userInfos.find(it => it.id.toString() === values.finishedBy?.toString()),
       thermogram: thermograms.find(it => it.id.toString() === values.thermogram?.toString()),
       thermogramRef: thermograms.find(it => it.id.toString() === values.thermogramRef?.toString()),
+      parentRecord: thermographicInspectionRecords.find(it => it.id.toString() === values.parentRecord?.toString()),
     };
 
     if (isNew) {
@@ -102,6 +117,7 @@ export const ThermographicInspectionRecordUpdate = () => {
       : {
           type: 'NO_ANOMALY',
           condition: 'NORMAL',
+          phase: 'PHASE_A',
           ...thermographicInspectionRecordEntity,
           createdAt: convertDateTimeFromServer(thermographicInspectionRecordEntity.createdAt),
           finishedAt: convertDateTimeFromServer(thermographicInspectionRecordEntity.finishedAt),
@@ -113,6 +129,7 @@ export const ThermographicInspectionRecordUpdate = () => {
           finishedBy: thermographicInspectionRecordEntity?.finishedBy?.id,
           thermogram: thermographicInspectionRecordEntity?.thermogram?.id,
           thermogramRef: thermographicInspectionRecordEntity?.thermogramRef?.id,
+          parentRecord: thermographicInspectionRecordEntity?.parentRecord?.id,
         };
 
   return (
@@ -262,6 +279,40 @@ export const ThermographicInspectionRecordUpdate = () => {
                 placeholder="YYYY-MM-DD HH:mm"
               />
               <ValidatedField
+                label={translate('thermographyApiApp.thermographicInspectionRecord.current')}
+                id="thermographic-inspection-record-current"
+                name="current"
+                data-cy="current"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('thermographyApiApp.thermographicInspectionRecord.voltage')}
+                id="thermographic-inspection-record-voltage"
+                name="voltage"
+                data-cy="voltage"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('thermographyApiApp.thermographicInspectionRecord.windSpeed')}
+                id="thermographic-inspection-record-windSpeed"
+                name="windSpeed"
+                data-cy="windSpeed"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('thermographyApiApp.thermographicInspectionRecord.phase')}
+                id="thermographic-inspection-record-phase"
+                name="phase"
+                data-cy="phase"
+                type="select"
+              >
+                {phaseTypeValues.map(phaseType => (
+                  <option value={phaseType} key={phaseType}>
+                    {translate(`thermographyApiApp.PhaseType.${phaseType}`)}
+                  </option>
+                ))}
+              </ValidatedField>
+              <ValidatedField
                 id="thermographic-inspection-record-plant"
                 name="plant"
                 data-cy="plant"
@@ -407,6 +458,24 @@ export const ThermographicInspectionRecordUpdate = () => {
                         {otherEntity.id}
                       </option>
                     ))
+                  : null}
+              </ValidatedField>
+              <ValidatedField
+                id="thermographic-inspection-record-parentRecord"
+                name="parentRecord"
+                data-cy="parentRecord"
+                label={translate('thermographyApiApp.thermographicInspectionRecord.parentRecord')}
+                type="select"
+              >
+                <option value="" key="0" />
+                {thermographicInspectionRecords
+                  ? thermographicInspectionRecords
+                      .filter(otherEntity => otherEntity.id !== thermographicInspectionRecordEntity?.id)
+                      .map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.id}
+                        </option>
+                      ))
                   : null}
               </ValidatedField>
               <Button

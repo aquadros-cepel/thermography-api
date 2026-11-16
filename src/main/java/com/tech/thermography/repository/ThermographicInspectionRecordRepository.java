@@ -23,6 +23,7 @@ public interface ThermographicInspectionRecordRepository extends JpaRepository<T
         LEFT JOIN FETCH tir.component
         LEFT JOIN FETCH tir.createdBy
         LEFT JOIN FETCH tir.finishedBy
+        LEFT JOIN FETCH tir.parentRecord
         LEFT JOIN FETCH tir.thermogram t
         LEFT JOIN FETCH t.rois
         """

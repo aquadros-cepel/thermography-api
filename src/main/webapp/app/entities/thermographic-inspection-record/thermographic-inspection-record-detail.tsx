@@ -127,6 +127,30 @@ export const ThermographicInspectionRecordDetail = () => {
             ) : null}
           </dd>
           <dt>
+            <span id="current">
+              <Translate contentKey="thermographyApiApp.thermographicInspectionRecord.current">Current</Translate>
+            </span>
+          </dt>
+          <dd>{thermographicInspectionRecordEntity.current}</dd>
+          <dt>
+            <span id="voltage">
+              <Translate contentKey="thermographyApiApp.thermographicInspectionRecord.voltage">Voltage</Translate>
+            </span>
+          </dt>
+          <dd>{thermographicInspectionRecordEntity.voltage}</dd>
+          <dt>
+            <span id="windSpeed">
+              <Translate contentKey="thermographyApiApp.thermographicInspectionRecord.windSpeed">Wind Speed</Translate>
+            </span>
+          </dt>
+          <dd>{thermographicInspectionRecordEntity.windSpeed}</dd>
+          <dt>
+            <span id="phase">
+              <Translate contentKey="thermographyApiApp.thermographicInspectionRecord.phase">Phase</Translate>
+            </span>
+          </dt>
+          <dd>{thermographicInspectionRecordEntity.phase}</dd>
+          <dt>
             <Translate contentKey="thermographyApiApp.thermographicInspectionRecord.plant">Plant</Translate>
           </dt>
           <dd>{thermographicInspectionRecordEntity.plant ? thermographicInspectionRecordEntity.plant.id : ''}</dd>
@@ -158,6 +182,10 @@ export const ThermographicInspectionRecordDetail = () => {
             <Translate contentKey="thermographyApiApp.thermographicInspectionRecord.thermogramRef">Thermogram Ref</Translate>
           </dt>
           <dd>{thermographicInspectionRecordEntity.thermogramRef ? thermographicInspectionRecordEntity.thermogramRef.id : ''}</dd>
+          <dt>
+            <Translate contentKey="thermographyApiApp.thermographicInspectionRecord.parentRecord">Parent Record</Translate>
+          </dt>
+          <dd>{thermographicInspectionRecordEntity.parentRecord ? thermographicInspectionRecordEntity.parentRecord.id : ''}</dd>
         </dl>
         <Button tag={Link} to="/thermographic-inspection-record" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

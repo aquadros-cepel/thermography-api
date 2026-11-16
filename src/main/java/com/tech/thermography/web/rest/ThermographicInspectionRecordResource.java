@@ -148,6 +148,9 @@ public class ThermographicInspectionRecordResource {
         if (!Objects.equals(id, thermographicInspectionRecord.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
+        if (thermographicInspectionRecord.getParentRecord() != null && id.equals(thermographicInspectionRecord.getParentRecord().getId())) {
+            throw new BadRequestAlertException("Um registro não pode ser pai de si mesmo", ENTITY_NAME, "parentself");
+        }
 
         if (!thermographicInspectionRecordRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
@@ -238,6 +241,33 @@ public class ThermographicInspectionRecordResource {
                 }
                 if (thermographicInspectionRecord.getFinishedAt() != null) {
                     existingThermographicInspectionRecord.setFinishedAt(thermographicInspectionRecord.getFinishedAt());
+                }
+                if (thermographicInspectionRecord.getCurrent() != null) {
+                    existingThermographicInspectionRecord.setCurrent(thermographicInspectionRecord.getCurrent());
+                }
+                if (thermographicInspectionRecord.getVoltage() != null) {
+                    existingThermographicInspectionRecord.setVoltage(thermographicInspectionRecord.getVoltage());
+                }
+                if (thermographicInspectionRecord.getWindSpeed() != null) {
+                    existingThermographicInspectionRecord.setWindSpeed(thermographicInspectionRecord.getWindSpeed());
+                }
+                if (thermographicInspectionRecord.getPhase() != null) {
+                    existingThermographicInspectionRecord.setPhase(thermographicInspectionRecord.getPhase());
+                }
+                if (
+                    thermographicInspectionRecord.getParentRecord() != null &&
+                    thermographicInspectionRecord.getParentRecord().getId() != null
+                ) {
+                    if (id.equals(thermographicInspectionRecord.getParentRecord().getId())) {
+                        throw new BadRequestAlertException("Um registro não pode ser pai de si mesmo", ENTITY_NAME, "parentself");
+                    }
+                    existingThermographicInspectionRecord.setParentRecord(
+                        thermographicInspectionRecordRepository
+                            .findById(thermographicInspectionRecord.getParentRecord().getId())
+                            .orElseThrow(() ->
+                                new BadRequestAlertException("Registro relacionado não encontrado", ENTITY_NAME, "parentnotfound")
+                            )
+                    );
                 }
 
                 return existingThermographicInspectionRecord;
@@ -415,6 +445,17 @@ public class ThermographicInspectionRecordResource {
         record.setNextMonitoring(payload.getNextMonitoring());
         record.setRecommendations(payload.getRecommendations());
         record.setFinished(payload.getFinished() != null ? payload.getFinished() : Boolean.FALSE);
+        record.setCurrent(payload.getCurrent());
+        record.setVoltage(payload.getVoltage());
+        record.setWindSpeed(payload.getWindSpeed());
+        record.setPhase(payload.getPhase());
+        if (payload.getParentRecord() != null && payload.getParentRecord().getId() != null) {
+            record.setParentRecord(
+                thermographicInspectionRecordRepository
+                    .findById(payload.getParentRecord().getId())
+                    .orElseThrow(() -> new BadRequestAlertException("Registro relacionado não encontrado", ENTITY_NAME, "parentnotfound"))
+            );
+        }
         record.setPlant(plant);
         record.setEquipment(equipment);
         record.setComponent(component);
@@ -626,6 +667,22 @@ public class ThermographicInspectionRecordResource {
         existingRecord.setRecommendations(payload.getRecommendations());
         existingRecord.setFinished(payload.getFinished());
         existingRecord.setFinishedAt(payload.getFinishedAt());
+        existingRecord.setCurrent(payload.getCurrent());
+        existingRecord.setVoltage(payload.getVoltage());
+        existingRecord.setWindSpeed(payload.getWindSpeed());
+        existingRecord.setPhase(payload.getPhase());
+        if (payload.getParentRecord() != null && payload.getParentRecord().getId() != null) {
+            if (payload.getId().equals(payload.getParentRecord().getId())) {
+                throw new BadRequestAlertException("Um registro não pode ser pai de si mesmo", ENTITY_NAME, "parentself");
+            }
+            existingRecord.setParentRecord(
+                thermographicInspectionRecordRepository
+                    .findById(payload.getParentRecord().getId())
+                    .orElseThrow(() -> new BadRequestAlertException("Registro relacionado não encontrado", ENTITY_NAME, "parentnotfound"))
+            );
+        } else {
+            existingRecord.setParentRecord(null);
+        }
         existingRecord.setPlant(plant);
         existingRecord.setEquipment(equipment);
         existingRecord.setComponent(component);

@@ -121,4 +121,21 @@
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>
+    <changeSet id="20261111130000-2" author="jhipster">
+        <addColumn tableName="thermographic_inspection_record">
+            <column name="current" type="double"/>
+            <column name="voltage" type="double"/>
+            <column name="wind_speed" type="double"/>
+            <column name="phase" type="varchar(255)"/>
+            <column name="parent_record_id" type="${uuidType}">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint
+            baseColumnNames="parent_record_id"
+            baseTableName="thermographic_inspection_record"
+            constraintName="fk_thermographic_inspection_record__parent_record_id"
+            referencedColumnNames="id"
+            referencedTableName="thermographic_inspection_record"/>
+    </changeSet>
 </databaseChangeLog>

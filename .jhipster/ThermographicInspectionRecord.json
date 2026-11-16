@@ -18,7 +18,7 @@
       "fieldName": "type",
       "fieldType": "ThermographicInspectionRecordType",
       "fieldValidateRules": ["required"],
-      "fieldValues": "NO_ANOMALY,ANOMALY_INITIAL,ANOMALY_MONITORING,ANOMALY_SOLVED"
+      "fieldValues": "NO_ANOMALY,ANOMALY_DETECTED,ANOMALY_MONITORING,ANOMALY_FIXED"
     },
     {
       "fieldName": "serviceOrder",
@@ -67,6 +67,23 @@
     {
       "fieldName": "finishedAt",
       "fieldType": "Instant"
+    },
+    {
+      "fieldName": "current",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "voltage",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "windSpeed",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "phase",
+      "fieldType": "PhaseType",
+      "fieldValues": "PHASE_A,PHASE_B,PHASE_C,NEUTRAL,GROUND,THREE_PHASE"
     }
   ],
   "name": "ThermographicInspectionRecord",
@@ -123,6 +140,20 @@
       "relationshipName": "thermogramRef",
       "relationshipSide": "left",
       "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "thermographicInspectionRecord",
+      "otherEntityRelationshipName": "childRecords",
+      "relationshipName": "parentRecord",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "thermographicInspectionRecord",
+      "otherEntityRelationshipName": "parentRecord",
+      "relationshipName": "childRecords",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
     }
   ],
   "searchEngine": "no"

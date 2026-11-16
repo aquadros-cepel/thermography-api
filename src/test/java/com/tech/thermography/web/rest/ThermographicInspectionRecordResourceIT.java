@@ -1,11 +1,19 @@
 package com.tech.thermography.web.rest;
 
-import static com.tech.thermography.domain.ThermographicInspectionRecordAsserts.*;
+import static com.tech.thermography.domain.ThermographicInspectionRecordAsserts.assertThermographicInspectionRecordAllPropertiesEquals;
+import static com.tech.thermography.domain.ThermographicInspectionRecordAsserts.assertThermographicInspectionRecordAllUpdatablePropertiesEquals;
+import static com.tech.thermography.domain.ThermographicInspectionRecordAsserts.assertThermographicInspectionRecordUpdatableFieldsEquals;
 import static com.tech.thermography.web.rest.TestUtil.createUpdateProxyForBean;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tech.thermography.IntegrationTest;
@@ -15,6 +23,7 @@ import com.tech.thermography.domain.Thermogram;
 import com.tech.thermography.domain.ThermographicInspectionRecord;
 import com.tech.thermography.domain.UserInfo;
 import com.tech.thermography.domain.enumeration.ConditionType;
+import com.tech.thermography.domain.enumeration.PhaseType;
 import com.tech.thermography.domain.enumeration.ThermographicInspectionRecordType;
 import com.tech.thermography.repository.ThermographicInspectionRecordRepository;
 import jakarta.persistence.EntityManager;
@@ -34,7 +43,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Integration tests for the {@link ThermographicInspectionRecordResource} REST controller.
+ * Integration tests for the {@link ThermographicInspectionRecordResource} REST
+ * controller.
  */
 @IntegrationTest
 @AutoConfigureMockMvc
@@ -45,7 +55,7 @@ class ThermographicInspectionRecordResourceIT {
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
     private static final ThermographicInspectionRecordType DEFAULT_TYPE = ThermographicInspectionRecordType.NO_ANOMALY;
-    private static final ThermographicInspectionRecordType UPDATED_TYPE = ThermographicInspectionRecordType.ANOMALY_INITIAL;
+    private static final ThermographicInspectionRecordType UPDATED_TYPE = ThermographicInspectionRecordType.ANOMALY_DETECTED;
 
     private static final String DEFAULT_SERVICE_ORDER = "AAAAAAAAAA";
     private static final String UPDATED_SERVICE_ORDER = "BBBBBBBBBB";
@@ -79,6 +89,18 @@ class ThermographicInspectionRecordResourceIT {
 
     private static final Instant DEFAULT_FINISHED_AT = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_FINISHED_AT = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
+    private static final Double DEFAULT_CURRENT = 1D;
+    private static final Double UPDATED_CURRENT = 2D;
+
+    private static final Double DEFAULT_VOLTAGE = 220D;
+    private static final Double UPDATED_VOLTAGE = 230D;
+
+    private static final Double DEFAULT_WIND_SPEED = 3D;
+    private static final Double UPDATED_WIND_SPEED = 4D;
+
+    private static final PhaseType DEFAULT_PHASE = PhaseType.PHASE_A;
+    private static final PhaseType UPDATED_PHASE = PhaseType.PHASE_B;
 
     private static final String ENTITY_API_URL = "/api/thermographic-inspection-records";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -119,7 +141,11 @@ class ThermographicInspectionRecordResourceIT {
             .nextMonitoring(DEFAULT_NEXT_MONITORING)
             .recommendations(DEFAULT_RECOMMENDATIONS)
             .finished(DEFAULT_FINISHED)
-            .finishedAt(DEFAULT_FINISHED_AT);
+            .finishedAt(DEFAULT_FINISHED_AT)
+            .current(DEFAULT_CURRENT)
+            .voltage(DEFAULT_VOLTAGE)
+            .windSpeed(DEFAULT_WIND_SPEED)
+            .phase(DEFAULT_PHASE);
         // Add required entity
         Plant plant;
         if (TestUtil.findAll(em, Plant.class).isEmpty()) {
@@ -185,7 +211,11 @@ class ThermographicInspectionRecordResourceIT {
             .nextMonitoring(UPDATED_NEXT_MONITORING)
             .recommendations(UPDATED_RECOMMENDATIONS)
             .finished(UPDATED_FINISHED)
-            .finishedAt(UPDATED_FINISHED_AT);
+            .finishedAt(UPDATED_FINISHED_AT)
+            .current(UPDATED_CURRENT)
+            .voltage(UPDATED_VOLTAGE)
+            .windSpeed(UPDATED_WIND_SPEED)
+            .phase(UPDATED_PHASE);
         // Add required entity
         Plant plant;
         if (TestUtil.findAll(em, Plant.class).isEmpty()) {
@@ -406,7 +436,11 @@ class ThermographicInspectionRecordResourceIT {
             .andExpect(jsonPath("$.[*].nextMonitoring").value(hasItem(DEFAULT_NEXT_MONITORING.toString())))
             .andExpect(jsonPath("$.[*].recommendations").value(hasItem(DEFAULT_RECOMMENDATIONS)))
             .andExpect(jsonPath("$.[*].finished").value(hasItem(DEFAULT_FINISHED)))
-            .andExpect(jsonPath("$.[*].finishedAt").value(hasItem(DEFAULT_FINISHED_AT.toString())));
+            .andExpect(jsonPath("$.[*].finishedAt").value(hasItem(DEFAULT_FINISHED_AT.toString())))
+            .andExpect(jsonPath("$.[*].current").value(hasItem(DEFAULT_CURRENT)))
+            .andExpect(jsonPath("$.[*].voltage").value(hasItem(DEFAULT_VOLTAGE)))
+            .andExpect(jsonPath("$.[*].windSpeed").value(hasItem(DEFAULT_WIND_SPEED)))
+            .andExpect(jsonPath("$.[*].phase").value(hasItem(DEFAULT_PHASE.toString())));
     }
 
     @Test
@@ -433,7 +467,11 @@ class ThermographicInspectionRecordResourceIT {
             .andExpect(jsonPath("$.nextMonitoring").value(DEFAULT_NEXT_MONITORING.toString()))
             .andExpect(jsonPath("$.recommendations").value(DEFAULT_RECOMMENDATIONS))
             .andExpect(jsonPath("$.finished").value(DEFAULT_FINISHED))
-            .andExpect(jsonPath("$.finishedAt").value(DEFAULT_FINISHED_AT.toString()));
+            .andExpect(jsonPath("$.finishedAt").value(DEFAULT_FINISHED_AT.toString()))
+            .andExpect(jsonPath("$.current").value(DEFAULT_CURRENT))
+            .andExpect(jsonPath("$.voltage").value(DEFAULT_VOLTAGE))
+            .andExpect(jsonPath("$.windSpeed").value(DEFAULT_WIND_SPEED))
+            .andExpect(jsonPath("$.phase").value(DEFAULT_PHASE.toString()));
     }
 
     @Test
@@ -457,7 +495,8 @@ class ThermographicInspectionRecordResourceIT {
         ThermographicInspectionRecord updatedThermographicInspectionRecord = thermographicInspectionRecordRepository
             .findById(thermographicInspectionRecord.getId())
             .orElseThrow();
-        // Disconnect from session so that the updates on updatedThermographicInspectionRecord are not directly saved in db
+        // Disconnect from session so that the updates on
+        // updatedThermographicInspectionRecord are not directly saved in db
         em.detach(updatedThermographicInspectionRecord);
         updatedThermographicInspectionRecord
             .name(UPDATED_NAME)
@@ -472,7 +511,11 @@ class ThermographicInspectionRecordResourceIT {
             .nextMonitoring(UPDATED_NEXT_MONITORING)
             .recommendations(UPDATED_RECOMMENDATIONS)
             .finished(UPDATED_FINISHED)
-            .finishedAt(UPDATED_FINISHED_AT);
+            .finishedAt(UPDATED_FINISHED_AT)
+            .current(UPDATED_CURRENT)
+            .voltage(UPDATED_VOLTAGE)
+            .windSpeed(UPDATED_WIND_SPEED)
+            .phase(UPDATED_PHASE);
 
         restThermographicInspectionRecordMockMvc
             .perform(
@@ -562,7 +605,11 @@ class ThermographicInspectionRecordResourceIT {
             .nextMonitoring(UPDATED_NEXT_MONITORING)
             .recommendations(UPDATED_RECOMMENDATIONS)
             .finished(UPDATED_FINISHED)
-            .finishedAt(UPDATED_FINISHED_AT);
+            .finishedAt(UPDATED_FINISHED_AT)
+            .current(UPDATED_CURRENT)
+            .voltage(UPDATED_VOLTAGE)
+            .windSpeed(UPDATED_WIND_SPEED)
+            .phase(UPDATED_PHASE);
 
         restThermographicInspectionRecordMockMvc
             .perform(
@@ -606,7 +653,11 @@ class ThermographicInspectionRecordResourceIT {
             .nextMonitoring(UPDATED_NEXT_MONITORING)
             .recommendations(UPDATED_RECOMMENDATIONS)
             .finished(UPDATED_FINISHED)
-            .finishedAt(UPDATED_FINISHED_AT);
+            .finishedAt(UPDATED_FINISHED_AT)
+            .current(UPDATED_CURRENT)
+            .voltage(UPDATED_VOLTAGE)
+            .windSpeed(UPDATED_WIND_SPEED)
+            .phase(UPDATED_PHASE);
 
         restThermographicInspectionRecordMockMvc
             .perform(

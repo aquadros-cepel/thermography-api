@@ -9,7 +9,10 @@ import static com.tech.thermography.domain.ThermographicInspectionRecordTestSamp
 import static com.tech.thermography.domain.UserInfoTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.tech.thermography.domain.enumeration.PhaseType;
 import com.tech.thermography.web.rest.TestUtil;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 class ThermographicInspectionRecordTest {
@@ -122,5 +125,54 @@ class ThermographicInspectionRecordTest {
 
         thermographicInspectionRecord.thermogramRef(null);
         assertThat(thermographicInspectionRecord.getThermogramRef()).isNull();
+    }
+
+    @Test
+    void measurementFieldsTest() {
+        ThermographicInspectionRecord record = getThermographicInspectionRecordRandomSampleGenerator();
+
+        record.setCurrent(12.5);
+        record.setVoltage(220.0);
+        record.setWindSpeed(3.2);
+        record.setPhase(PhaseType.PHASE_A);
+
+        assertThat(record.getCurrent()).isEqualTo(12.5);
+        assertThat(record.getVoltage()).isEqualTo(220.0);
+        assertThat(record.getWindSpeed()).isEqualTo(3.2);
+        assertThat(record.getPhase()).isEqualTo(PhaseType.PHASE_A);
+    }
+
+    @Test
+    void parentRecordTest() {
+        ThermographicInspectionRecord thermographicInspectionRecord = getThermographicInspectionRecordRandomSampleGenerator();
+        ThermographicInspectionRecord thermographicInspectionRecordBack = getThermographicInspectionRecordRandomSampleGenerator();
+
+        thermographicInspectionRecord.setParentRecord(thermographicInspectionRecordBack);
+        assertThat(thermographicInspectionRecord.getParentRecord()).isEqualTo(thermographicInspectionRecordBack);
+
+        thermographicInspectionRecord.parentRecord(null);
+        assertThat(thermographicInspectionRecord.getParentRecord()).isNull();
+    }
+
+    @Test
+    void childRecordsTest() {
+        ThermographicInspectionRecord thermographicInspectionRecord = getThermographicInspectionRecordRandomSampleGenerator();
+        ThermographicInspectionRecord thermographicInspectionRecordBack = getThermographicInspectionRecordRandomSampleGenerator();
+
+        thermographicInspectionRecord.addChildRecords(thermographicInspectionRecordBack);
+        assertThat(thermographicInspectionRecord.getChildRecords()).containsOnly(thermographicInspectionRecordBack);
+        assertThat(thermographicInspectionRecordBack.getParentRecord()).isEqualTo(thermographicInspectionRecord);
+
+        thermographicInspectionRecord.removeChildRecords(thermographicInspectionRecordBack);
+        assertThat(thermographicInspectionRecord.getChildRecords()).doesNotContain(thermographicInspectionRecordBack);
+        assertThat(thermographicInspectionRecordBack.getParentRecord()).isNull();
+
+        thermographicInspectionRecord.childRecords(new HashSet<>(Set.of(thermographicInspectionRecordBack)));
+        assertThat(thermographicInspectionRecord.getChildRecords()).containsOnly(thermographicInspectionRecordBack);
+        assertThat(thermographicInspectionRecordBack.getParentRecord()).isEqualTo(thermographicInspectionRecord);
+
+        thermographicInspectionRecord.setChildRecords(new HashSet<>());
+        assertThat(thermographicInspectionRecord.getChildRecords()).doesNotContain(thermographicInspectionRecordBack);
+        assertThat(thermographicInspectionRecordBack.getParentRecord()).isNull();
     }
 }

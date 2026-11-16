@@ -5,7 +5,7 @@ package com.tech.thermography.domain.enumeration;
  */
 public enum ThermographicInspectionRecordType {
     NO_ANOMALY,
-    ANOMALY_INITIAL,
+    ANOMALY_DETECTED,
     ANOMALY_MONITORING,
-    ANOMALY_SOLVED,
+    ANOMALY_FIXED,
 }

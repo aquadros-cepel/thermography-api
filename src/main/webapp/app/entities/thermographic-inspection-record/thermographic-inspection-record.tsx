@@ -149,6 +149,22 @@ export const ThermographicInspectionRecord = () => {
                   <Translate contentKey="thermographyApiApp.thermographicInspectionRecord.finishedAt">Finished At</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('finishedAt')} />
                 </th>
+                <th className="hand" onClick={sort('current')}>
+                  <Translate contentKey="thermographyApiApp.thermographicInspectionRecord.current">Current</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('current')} />
+                </th>
+                <th className="hand" onClick={sort('voltage')}>
+                  <Translate contentKey="thermographyApiApp.thermographicInspectionRecord.voltage">Voltage</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('voltage')} />
+                </th>
+                <th className="hand" onClick={sort('windSpeed')}>
+                  <Translate contentKey="thermographyApiApp.thermographicInspectionRecord.windSpeed">Wind Speed</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('windSpeed')} />
+                </th>
+                <th className="hand" onClick={sort('phase')}>
+                  <Translate contentKey="thermographyApiApp.thermographicInspectionRecord.phase">Phase</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('phase')} />
+                </th>
                 <th>
                   <Translate contentKey="thermographyApiApp.thermographicInspectionRecord.plant">Plant</Translate>{' '}
                   <FontAwesomeIcon icon="sort" />
@@ -179,6 +195,10 @@ export const ThermographicInspectionRecord = () => {
                 </th>
                 <th>
                   <Translate contentKey="thermographyApiApp.thermographicInspectionRecord.thermogramRef">Thermogram Ref</Translate>{' '}
+                  <FontAwesomeIcon icon="sort" />
+                </th>
+                <th>
+                  <Translate contentKey="thermographyApiApp.thermographicInspectionRecord.parentRecord">Parent Record</Translate>{' '}
                   <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
@@ -224,6 +244,12 @@ export const ThermographicInspectionRecord = () => {
                     {thermographicInspectionRecord.finishedAt ? (
                       <TextFormat type="date" value={thermographicInspectionRecord.finishedAt} format={APP_DATE_FORMAT} />
                     ) : null}
+                  </td>
+                  <td>{thermographicInspectionRecord.current}</td>
+                  <td>{thermographicInspectionRecord.voltage}</td>
+                  <td>{thermographicInspectionRecord.windSpeed}</td>
+                  <td>
+                    <Translate contentKey={`thermographyApiApp.PhaseType.${thermographicInspectionRecord.phase}`} />
                   </td>
                   <td>
                     {thermographicInspectionRecord.plant ? (
@@ -290,6 +316,15 @@ export const ThermographicInspectionRecord = () => {
                     {thermographicInspectionRecord.thermogramRef ? (
                       <Link to={`/thermogram/${thermographicInspectionRecord.thermogramRef.id}`}>
                         {thermographicInspectionRecord.thermogramRef.id}
+                      </Link>
+                    ) : (
+                      ''
+                    )}
+                  </td>
+                  <td>
+                    {thermographicInspectionRecord.parentRecord ? (
+                      <Link to={`/thermographic-inspection-record/${thermographicInspectionRecord.parentRecord.id}`}>
+                        {thermographicInspectionRecord.parentRecord.id}
                       </Link>
                     ) : (
                       ''

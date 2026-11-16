@@ -73,7 +73,11 @@ public class ThermographicInspectionRecordAsserts {
             .satisfies(a -> assertThat(a.getNextMonitoring()).as("check nextMonitoring").isEqualTo(expected.getNextMonitoring()))
             .satisfies(a -> assertThat(a.getRecommendations()).as("check recommendations").isEqualTo(expected.getRecommendations()))
             .satisfies(a -> assertThat(a.getFinished()).as("check finished").isEqualTo(expected.getFinished()))
-            .satisfies(a -> assertThat(a.getFinishedAt()).as("check finishedAt").isEqualTo(expected.getFinishedAt()));
+            .satisfies(a -> assertThat(a.getFinishedAt()).as("check finishedAt").isEqualTo(expected.getFinishedAt()))
+            .satisfies(a -> assertThat(a.getCurrent()).as("check current").isEqualTo(expected.getCurrent()))
+            .satisfies(a -> assertThat(a.getVoltage()).as("check voltage").isEqualTo(expected.getVoltage()))
+            .satisfies(a -> assertThat(a.getWindSpeed()).as("check windSpeed").isEqualTo(expected.getWindSpeed()))
+            .satisfies(a -> assertThat(a.getPhase()).as("check phase").isEqualTo(expected.getPhase()));
     }
 
     /**
@@ -95,6 +99,7 @@ public class ThermographicInspectionRecordAsserts {
             .satisfies(a -> assertThat(a.getCreatedBy()).as("check createdBy").isEqualTo(expected.getCreatedBy()))
             .satisfies(a -> assertThat(a.getFinishedBy()).as("check finishedBy").isEqualTo(expected.getFinishedBy()))
             .satisfies(a -> assertThat(a.getThermogram()).as("check thermogram").isEqualTo(expected.getThermogram()))
-            .satisfies(a -> assertThat(a.getThermogramRef()).as("check thermogramRef").isEqualTo(expected.getThermogramRef()));
+            .satisfies(a -> assertThat(a.getThermogramRef()).as("check thermogramRef").isEqualTo(expected.getThermogramRef()))
+            .satisfies(a -> assertThat(a.getParentRecord()).as("check parentRecord").isEqualTo(expected.getParentRecord()));
     }
 }

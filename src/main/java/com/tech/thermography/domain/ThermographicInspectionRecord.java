@@ -2,6 +2,7 @@ package com.tech.thermography.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tech.thermography.domain.enumeration.ConditionType;
+import com.tech.thermography.domain.enumeration.PhaseType;
 import com.tech.thermography.domain.enumeration.ThermographicInspectionRecordType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -12,11 +13,14 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -83,6 +87,19 @@ public class ThermographicInspectionRecord implements Serializable {
     @Column(name = "finished_at")
     private Instant finishedAt;
 
+    @Column(name = "current")
+    private Double current;
+
+    @Column(name = "voltage")
+    private Double voltage;
+
+    @Column(name = "wind_speed")
+    private Double windSpeed;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "phase")
+    private PhaseType phase;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = { "company", "businessUnit" }, allowSetters = true)
@@ -119,6 +136,43 @@ public class ThermographicInspectionRecord implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties(value = { "equipment", "createdBy" }, allowSetters = true)
     private Thermogram thermogramRef;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(
+        value = {
+            "plant",
+            "route",
+            "equipment",
+            "component",
+            "createdBy",
+            "finishedBy",
+            "thermogram",
+            "thermogramRef",
+            "parentRecord",
+            "childRecords",
+        },
+        allowSetters = true
+    )
+    private ThermographicInspectionRecord parentRecord;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentRecord")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = {
+            "plant",
+            "route",
+            "equipment",
+            "component",
+            "createdBy",
+            "finishedBy",
+            "thermogram",
+            "thermogramRef",
+            "parentRecord",
+            "childRecords",
+        },
+        allowSetters = true
+    )
+    private Set<ThermographicInspectionRecord> childRecords = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -304,6 +358,58 @@ public class ThermographicInspectionRecord implements Serializable {
         this.finishedAt = finishedAt;
     }
 
+    public Double getCurrent() {
+        return this.current;
+    }
+
+    public ThermographicInspectionRecord current(Double current) {
+        this.setCurrent(current);
+        return this;
+    }
+
+    public void setCurrent(Double current) {
+        this.current = current;
+    }
+
+    public Double getVoltage() {
+        return this.voltage;
+    }
+
+    public ThermographicInspectionRecord voltage(Double voltage) {
+        this.setVoltage(voltage);
+        return this;
+    }
+
+    public void setVoltage(Double voltage) {
+        this.voltage = voltage;
+    }
+
+    public Double getWindSpeed() {
+        return this.windSpeed;
+    }
+
+    public ThermographicInspectionRecord windSpeed(Double windSpeed) {
+        this.setWindSpeed(windSpeed);
+        return this;
+    }
+
+    public void setWindSpeed(Double windSpeed) {
+        this.windSpeed = windSpeed;
+    }
+
+    public PhaseType getPhase() {
+        return this.phase;
+    }
+
+    public ThermographicInspectionRecord phase(PhaseType phase) {
+        this.setPhase(phase);
+        return this;
+    }
+
+    public void setPhase(PhaseType phase) {
+        this.phase = phase;
+    }
+
     public Plant getPlant() {
         return this.plant;
     }
@@ -408,8 +514,51 @@ public class ThermographicInspectionRecord implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
-    // setters here
+    public ThermographicInspectionRecord getParentRecord() {
+        return this.parentRecord;
+    }
+
+    public void setParentRecord(ThermographicInspectionRecord parentRecord) {
+        this.parentRecord = parentRecord;
+    }
+
+    public ThermographicInspectionRecord parentRecord(ThermographicInspectionRecord parentRecord) {
+        this.setParentRecord(parentRecord);
+        return this;
+    }
+
+    public Set<ThermographicInspectionRecord> getChildRecords() {
+        return this.childRecords;
+    }
+
+    public void setChildRecords(Set<ThermographicInspectionRecord> childRecords) {
+        if (this.childRecords != null) {
+            this.childRecords.forEach(child -> child.setParentRecord(null));
+        }
+        if (childRecords != null) {
+            childRecords.forEach(child -> child.setParentRecord(this));
+        }
+        this.childRecords = childRecords;
+    }
+
+    public ThermographicInspectionRecord childRecords(Set<ThermographicInspectionRecord> childRecords) {
+        this.setChildRecords(childRecords);
+        return this;
+    }
+
+    public ThermographicInspectionRecord addChildRecords(ThermographicInspectionRecord childRecord) {
+        this.childRecords.add(childRecord);
+        childRecord.setParentRecord(this);
+        return this;
+    }
+
+    public ThermographicInspectionRecord removeChildRecords(ThermographicInspectionRecord childRecord) {
+        this.childRecords.remove(childRecord);
+        childRecord.setParentRecord(null);
+        return this;
+    }
+
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -447,6 +596,10 @@ public class ThermographicInspectionRecord implements Serializable {
                 ", recommendations='" + getRecommendations() + "'" +
                 ", finished='" + getFinished() + "'" +
                 ", finishedAt='" + getFinishedAt() + "'" +
+                ", current=" + getCurrent() +
+                ", voltage=" + getVoltage() +
+                ", windSpeed=" + getWindSpeed() +
+                ", phase='" + getPhase() + "'" +
                 "}";
     }
 }

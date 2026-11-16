@@ -3,9 +3,9 @@
     "ThermographicInspectionRecordType": {
       "null": "",
       "NO_ANOMALY": "NO_ANOMALY",
-      "ANOMALY_INITIAL": "ANOMALY_INITIAL",
+      "ANOMALY_DETECTED": "ANOMALY_DETECTED",
       "ANOMALY_MONITORING": "ANOMALY_MONITORING",
-      "ANOMALY_SOLVED": "ANOMALY_SOLVED"
+      "ANOMALY_FIXED": "ANOMALY_FIXED"
     }
   }
 }
