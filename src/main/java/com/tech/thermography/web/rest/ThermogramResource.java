@@ -157,6 +157,12 @@ public class ThermogramResource {
                 if (thermogram.getRelativeHumidity() != null) {
                     existingThermogram.setRelativeHumidity(thermogram.getRelativeHumidity());
                 }
+                if (thermogram.getExtOpticsTemp() != null) {
+                    existingThermogram.setExtOpticsTemp(thermogram.getExtOpticsTemp());
+                }
+                if (thermogram.getExtOpticsTrans() != null) {
+                    existingThermogram.setExtOpticsTrans(thermogram.getExtOpticsTrans());
+                }
                 if (thermogram.getCameraLens() != null) {
                     existingThermogram.setCameraLens(thermogram.getCameraLens());
                 }

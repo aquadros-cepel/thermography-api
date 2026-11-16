@@ -72,6 +72,12 @@ export const ThermogramUpdate = () => {
     if (values.relativeHumidity !== undefined && typeof values.relativeHumidity !== 'number') {
       values.relativeHumidity = Number(values.relativeHumidity);
     }
+    if (values.extOpticsTemp !== undefined && typeof values.extOpticsTemp !== 'number') {
+      values.extOpticsTemp = Number(values.extOpticsTemp);
+    }
+    if (values.extOpticsTrans !== undefined && typeof values.extOpticsTrans !== 'number') {
+      values.extOpticsTrans = Number(values.extOpticsTrans);
+    }
     if (values.maxTempRoi !== undefined && typeof values.maxTempRoi !== 'number') {
       values.maxTempRoi = Number(values.maxTempRoi);
     }
@@ -215,6 +221,20 @@ export const ThermogramUpdate = () => {
                 id="thermogram-relativeHumidity"
                 name="relativeHumidity"
                 data-cy="relativeHumidity"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('thermographyApiApp.thermogram.extOpticsTemp')}
+                id="thermogram-extOpticsTemp"
+                name="extOpticsTemp"
+                data-cy="extOpticsTemp"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('thermographyApiApp.thermogram.extOpticsTrans')}
+                id="thermogram-extOpticsTrans"
+                name="extOpticsTrans"
+                data-cy="extOpticsTrans"
                 type="text"
               />
               <ValidatedField

@@ -29,6 +29,8 @@
       "atmosphericTemp": "Atmospheric Temp",
       "reflectedTemp": "Reflected Temp",
       "relativeHumidity": "Relative Humidity",
+      "extOpticsTemp": "Ext Optics Temp",
+      "extOpticsTrans": "Ext Optics Trans",
       "cameraLens": "Camera Lens",
       "cameraModel": "Camera Model",
       "imageResolution": "Image Resolution",

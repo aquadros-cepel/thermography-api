@@ -1,7 +1,12 @@
 package com.tech.thermography.domain;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.UUID;
 import org.hibernate.annotations.Cache;
@@ -18,7 +23,6 @@ public class Company implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)
@@ -313,7 +317,8 @@ public class Company implements Serializable {
         this.taxIdNumber = taxIdNumber;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -328,7 +333,8 @@ public class Company implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -336,24 +342,24 @@ public class Company implements Serializable {
     @Override
     public String toString() {
         return "Company{" +
-            "id=" + getId() +
-            ", code='" + getCode() + "'" +
-            ", name='" + getName() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", logo='" + getLogo() + "'" +
-            ", logoContentType='" + getLogoContentType() + "'" +
-            ", address='" + getAddress() + "'" +
-            ", zipCode='" + getZipCode() + "'" +
-            ", street='" + getStreet() + "'" +
-            ", number='" + getNumber() + "'" +
-            ", complement='" + getComplement() + "'" +
-            ", neighborhood='" + getNeighborhood() + "'" +
-            ", city='" + getCity() + "'" +
-            ", state='" + getState() + "'" +
-            ", country='" + getCountry() + "'" +
-            ", primaryPhoneNumber='" + getPrimaryPhoneNumber() + "'" +
-            ", secondaryPhoneNumber='" + getSecondaryPhoneNumber() + "'" +
-            ", taxIdNumber='" + getTaxIdNumber() + "'" +
-            "}";
+                "id=" + getId() +
+                ", code='" + getCode() + "'" +
+                ", name='" + getName() + "'" +
+                ", description='" + getDescription() + "'" +
+                ", logo='" + getLogo() + "'" +
+                ", logoContentType='" + getLogoContentType() + "'" +
+                ", address='" + getAddress() + "'" +
+                ", zipCode='" + getZipCode() + "'" +
+                ", street='" + getStreet() + "'" +
+                ", number='" + getNumber() + "'" +
+                ", complement='" + getComplement() + "'" +
+                ", neighborhood='" + getNeighborhood() + "'" +
+                ", city='" + getCity() + "'" +
+                ", state='" + getState() + "'" +
+                ", country='" + getCountry() + "'" +
+                ", primaryPhoneNumber='" + getPrimaryPhoneNumber() + "'" +
+                ", secondaryPhoneNumber='" + getSecondaryPhoneNumber() + "'" +
+                ", taxIdNumber='" + getTaxIdNumber() + "'" +
+                "}";
     }
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -31,6 +32,7 @@ public class Thermogram implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue
     @Column(name = "id", nullable = false)
     private UUID id;
 
@@ -68,6 +70,12 @@ public class Thermogram implements Serializable {
 
     @Column(name = "relative_humidity")
     private Double relativeHumidity;
+
+    @Column(name = "ext_optics_temp")
+    private Double extOpticsTemp;
+
+    @Column(name = "ext_optics_trans")
+    private Double extOpticsTrans;
 
     @Column(name = "camera_lens")
     private String cameraLens;
@@ -265,6 +273,22 @@ public class Thermogram implements Serializable {
 
     public void setRelativeHumidity(Double relativeHumidity) {
         this.relativeHumidity = relativeHumidity;
+    }
+
+    public Double getExtOpticsTemp() {
+        return this.extOpticsTemp;
+    }
+
+    public void setExtOpticsTemp(Double extOpticsTemp) {
+        this.extOpticsTemp = extOpticsTemp;
+    }
+
+    public Double getExtOpticsTrans() {
+        return this.extOpticsTrans;
+    }
+
+    public void setExtOpticsTrans(Double extOpticsTrans) {
+        this.extOpticsTrans = extOpticsTrans;
     }
 
     public String getCameraLens() {
@@ -466,6 +490,8 @@ public class Thermogram implements Serializable {
                 ", atmosphericTemp=" + getAtmosphericTemp() +
                 ", reflectedTemp=" + getReflectedTemp() +
                 ", relativeHumidity=" + getRelativeHumidity() +
+                ", extOpticsTemp=" + getExtOpticsTemp() +
+                ", extOpticsTrans=" + getExtOpticsTrans() +
                 ", cameraLens='" + getCameraLens() + "'" +
                 ", cameraModel='" + getCameraModel() + "'" +
                 ", imageResolution='" + getImageResolution() + "'" +

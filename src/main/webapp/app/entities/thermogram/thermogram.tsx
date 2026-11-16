@@ -132,6 +132,14 @@ export const Thermogram = () => {
                   <Translate contentKey="thermographyApiApp.thermogram.relativeHumidity">Relative Humidity</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('relativeHumidity')} />
                 </th>
+                <th className="hand" onClick={sort('extOpticsTemp')}>
+                  <Translate contentKey="thermographyApiApp.thermogram.extOpticsTemp">Ext Optics Temp</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('extOpticsTemp')} />
+                </th>
+                <th className="hand" onClick={sort('extOpticsTrans')}>
+                  <Translate contentKey="thermographyApiApp.thermogram.extOpticsTrans">Ext Optics Trans</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('extOpticsTrans')} />
+                </th>
                 <th className="hand" onClick={sort('cameraLens')}>
                   <Translate contentKey="thermographyApiApp.thermogram.cameraLens">Camera Lens</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('cameraLens')} />
@@ -192,6 +200,8 @@ export const Thermogram = () => {
                   <td>{thermogram.atmosphericTemp}</td>
                   <td>{thermogram.reflectedTemp}</td>
                   <td>{thermogram.relativeHumidity}</td>
+                  <td>{thermogram.extOpticsTemp}</td>
+                  <td>{thermogram.extOpticsTrans}</td>
                   <td>{thermogram.cameraLens}</td>
                   <td>{thermogram.cameraModel}</td>
                   <td>{thermogram.imageResolution}</td>

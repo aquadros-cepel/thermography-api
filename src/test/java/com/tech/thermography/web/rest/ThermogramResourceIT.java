@@ -68,6 +68,12 @@ class ThermogramResourceIT {
     private static final Double DEFAULT_RELATIVE_HUMIDITY = 1D;
     private static final Double UPDATED_RELATIVE_HUMIDITY = 2D;
 
+    private static final Double DEFAULT_EXT_OPTICS_TEMP = 1D;
+    private static final Double UPDATED_EXT_OPTICS_TEMP = 2D;
+
+    private static final Double DEFAULT_EXT_OPTICS_TRANS = 1D;
+    private static final Double UPDATED_EXT_OPTICS_TRANS = 2D;
+
     private static final String DEFAULT_CAMERA_LENS = "AAAAAAAAAA";
     private static final String UPDATED_CAMERA_LENS = "BBBBBBBBBB";
 
@@ -130,6 +136,8 @@ class ThermogramResourceIT {
             .atmosphericTemp(DEFAULT_ATMOSPHERIC_TEMP)
             .reflectedTemp(DEFAULT_REFLECTED_TEMP)
             .relativeHumidity(DEFAULT_RELATIVE_HUMIDITY)
+            .extOpticsTemp(DEFAULT_EXT_OPTICS_TEMP)
+            .extOpticsTrans(DEFAULT_EXT_OPTICS_TRANS)
             .cameraLens(DEFAULT_CAMERA_LENS)
             .cameraModel(DEFAULT_CAMERA_MODEL)
             .imageResolution(DEFAULT_IMAGE_RESOLUTION)
@@ -180,6 +188,8 @@ class ThermogramResourceIT {
             .atmosphericTemp(UPDATED_ATMOSPHERIC_TEMP)
             .reflectedTemp(UPDATED_REFLECTED_TEMP)
             .relativeHumidity(UPDATED_RELATIVE_HUMIDITY)
+            .extOpticsTemp(UPDATED_EXT_OPTICS_TEMP)
+            .extOpticsTrans(UPDATED_EXT_OPTICS_TRANS)
             .cameraLens(UPDATED_CAMERA_LENS)
             .cameraModel(UPDATED_CAMERA_MODEL)
             .imageResolution(UPDATED_IMAGE_RESOLUTION)
@@ -318,6 +328,8 @@ class ThermogramResourceIT {
             .andExpect(jsonPath("$.[*].atmosphericTemp").value(hasItem(DEFAULT_ATMOSPHERIC_TEMP)))
             .andExpect(jsonPath("$.[*].reflectedTemp").value(hasItem(DEFAULT_REFLECTED_TEMP)))
             .andExpect(jsonPath("$.[*].relativeHumidity").value(hasItem(DEFAULT_RELATIVE_HUMIDITY)))
+            .andExpect(jsonPath("$.[*].extOpticsTemp").value(hasItem(DEFAULT_EXT_OPTICS_TEMP)))
+            .andExpect(jsonPath("$.[*].extOpticsTrans").value(hasItem(DEFAULT_EXT_OPTICS_TRANS)))
             .andExpect(jsonPath("$.[*].cameraLens").value(hasItem(DEFAULT_CAMERA_LENS)))
             .andExpect(jsonPath("$.[*].cameraModel").value(hasItem(DEFAULT_CAMERA_MODEL)))
             .andExpect(jsonPath("$.[*].imageResolution").value(hasItem(DEFAULT_IMAGE_RESOLUTION)))
@@ -351,6 +363,8 @@ class ThermogramResourceIT {
             .andExpect(jsonPath("$.atmosphericTemp").value(DEFAULT_ATMOSPHERIC_TEMP))
             .andExpect(jsonPath("$.reflectedTemp").value(DEFAULT_REFLECTED_TEMP))
             .andExpect(jsonPath("$.relativeHumidity").value(DEFAULT_RELATIVE_HUMIDITY))
+            .andExpect(jsonPath("$.extOpticsTemp").value(DEFAULT_EXT_OPTICS_TEMP))
+            .andExpect(jsonPath("$.extOpticsTrans").value(DEFAULT_EXT_OPTICS_TRANS))
             .andExpect(jsonPath("$.cameraLens").value(DEFAULT_CAMERA_LENS))
             .andExpect(jsonPath("$.cameraModel").value(DEFAULT_CAMERA_MODEL))
             .andExpect(jsonPath("$.imageResolution").value(DEFAULT_IMAGE_RESOLUTION))
@@ -392,6 +406,8 @@ class ThermogramResourceIT {
             .atmosphericTemp(UPDATED_ATMOSPHERIC_TEMP)
             .reflectedTemp(UPDATED_REFLECTED_TEMP)
             .relativeHumidity(UPDATED_RELATIVE_HUMIDITY)
+            .extOpticsTemp(UPDATED_EXT_OPTICS_TEMP)
+            .extOpticsTrans(UPDATED_EXT_OPTICS_TRANS)
             .cameraLens(UPDATED_CAMERA_LENS)
             .cameraModel(UPDATED_CAMERA_MODEL)
             .imageResolution(UPDATED_IMAGE_RESOLUTION)
@@ -476,15 +492,16 @@ class ThermogramResourceIT {
         partialUpdatedThermogram.setId(thermogram.getId());
 
         partialUpdatedThermogram
-            .imageRefPath(UPDATED_IMAGE_REF_PATH)
+            .audioPath(UPDATED_AUDIO_PATH)
+            .minTemp(UPDATED_MIN_TEMP)
             .avgTemp(UPDATED_AVG_TEMP)
-            .maxTemp(UPDATED_MAX_TEMP)
-            .emissivity(UPDATED_EMISSIVITY)
-            .subjectDistance(UPDATED_SUBJECT_DISTANCE)
-            .reflectedTemp(UPDATED_REFLECTED_TEMP)
+            .atmosphericTemp(UPDATED_ATMOSPHERIC_TEMP)
             .relativeHumidity(UPDATED_RELATIVE_HUMIDITY)
-            .cameraModel(UPDATED_CAMERA_MODEL)
+            .extOpticsTemp(UPDATED_EXT_OPTICS_TEMP)
+            .extOpticsTrans(UPDATED_EXT_OPTICS_TRANS)
+            .cameraLens(UPDATED_CAMERA_LENS)
             .selectedRoiId(UPDATED_SELECTED_ROI_ID)
+            .maxTempRoi(UPDATED_MAX_TEMP_ROI)
             .createdAt(UPDATED_CREATED_AT)
             .latitude(UPDATED_LATITUDE);
 
@@ -529,6 +546,8 @@ class ThermogramResourceIT {
             .atmosphericTemp(UPDATED_ATMOSPHERIC_TEMP)
             .reflectedTemp(UPDATED_REFLECTED_TEMP)
             .relativeHumidity(UPDATED_RELATIVE_HUMIDITY)
+            .extOpticsTemp(UPDATED_EXT_OPTICS_TEMP)
+            .extOpticsTrans(UPDATED_EXT_OPTICS_TRANS)
             .cameraLens(UPDATED_CAMERA_LENS)
             .cameraModel(UPDATED_CAMERA_MODEL)
             .imageResolution(UPDATED_IMAGE_RESOLUTION)

@@ -15,7 +15,9 @@
     },
     {
       "fieldName": "description",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "5000"
     },
     {
       "fieldName": "deadline",
@@ -37,7 +39,9 @@
     },
     {
       "fieldName": "recommendations",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "5000"
     }
   ],
   "name": "RiskPeriodicityDeadline",

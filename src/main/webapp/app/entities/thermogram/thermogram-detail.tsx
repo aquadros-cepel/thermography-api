@@ -99,6 +99,18 @@ export const ThermogramDetail = () => {
           </dt>
           <dd>{thermogramEntity.relativeHumidity}</dd>
           <dt>
+            <span id="extOpticsTemp">
+              <Translate contentKey="thermographyApiApp.thermogram.extOpticsTemp">Ext Optics Temp</Translate>
+            </span>
+          </dt>
+          <dd>{thermogramEntity.extOpticsTemp}</dd>
+          <dt>
+            <span id="extOpticsTrans">
+              <Translate contentKey="thermographyApiApp.thermogram.extOpticsTrans">Ext Optics Trans</Translate>
+            </span>
+          </dt>
+          <dd>{thermogramEntity.extOpticsTrans}</dd>
+          <dt>
             <span id="cameraLens">
               <Translate contentKey="thermographyApiApp.thermogram.cameraLens">Camera Lens</Translate>
             </span>

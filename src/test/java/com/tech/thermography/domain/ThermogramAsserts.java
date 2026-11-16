@@ -58,6 +58,8 @@ public class ThermogramAsserts {
             .satisfies(a -> assertThat(a.getAtmosphericTemp()).as("check atmosphericTemp").isEqualTo(expected.getAtmosphericTemp()))
             .satisfies(a -> assertThat(a.getReflectedTemp()).as("check reflectedTemp").isEqualTo(expected.getReflectedTemp()))
             .satisfies(a -> assertThat(a.getRelativeHumidity()).as("check relativeHumidity").isEqualTo(expected.getRelativeHumidity()))
+            .satisfies(a -> assertThat(a.getExtOpticsTemp()).as("check extOpticsTemp").isEqualTo(expected.getExtOpticsTemp()))
+            .satisfies(a -> assertThat(a.getExtOpticsTrans()).as("check extOpticsTrans").isEqualTo(expected.getExtOpticsTrans()))
             .satisfies(a -> assertThat(a.getCameraLens()).as("check cameraLens").isEqualTo(expected.getCameraLens()))
             .satisfies(a -> assertThat(a.getCameraModel()).as("check cameraModel").isEqualTo(expected.getCameraModel()))
             .satisfies(a -> assertThat(a.getImageResolution()).as("check imageResolution").isEqualTo(expected.getImageResolution()))

@@ -1,0 +1,223 @@
+# Tarefa: Atualização cirúrgica da entidade Thermogram no JHipster
+
+Atue como um engenheiro de software especialista em JHipster, JDL, Java, Spring Boot, Hibernate, Liquibase e React.
+
+## 1. Objetivo
+
+Modificar a entidade `Thermogram` existente no arquivo `.jdl` do projeto, adicionando campos extOpticsTemp, extOpticsTrans.
+
+Executar os comandos necessários do JHipster para regenerar exclusivamente os componentes de backend e frontend relacionados à entidade `Thermogram`.
+
+**RESTRIÇÃO FUNDAMENTAL: todo o restante do projeto deve permanecer rigorosamente inalterado.**
+
+Não realizar regeneração global do projeto.
+
+## 2. Nova definição da entidade
+
+Localize a definição atual da entidade `Thermogram` no arquivo JDL e substitua-a pela seguinte definição:
+
+```jdl
+entity Thermogram {
+    id UUID required
+      imagePath String required
+    audioPath String
+    
+    imageRefPath String required
+    
+    minTemp Double
+    avgTemp Double
+    maxTemp Double
+
+      emissivity Double
+    subjectDistance Double
+    atmosphericTemp Double
+    reflectedTemp Double
+    relativeHumidity Double
+    extOpticsTemp Double
+    extOpticsTrans Double
+    cameraLens String
+    cameraModel String
+    imageResolution String
+
+      selectedRoiId UUID
+    maxTempRoi Double
+
+    createdAt Instant
+    
+    latitude Double
+    longitude Double
+}
+```
+
+Preserve todas as demais entidades, relacionamentos, enums, configurações e opções existentes no arquivo JDL.
+
+Não reestruture nem reformate desnecessariamente o restante do arquivo.
+
+## 3. Regras obrigatórias de execução
+
+### Etapa 1 – Análise do projeto
+
+Antes de qualquer alteração:
+
+1. Identifique a raiz do projeto.
+2. Utilize como base o arquivo thermograpy_v5.jdl` utilizado pelo projeto, e gere uma nova versão v6 com as modificações.
+3. Identifique a versão do JHipster e a arquitetura atual do projeto.
+4. Identifique se o frontend utiliza React.
+5. Identifique os diretórios e arquivos atualmente gerados para `Thermogram`.
+6. Analise os arquivos de configuração do JHipster e os comandos disponíveis para regeneração individual de entidades.
+7. Execute `git status` e identifique todas as alterações preexistentes.
+
+Não descarte nem sobrescreva alterações locais já existentes.
+
+### Etapa 2 – Atualização do JDL
+
+1. Modifique exclusivamente a definição da entidade `Thermogram`.
+2. Valide a sintaxe do JDL.
+3. Confirme que nenhuma outra entidade ou relacionamento foi modificado.
+4. Preserve todas as opções e configurações globais existentes.
+
+### Etapa 3 – Regeneração do backend
+
+Utilize o mecanismo oficial do JHipster para regenerar somente a entidade `Thermogram`.
+
+Considere a utilização do comando:
+
+```bash
+jhipster import-jdl thermography_v6.jdl --entities Thermogram
+```
+
+Entretanto, antes de executá-lo, verifique a versão instalada e o comportamento do comando nessa versão.
+
+Se houver suporte a importação de uma entidade específica diretamente do JDL, prefira essa abordagem para manter a definição do JDL como fonte da verdade.
+
+A regeneração deve contemplar exclusivamente os componentes de backend de `Thermogram`, incluindo, quando aplicável:
+
+- Entity Java.
+- DTO, caso utilizado.
+- Mapper.
+- Repository.
+- Service.
+- Resource / REST Controller.
+- Liquibase changelog específico da entidade.
+- Testes unitários e de integração relacionados à entidade.
+
+**Atenção especial ao banco de dados:**
+
+- Não apague dados existentes.
+- Não execute DROP TABLE.
+- Não recrie tabelas.
+- Não altere registros existentes.
+- Gere uma migration incremental para adicionar os novos campos.
+- Preserve os dados atuais de `Thermogram`.
+- Verifique a compatibilidade do tipo `ImageBlob` com a configuração atual do projeto.
+
+### Etapa 4 – Regeneração do frontend
+
+Regere exclusivamente os componentes React relacionados à entidade `Thermogram`.
+
+Inclua, quando aplicável:
+
+- Interface TypeScript da entidade.
+- Serviços/API de acesso à entidade.
+- Componentes de listagem.
+- Componentes de criação.
+- Componentes de edição.
+- Componentes de visualização.
+- Formulários e validações.
+- Rotas específicas da entidade, somente se necessário.
+
+O novo formulário deve contemplar todos os campos adicionados.
+
+Não altere componentes compartilhados do frontend, layouts, menus, autenticação, navegação global ou configurações gerais.
+
+### Etapa 5 – Proteção dos demais componentes
+
+Esta etapa é obrigatória.
+
+Não executar:
+
+```bash
+jhipster
+```
+
+Não executar uma importação global do JDL que provoque a regeneração de todas as entidades.
+
+Não executar comandos que recriem ou atualizem indiscriminadamente o projeto inteiro.
+
+Não modificar:
+
+- Outras entidades Java.
+- Outros DTOs e Mappers.
+- Outros Repositories.
+- Outros Services.
+- Outros Resources.
+- Outras interfaces TypeScript.
+- Outras páginas React.
+- Outras rotas.
+- Componentes compartilhados.
+- Configurações de segurança.
+- Configurações do Spring Boot.
+- Configurações do frontend.
+- Dependências do projeto.
+- Arquivos de build.
+- Configurações do banco de dados.
+- Outras migrations existentes.
+
+Se o JHipster tentar modificar arquivos fora do escopo da entidade `Thermogram`, interrompa a execução, analise o impacto e procure uma alternativa mais restritiva.
+
+Não reverta alterações preexistentes do usuário.
+
+### Etapa 6 – Auditoria das alterações
+
+Ao terminar, execute:
+
+```bash
+git status --short
+git diff --stat
+git diff
+```
+
+Analise todas as alterações realizadas.
+
+Classifique os arquivos modificados em:
+
+1. Arquivos diretamente relacionados à entidade `Thermogram`.
+2. Arquivos compartilhados que precisaram de alteração.
+3. Arquivos fora do escopo.
+
+Se houver arquivos fora do escopo, investigue e reverta somente as alterações introduzidas por esta execução, sem afetar alterações preexistentes.
+
+O objetivo é que o diff final contenha somente as modificações necessárias para implementar a nova entidade `Thermogram`.
+
+### Etapa 7 – Validação
+
+Execute as verificações aplicáveis ao projeto:
+
+- Compilação do backend.
+- Testes relacionados a `Thermogram`.
+- Compilação do frontend.
+- Validação da migration Liquibase.
+- Verificação dos endpoints REST.
+- Verificação do tratamento de `ImageBlob`.
+- Verificação dos formulários React.
+
+Não faça alterações em outras partes do projeto para corrigir problemas não relacionados à tarefa.
+
+## 4. Relatório final obrigatório
+
+Ao finalizar, apresente:
+
+1. Arquivos `.jdl` modificados.
+2. Lista dos arquivos de backend modificados.
+3. Lista dos arquivos de frontend modificados.
+4. Migrations Liquibase criadas.
+5. Comandos JHipster executados.
+6. Resultado da compilação do backend.
+7. Resultado da compilação do frontend.
+8. Resultado dos testes.
+9. Confirmação de que os dados existentes foram preservados.
+10. Lista de qualquer alteração fora do escopo que tenha sido necessária.
+
+Se não for possível garantir que a regeneração seja restrita à entidade `Thermogram`, não prossiga com uma regeneração potencialmente destrutiva. Explique o problema e apresente uma alternativa segura.
+
+**Critério de sucesso:** a entidade `Thermogram` deve possuir todos os novos campos no backend e frontend, mantendo integralmente o comportamento e o código das demais entidades e funcionalidades do sistema.

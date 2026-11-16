@@ -15,6 +15,8 @@ export interface IThermogram {
   atmosphericTemp?: number | null;
   reflectedTemp?: number | null;
   relativeHumidity?: number | null;
+  extOpticsTemp?: number | null;
+  extOpticsTrans?: number | null;
   cameraLens?: string | null;
   cameraModel?: string | null;
   imageResolution?: string | null;
