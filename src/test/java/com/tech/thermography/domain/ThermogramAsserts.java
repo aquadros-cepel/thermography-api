@@ -67,7 +67,8 @@ public class ThermogramAsserts {
             .satisfies(a -> assertThat(a.getMaxTempRoi()).as("check maxTempRoi").isEqualTo(expected.getMaxTempRoi()))
             .satisfies(a -> assertThat(a.getCreatedAt()).as("check createdAt").isEqualTo(expected.getCreatedAt()))
             .satisfies(a -> assertThat(a.getLatitude()).as("check latitude").isEqualTo(expected.getLatitude()))
-            .satisfies(a -> assertThat(a.getLongitude()).as("check longitude").isEqualTo(expected.getLongitude()));
+            .satisfies(a -> assertThat(a.getLongitude()).as("check longitude").isEqualTo(expected.getLongitude()))
+            .satisfies(a -> assertThat(a.getPhase()).as("check phase").isEqualTo(expected.getPhase()));
     }
 
     /**

@@ -39,6 +39,7 @@
       "createdAt": "Created At",
       "latitude": "Latitude",
       "longitude": "Longitude",
+      "phase": "Phase",
       "equipment": "Equipment",
       "createdBy": "Created By"
     }

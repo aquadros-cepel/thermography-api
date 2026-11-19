@@ -5,14 +5,13 @@ import { IEquipment } from 'app/shared/model/equipment.model';
 import { IEquipmentComponent } from 'app/shared/model/equipment-component.model';
 import { IUserInfo } from 'app/shared/model/user-info.model';
 import { IThermogram } from 'app/shared/model/thermogram.model';
-import { ThermographicInspectionRecordType } from 'app/shared/model/enumerations/thermographic-inspection-record-type.model';
+import { ThermographicRecordType } from 'app/shared/model/enumerations/thermographic-record-type.model';
 import { ConditionType } from 'app/shared/model/enumerations/condition-type.model';
-import { PhaseType } from 'app/shared/model/enumerations/phase-type.model';
 
-export interface IThermographicInspectionRecord {
+export interface IThermographicRecord {
   id?: string;
   name?: string;
-  type?: keyof typeof ThermographicInspectionRecordType;
+  type?: keyof typeof ThermographicRecordType;
   serviceOrder?: string | null;
   createdAt?: dayjs.Dayjs;
   analysisDescription?: string | null;
@@ -27,7 +26,6 @@ export interface IThermographicInspectionRecord {
   current?: number | null;
   voltage?: number | null;
   windSpeed?: number | null;
-  phase?: keyof typeof PhaseType | null;
   plant?: IPlant;
   route?: IInspectionRecord | null;
   equipment?: IEquipment;
@@ -36,9 +34,9 @@ export interface IThermographicInspectionRecord {
   finishedBy?: IUserInfo;
   thermogram?: IThermogram;
   thermogramRef?: IThermogram | null;
-  parentRecord?: IThermographicInspectionRecord | null;
+  parentRecord?: IThermographicRecord | null;
 }
 
-export const defaultValue: Readonly<IThermographicInspectionRecord> = {
+export const defaultValue: Readonly<IThermographicRecord> = {
   finished: false,
 };

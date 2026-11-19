@@ -1,6 +1,6 @@
 package com.tech.thermography.repository;
 
-import com.tech.thermography.domain.ThermographicInspectionRecord;
+import com.tech.thermography.domain.ThermographicRecord;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,14 +9,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
- * Spring Data JPA repository for the ThermographicInspectionRecord entity.
+ * Spring Data JPA repository for the ThermographicRecord entity.
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ThermographicInspectionRecordRepository extends JpaRepository<ThermographicInspectionRecord, UUID> {
+public interface ThermographicRecordRepository extends JpaRepository<ThermographicRecord, UUID> {
     @Query(
         """
-        SELECT DISTINCT tir FROM ThermographicInspectionRecord tir
+        SELECT DISTINCT tir FROM ThermographicRecord tir
         LEFT JOIN FETCH tir.plant
         LEFT JOIN FETCH tir.route
         LEFT JOIN FETCH tir.equipment
@@ -28,15 +28,15 @@ public interface ThermographicInspectionRecordRepository extends JpaRepository<T
         LEFT JOIN FETCH t.rois
         """
     )
-    List<ThermographicInspectionRecord> findAllWithRelationships();
+    List<ThermographicRecord> findAllWithRelationships();
 
     @Query(
         """
-        SELECT tir FROM ThermographicInspectionRecord tir
+        SELECT tir FROM ThermographicRecord tir
         LEFT JOIN FETCH tir.thermogramRef tr
         LEFT JOIN FETCH tr.rois
         WHERE tir IN :records
         """
     )
-    List<ThermographicInspectionRecord> findWithThermogramRef(@Param("records") List<ThermographicInspectionRecord> records);
+    List<ThermographicRecord> findWithThermogramRef(@Param("records") List<ThermographicRecord> records);
 }

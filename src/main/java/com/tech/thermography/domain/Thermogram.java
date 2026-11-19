@@ -3,10 +3,12 @@ package com.tech.thermography.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.tech.thermography.domain.enumeration.PhaseType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -32,7 +34,6 @@ public class Thermogram implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
     @Column(name = "id", nullable = false)
     private UUID id;
 
@@ -100,6 +101,10 @@ public class Thermogram implements Serializable {
 
     @Column(name = "longitude")
     private Double longitude;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "phase")
+    private PhaseType phase;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -279,12 +284,22 @@ public class Thermogram implements Serializable {
         return this.extOpticsTemp;
     }
 
+    public Thermogram extOpticsTemp(Double extOpticsTemp) {
+        this.setExtOpticsTemp(extOpticsTemp);
+        return this;
+    }
+
     public void setExtOpticsTemp(Double extOpticsTemp) {
         this.extOpticsTemp = extOpticsTemp;
     }
 
     public Double getExtOpticsTrans() {
         return this.extOpticsTrans;
+    }
+
+    public Thermogram extOpticsTrans(Double extOpticsTrans) {
+        this.setExtOpticsTrans(extOpticsTrans);
+        return this;
     }
 
     public void setExtOpticsTrans(Double extOpticsTrans) {
@@ -395,6 +410,19 @@ public class Thermogram implements Serializable {
         this.longitude = longitude;
     }
 
+    public PhaseType getPhase() {
+        return this.phase;
+    }
+
+    public Thermogram phase(PhaseType phase) {
+        this.setPhase(phase);
+        return this;
+    }
+
+    public void setPhase(PhaseType phase) {
+        this.phase = phase;
+    }
+
     public Equipment getEquipment() {
         return this.equipment;
     }
@@ -500,6 +528,7 @@ public class Thermogram implements Serializable {
                 ", createdAt='" + getCreatedAt() + "'" +
                 ", latitude=" + getLatitude() +
                 ", longitude=" + getLongitude() +
+                ", phase='" + getPhase() + "'" +
                 "}";
     }
 }

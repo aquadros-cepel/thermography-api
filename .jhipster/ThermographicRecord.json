@@ -16,7 +16,7 @@
     },
     {
       "fieldName": "type",
-      "fieldType": "ThermographicInspectionRecordType",
+      "fieldType": "ThermographicRecordType",
       "fieldValidateRules": ["required"],
       "fieldValues": "NO_ANOMALY,ANOMALY_DETECTED,ANOMALY_MONITORING,ANOMALY_FIXED"
     },
@@ -79,14 +79,9 @@
     {
       "fieldName": "windSpeed",
       "fieldType": "Double"
-    },
-    {
-      "fieldName": "phase",
-      "fieldType": "PhaseType",
-      "fieldValues": "PHASE_A,PHASE_B,PHASE_C,NEUTRAL,GROUND,THREE_PHASE"
     }
   ],
-  "name": "ThermographicInspectionRecord",
+  "name": "ThermographicRecord",
   "relationships": [
     {
       "otherEntityName": "plant",
@@ -142,14 +137,14 @@
       "relationshipType": "many-to-one"
     },
     {
-      "otherEntityName": "thermographicInspectionRecord",
+      "otherEntityName": "thermographicRecord",
       "otherEntityRelationshipName": "childRecords",
       "relationshipName": "parentRecord",
       "relationshipSide": "left",
       "relationshipType": "many-to-one"
     },
     {
-      "otherEntityName": "thermographicInspectionRecord",
+      "otherEntityName": "thermographicRecord",
       "otherEntityRelationshipName": "parentRecord",
       "relationshipName": "childRecords",
       "relationshipSide": "right",

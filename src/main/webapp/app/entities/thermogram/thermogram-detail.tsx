@@ -161,6 +161,12 @@ export const ThermogramDetail = () => {
           </dt>
           <dd>{thermogramEntity.longitude}</dd>
           <dt>
+            <span id="phase">
+              <Translate contentKey="thermographyApiApp.thermogram.phase">Phase</Translate>
+            </span>
+          </dt>
+          <dd>{thermogramEntity.phase}</dd>
+          <dt>
             <Translate contentKey="thermographyApiApp.thermogram.equipment">Equipment</Translate>
           </dt>
           <dd>{thermogramEntity.equipment ? thermogramEntity.equipment.id : ''}</dd>

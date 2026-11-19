@@ -3,9 +3,9 @@ import { createAsyncThunk, isFulfilled, isPending } from '@reduxjs/toolkit';
 import { ASC } from 'app/shared/util/pagination.constants';
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { EntityState, IQueryParams, createEntitySlice, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
-import { IThermographicInspectionRecord, defaultValue } from 'app/shared/model/thermographic-inspection-record.model';
+import { IThermographicRecord, defaultValue } from 'app/shared/model/thermographic-record.model';
 
-const initialState: EntityState<IThermographicInspectionRecord> = {
+const initialState: EntityState<IThermographicRecord> = {
   loading: false,
   errorMessage: null,
   entities: [],
@@ -14,32 +14,32 @@ const initialState: EntityState<IThermographicInspectionRecord> = {
   updateSuccess: false,
 };
 
-const apiUrl = 'api/thermographic-inspection-records';
+const apiUrl = 'api/thermographic-records';
 
 // Actions
 
 export const getEntities = createAsyncThunk(
-  'thermographicInspectionRecord/fetch_entity_list',
+  'thermographicRecord/fetch_entity_list',
   async ({ sort }: IQueryParams) => {
     const requestUrl = `${apiUrl}?${sort ? `sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
-    return axios.get<IThermographicInspectionRecord[]>(requestUrl);
+    return axios.get<IThermographicRecord[]>(requestUrl);
   },
   { serializeError: serializeAxiosError },
 );
 
 export const getEntity = createAsyncThunk(
-  'thermographicInspectionRecord/fetch_entity',
+  'thermographicRecord/fetch_entity',
   async (id: string | number) => {
     const requestUrl = `${apiUrl}/${id}`;
-    return axios.get<IThermographicInspectionRecord>(requestUrl);
+    return axios.get<IThermographicRecord>(requestUrl);
   },
   { serializeError: serializeAxiosError },
 );
 
 export const createEntity = createAsyncThunk(
-  'thermographicInspectionRecord/create_entity',
-  async (entity: IThermographicInspectionRecord, thunkAPI) => {
-    const result = await axios.post<IThermographicInspectionRecord>(apiUrl, cleanEntity(entity));
+  'thermographicRecord/create_entity',
+  async (entity: IThermographicRecord, thunkAPI) => {
+    const result = await axios.post<IThermographicRecord>(apiUrl, cleanEntity(entity));
     thunkAPI.dispatch(getEntities({}));
     return result;
   },
@@ -47,9 +47,9 @@ export const createEntity = createAsyncThunk(
 );
 
 export const updateEntity = createAsyncThunk(
-  'thermographicInspectionRecord/update_entity',
-  async (entity: IThermographicInspectionRecord, thunkAPI) => {
-    const result = await axios.put<IThermographicInspectionRecord>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
+  'thermographicRecord/update_entity',
+  async (entity: IThermographicRecord, thunkAPI) => {
+    const result = await axios.put<IThermographicRecord>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
     thunkAPI.dispatch(getEntities({}));
     return result;
   },
@@ -57,9 +57,9 @@ export const updateEntity = createAsyncThunk(
 );
 
 export const partialUpdateEntity = createAsyncThunk(
-  'thermographicInspectionRecord/partial_update_entity',
-  async (entity: IThermographicInspectionRecord, thunkAPI) => {
-    const result = await axios.patch<IThermographicInspectionRecord>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
+  'thermographicRecord/partial_update_entity',
+  async (entity: IThermographicRecord, thunkAPI) => {
+    const result = await axios.patch<IThermographicRecord>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
     thunkAPI.dispatch(getEntities({}));
     return result;
   },
@@ -67,10 +67,10 @@ export const partialUpdateEntity = createAsyncThunk(
 );
 
 export const deleteEntity = createAsyncThunk(
-  'thermographicInspectionRecord/delete_entity',
+  'thermographicRecord/delete_entity',
   async (id: string | number, thunkAPI) => {
     const requestUrl = `${apiUrl}/${id}`;
-    const result = await axios.delete<IThermographicInspectionRecord>(requestUrl);
+    const result = await axios.delete<IThermographicRecord>(requestUrl);
     thunkAPI.dispatch(getEntities({}));
     return result;
   },
@@ -79,8 +79,8 @@ export const deleteEntity = createAsyncThunk(
 
 // slice
 
-export const ThermographicInspectionRecordSlice = createEntitySlice({
-  name: 'thermographicInspectionRecord',
+export const ThermographicRecordSlice = createEntitySlice({
+  name: 'thermographicRecord',
   initialState,
   extraReducers(builder) {
     builder
@@ -128,7 +128,7 @@ export const ThermographicInspectionRecordSlice = createEntitySlice({
   },
 });
 
-export const { reset } = ThermographicInspectionRecordSlice.actions;
+export const { reset } = ThermographicRecordSlice.actions;
 
 // Reducer
-export default ThermographicInspectionRecordSlice.reducer;
+export default ThermographicRecordSlice.reducer;

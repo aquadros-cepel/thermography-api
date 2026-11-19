@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntities as getEquipment } from 'app/entities/equipment/equipment.reducer';
 import { getEntities as getUserInfos } from 'app/entities/user-info/user-info.reducer';
+import { PhaseType } from 'app/shared/model/enumerations/phase-type.model';
 import { createEntity, getEntity, reset, updateEntity } from './thermogram.reducer';
 
 export const ThermogramUpdate = () => {
@@ -25,6 +26,7 @@ export const ThermogramUpdate = () => {
   const loading = useAppSelector(state => state.thermogram.loading);
   const updating = useAppSelector(state => state.thermogram.updating);
   const updateSuccess = useAppSelector(state => state.thermogram.updateSuccess);
+  const phaseTypeValues = Object.keys(PhaseType);
 
   const handleClose = () => {
     navigate('/thermogram');
@@ -109,6 +111,7 @@ export const ThermogramUpdate = () => {
           createdAt: displayDefaultDateTime(),
         }
       : {
+          phase: 'PHASE_A',
           ...thermogramEntity,
           createdAt: convertDateTimeFromServer(thermogramEntity.createdAt),
           equipment: thermogramEntity?.equipment?.id,
@@ -294,6 +297,19 @@ export const ThermogramUpdate = () => {
                 data-cy="longitude"
                 type="text"
               />
+              <ValidatedField
+                label={translate('thermographyApiApp.thermogram.phase')}
+                id="thermogram-phase"
+                name="phase"
+                data-cy="phase"
+                type="select"
+              >
+                {phaseTypeValues.map(phaseType => (
+                  <option value={phaseType} key={phaseType}>
+                    {translate(`thermographyApiApp.PhaseType.${phaseType}`)}
+                  </option>
+                ))}
+              </ValidatedField>
               <ValidatedField
                 id="thermogram-equipment"
                 name="equipment"

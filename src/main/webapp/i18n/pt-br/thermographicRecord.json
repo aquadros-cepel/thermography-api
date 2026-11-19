@@ -1,21 +1,21 @@
 {
   "thermographyApiApp": {
-    "thermographicInspectionRecord": {
+    "thermographicRecord": {
       "home": {
-        "title": "Thermographic Inspection Records",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new Thermographic Inspection Record",
-        "createOrEditLabel": "Create or edit a Thermographic Inspection Record",
-        "notFound": "No Thermographic Inspection Records found"
+        "title": "Thermographic Records",
+        "refreshListLabel": "Atualizar lista",
+        "createLabel": "Criar novo Thermographic Record",
+        "createOrEditLabel": "Criar ou editar Thermographic Record",
+        "notFound": "Nenhum Thermographic Record encontrado"
       },
-      "created": "A new Thermographic Inspection Record is created with identifier {{ param }}",
-      "updated": "A Thermographic Inspection Record is updated with identifier {{ param }}",
-      "deleted": "A Thermographic Inspection Record is deleted with identifier {{ param }}",
+      "created": "Um novo Thermographic Record foi criado com o identificador {{ param }}",
+      "updated": "Um Thermographic Record foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Thermographic Record foi excluído com o identificador {{ param }}",
       "delete": {
-        "question": "Are you sure you want to delete Thermographic Inspection Record {{ id }}?"
+        "question": "Tem certeza de que deseja excluir Thermographic Record {{ id }}?"
       },
       "detail": {
-        "title": "Thermographic Inspection Record"
+        "title": "Thermographic Record"
       },
       "id": "Id",
       "name": "Name",
@@ -34,7 +34,6 @@
       "current": "Current",
       "voltage": "Voltage",
       "windSpeed": "Wind Speed",
-      "phase": "Phase",
       "plant": "Plant",
       "route": "Route",
       "equipment": "Equipment",

@@ -172,6 +172,10 @@ export const Thermogram = () => {
                   <Translate contentKey="thermographyApiApp.thermogram.longitude">Longitude</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('longitude')} />
                 </th>
+                <th className="hand" onClick={sort('phase')}>
+                  <Translate contentKey="thermographyApiApp.thermogram.phase">Phase</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('phase')} />
+                </th>
                 <th>
                   <Translate contentKey="thermographyApiApp.thermogram.equipment">Equipment</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
@@ -210,6 +214,9 @@ export const Thermogram = () => {
                   <td>{thermogram.createdAt ? <TextFormat type="date" value={thermogram.createdAt} format={APP_DATE_FORMAT} /> : null}</td>
                   <td>{thermogram.latitude}</td>
                   <td>{thermogram.longitude}</td>
+                  <td>
+                    <Translate contentKey={`thermographyApiApp.PhaseType.${thermogram.phase}`} />
+                  </td>
                   <td>{thermogram.equipment ? <Link to={`/equipment/${thermogram.equipment.id}`}>{thermogram.equipment.id}</Link> : ''}</td>
                   <td>{thermogram.createdBy ? <Link to={`/user-info/${thermogram.createdBy.id}`}>{thermogram.createdBy.id}</Link> : ''}</td>
                   <td className="text-end">

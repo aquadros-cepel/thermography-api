@@ -1,25 +1,25 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect } from 'react';
+import { Translate, ValidatedField, ValidatedForm, isNumber, translate } from 'react-jhipster';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button, Col, FormText, Row } from 'reactstrap';
-import { Translate, ValidatedField, ValidatedForm, isNumber, translate } from 'react-jhipster';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 
-import { getEntities as getPlants } from 'app/entities/plant/plant.reducer';
-import { getEntities as getInspectionRecords } from 'app/entities/inspection-record/inspection-record.reducer';
-import { getEntities as getEquipment } from 'app/entities/equipment/equipment.reducer';
 import { getEntities as getEquipmentComponents } from 'app/entities/equipment-component/equipment-component.reducer';
-import { getEntities as getUserInfos } from 'app/entities/user-info/user-info.reducer';
+import { getEntities as getEquipment } from 'app/entities/equipment/equipment.reducer';
+import { getEntities as getInspectionRecords } from 'app/entities/inspection-record/inspection-record.reducer';
+import { getEntities as getPlants } from 'app/entities/plant/plant.reducer';
 import { getEntities as getThermograms } from 'app/entities/thermogram/thermogram.reducer';
-import { getEntities as getThermographicInspectionRecords } from 'app/entities/thermographic-inspection-record/thermographic-inspection-record.reducer';
-import { ThermographicInspectionRecordType } from 'app/shared/model/enumerations/thermographic-inspection-record-type.model';
+import { getEntities as getThermographicRecords } from 'app/entities/thermographic-record/thermographic-record.reducer';
+import { getEntities as getUserInfos } from 'app/entities/user-info/user-info.reducer';
 import { ConditionType } from 'app/shared/model/enumerations/condition-type.model';
 import { PhaseType } from 'app/shared/model/enumerations/phase-type.model';
-import { createEntity, getEntity, reset, updateEntity } from './thermographic-inspection-record.reducer';
+import { ThermographicRecordType } from 'app/shared/model/enumerations/thermographic-record-type.model';
+import { createEntity, getEntity, reset, updateEntity } from './thermographic-record.reducer';
 
-export const ThermographicInspectionRecordUpdate = () => {
+export const ThermographicRecordUpdate = () => {
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
@@ -33,17 +33,17 @@ export const ThermographicInspectionRecordUpdate = () => {
   const equipmentComponents = useAppSelector(state => state.equipmentComponent.entities);
   const userInfos = useAppSelector(state => state.userInfo.entities);
   const thermograms = useAppSelector(state => state.thermogram.entities);
-  const thermographicInspectionRecords = useAppSelector(state => state.thermographicInspectionRecord.entities);
-  const thermographicInspectionRecordEntity = useAppSelector(state => state.thermographicInspectionRecord.entity);
-  const loading = useAppSelector(state => state.thermographicInspectionRecord.loading);
-  const updating = useAppSelector(state => state.thermographicInspectionRecord.updating);
-  const updateSuccess = useAppSelector(state => state.thermographicInspectionRecord.updateSuccess);
-  const thermographicInspectionRecordTypeValues = Object.keys(ThermographicInspectionRecordType);
+  const ThermographicRecords = useAppSelector(state => state.ThermographicRecord.entities);
+  const ThermographicRecordEntity = useAppSelector(state => state.ThermographicRecord.entity);
+  const loading = useAppSelector(state => state.ThermographicRecord.loading);
+  const updating = useAppSelector(state => state.ThermographicRecord.updating);
+  const updateSuccess = useAppSelector(state => state.ThermographicRecord.updateSuccess);
+  const ThermographicRecordTypeValues = Object.keys(ThermographicRecordType);
   const conditionTypeValues = Object.keys(ConditionType);
   const phaseTypeValues = Object.keys(PhaseType);
 
   const handleClose = () => {
-    navigate('/thermographic-inspection-record');
+    navigate('/thermographic-record');
   };
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export const ThermographicInspectionRecordUpdate = () => {
     dispatch(getEquipmentComponents({}));
     dispatch(getUserInfos({}));
     dispatch(getThermograms({}));
-    dispatch(getThermographicInspectionRecords({}));
+    dispatch(getThermographicRecords({}));
   }, []);
 
   useEffect(() => {
@@ -88,7 +88,7 @@ export const ThermographicInspectionRecordUpdate = () => {
     }
 
     const entity = {
-      ...thermographicInspectionRecordEntity,
+      ...ThermographicRecordEntity,
       ...values,
       plant: plants.find(it => it.id.toString() === values.plant?.toString()),
       route: inspectionRecords.find(it => it.id.toString() === values.route?.toString()),
@@ -98,7 +98,7 @@ export const ThermographicInspectionRecordUpdate = () => {
       finishedBy: userInfos.find(it => it.id.toString() === values.finishedBy?.toString()),
       thermogram: thermograms.find(it => it.id.toString() === values.thermogram?.toString()),
       thermogramRef: thermograms.find(it => it.id.toString() === values.thermogramRef?.toString()),
-      parentRecord: thermographicInspectionRecords.find(it => it.id.toString() === values.parentRecord?.toString()),
+      parentRecord: ThermographicRecords.find(it => it.id.toString() === values.parentRecord?.toString()),
     };
 
     if (isNew) {
@@ -118,30 +118,27 @@ export const ThermographicInspectionRecordUpdate = () => {
           type: 'NO_ANOMALY',
           condition: 'NORMAL',
           phase: 'PHASE_A',
-          ...thermographicInspectionRecordEntity,
-          createdAt: convertDateTimeFromServer(thermographicInspectionRecordEntity.createdAt),
-          finishedAt: convertDateTimeFromServer(thermographicInspectionRecordEntity.finishedAt),
-          plant: thermographicInspectionRecordEntity?.plant?.id,
-          route: thermographicInspectionRecordEntity?.route?.id,
-          equipment: thermographicInspectionRecordEntity?.equipment?.id,
-          component: thermographicInspectionRecordEntity?.component?.id,
-          createdBy: thermographicInspectionRecordEntity?.createdBy?.id,
-          finishedBy: thermographicInspectionRecordEntity?.finishedBy?.id,
-          thermogram: thermographicInspectionRecordEntity?.thermogram?.id,
-          thermogramRef: thermographicInspectionRecordEntity?.thermogramRef?.id,
-          parentRecord: thermographicInspectionRecordEntity?.parentRecord?.id,
+          ...ThermographicRecordEntity,
+          createdAt: convertDateTimeFromServer(ThermographicRecordEntity.createdAt),
+          finishedAt: convertDateTimeFromServer(ThermographicRecordEntity.finishedAt),
+          plant: ThermographicRecordEntity?.plant?.id,
+          route: ThermographicRecordEntity?.route?.id,
+          equipment: ThermographicRecordEntity?.equipment?.id,
+          component: ThermographicRecordEntity?.component?.id,
+          createdBy: ThermographicRecordEntity?.createdBy?.id,
+          finishedBy: ThermographicRecordEntity?.finishedBy?.id,
+          thermogram: ThermographicRecordEntity?.thermogram?.id,
+          thermogramRef: ThermographicRecordEntity?.thermogramRef?.id,
+          parentRecord: ThermographicRecordEntity?.parentRecord?.id,
         };
 
   return (
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2
-            id="thermographyApiApp.thermographicInspectionRecord.home.createOrEditLabel"
-            data-cy="ThermographicInspectionRecordCreateUpdateHeading"
-          >
-            <Translate contentKey="thermographyApiApp.thermographicInspectionRecord.home.createOrEditLabel">
-              Create or edit a ThermographicInspectionRecord
+          <h2 id="thermographyApiApp.ThermographicRecord.home.createOrEditLabel" data-cy="ThermographicRecordCreateUpdateHeading">
+            <Translate contentKey="thermographyApiApp.ThermographicRecord.home.createOrEditLabel">
+              Create or edit a ThermographicRecord
             </Translate>
           </h2>
         </Col>
@@ -157,14 +154,14 @@ export const ThermographicInspectionRecordUpdate = () => {
                   name="id"
                   required
                   readOnly
-                  id="thermographic-inspection-record-id"
-                  label={translate('thermographyApiApp.thermographicInspectionRecord.id')}
+                  id="thermographic-record-id"
+                  label={translate('thermographyApiApp.ThermographicRecord.id')}
                   validate={{ required: true }}
                 />
               ) : null}
               <ValidatedField
-                label={translate('thermographyApiApp.thermographicInspectionRecord.name')}
-                id="thermographic-inspection-record-name"
+                label={translate('thermographyApiApp.ThermographicRecord.name')}
+                id="thermographic-record-name"
                 name="name"
                 data-cy="name"
                 type="text"
@@ -173,28 +170,28 @@ export const ThermographicInspectionRecordUpdate = () => {
                 }}
               />
               <ValidatedField
-                label={translate('thermographyApiApp.thermographicInspectionRecord.type')}
-                id="thermographic-inspection-record-type"
+                label={translate('thermographyApiApp.ThermographicRecord.type')}
+                id="thermographic-record-type"
                 name="type"
                 data-cy="type"
                 type="select"
               >
-                {thermographicInspectionRecordTypeValues.map(thermographicInspectionRecordType => (
-                  <option value={thermographicInspectionRecordType} key={thermographicInspectionRecordType}>
-                    {translate(`thermographyApiApp.ThermographicInspectionRecordType.${thermographicInspectionRecordType}`)}
+                {ThermographicRecordTypeValues.map(thermographicRecordType => (
+                  <option value={thermographicRecordType} key={thermographicRecordType}>
+                    {translate(`thermographyApiApp.ThermographicRecordType.${thermographicRecordType}`)}
                   </option>
                 ))}
               </ValidatedField>
               <ValidatedField
-                label={translate('thermographyApiApp.thermographicInspectionRecord.serviceOrder')}
-                id="thermographic-inspection-record-serviceOrder"
+                label={translate('thermographyApiApp.ThermographicRecord.serviceOrder')}
+                id="thermographic-record-serviceOrder"
                 name="serviceOrder"
                 data-cy="serviceOrder"
                 type="text"
               />
               <ValidatedField
-                label={translate('thermographyApiApp.thermographicInspectionRecord.createdAt')}
-                id="thermographic-inspection-record-createdAt"
+                label={translate('thermographyApiApp.ThermographicRecord.createdAt')}
+                id="thermographic-record-createdAt"
                 name="createdAt"
                 data-cy="createdAt"
                 type="datetime-local"
@@ -204,15 +201,15 @@ export const ThermographicInspectionRecordUpdate = () => {
                 }}
               />
               <ValidatedField
-                label={translate('thermographyApiApp.thermographicInspectionRecord.analysisDescription')}
-                id="thermographic-inspection-record-analysisDescription"
+                label={translate('thermographyApiApp.ThermographicRecord.analysisDescription')}
+                id="thermographic-record-analysisDescription"
                 name="analysisDescription"
                 data-cy="analysisDescription"
                 type="text"
               />
               <ValidatedField
-                label={translate('thermographyApiApp.thermographicInspectionRecord.condition')}
-                id="thermographic-inspection-record-condition"
+                label={translate('thermographyApiApp.ThermographicRecord.condition')}
+                id="thermographic-record-condition"
                 name="condition"
                 data-cy="condition"
                 type="select"
@@ -224,8 +221,8 @@ export const ThermographicInspectionRecordUpdate = () => {
                 ))}
               </ValidatedField>
               <ValidatedField
-                label={translate('thermographyApiApp.thermographicInspectionRecord.deltaT')}
-                id="thermographic-inspection-record-deltaT"
+                label={translate('thermographyApiApp.ThermographicRecord.deltaT')}
+                id="thermographic-record-deltaT"
                 name="deltaT"
                 data-cy="deltaT"
                 type="text"
@@ -235,73 +232,73 @@ export const ThermographicInspectionRecordUpdate = () => {
                 }}
               />
               <ValidatedField
-                label={translate('thermographyApiApp.thermographicInspectionRecord.periodicity')}
-                id="thermographic-inspection-record-periodicity"
+                label={translate('thermographyApiApp.ThermographicRecord.periodicity')}
+                id="thermographic-record-periodicity"
                 name="periodicity"
                 data-cy="periodicity"
                 type="text"
               />
               <ValidatedField
-                label={translate('thermographyApiApp.thermographicInspectionRecord.deadlineExecution')}
-                id="thermographic-inspection-record-deadlineExecution"
+                label={translate('thermographyApiApp.ThermographicRecord.deadlineExecution')}
+                id="thermographic-record-deadlineExecution"
                 name="deadlineExecution"
                 data-cy="deadlineExecution"
                 type="date"
               />
               <ValidatedField
-                label={translate('thermographyApiApp.thermographicInspectionRecord.nextMonitoring')}
-                id="thermographic-inspection-record-nextMonitoring"
+                label={translate('thermographyApiApp.ThermographicRecord.nextMonitoring')}
+                id="thermographic-record-nextMonitoring"
                 name="nextMonitoring"
                 data-cy="nextMonitoring"
                 type="date"
               />
               <ValidatedField
-                label={translate('thermographyApiApp.thermographicInspectionRecord.recommendations')}
-                id="thermographic-inspection-record-recommendations"
+                label={translate('thermographyApiApp.ThermographicRecord.recommendations')}
+                id="thermographic-record-recommendations"
                 name="recommendations"
                 data-cy="recommendations"
                 type="text"
               />
               <ValidatedField
-                label={translate('thermographyApiApp.thermographicInspectionRecord.finished')}
-                id="thermographic-inspection-record-finished"
+                label={translate('thermographyApiApp.ThermographicRecord.finished')}
+                id="thermographic-record-finished"
                 name="finished"
                 data-cy="finished"
                 check
                 type="checkbox"
               />
               <ValidatedField
-                label={translate('thermographyApiApp.thermographicInspectionRecord.finishedAt')}
-                id="thermographic-inspection-record-finishedAt"
+                label={translate('thermographyApiApp.ThermographicRecord.finishedAt')}
+                id="thermographic-record-finishedAt"
                 name="finishedAt"
                 data-cy="finishedAt"
                 type="datetime-local"
                 placeholder="YYYY-MM-DD HH:mm"
               />
               <ValidatedField
-                label={translate('thermographyApiApp.thermographicInspectionRecord.current')}
-                id="thermographic-inspection-record-current"
+                label={translate('thermographyApiApp.ThermographicRecord.current')}
+                id="thermographic-record-current"
                 name="current"
                 data-cy="current"
                 type="text"
               />
               <ValidatedField
-                label={translate('thermographyApiApp.thermographicInspectionRecord.voltage')}
-                id="thermographic-inspection-record-voltage"
+                label={translate('thermographyApiApp.ThermographicRecord.voltage')}
+                id="thermographic-record-voltage"
                 name="voltage"
                 data-cy="voltage"
                 type="text"
               />
               <ValidatedField
-                label={translate('thermographyApiApp.thermographicInspectionRecord.windSpeed')}
-                id="thermographic-inspection-record-windSpeed"
+                label={translate('thermographyApiApp.ThermographicRecord.windSpeed')}
+                id="thermographic-record-windSpeed"
                 name="windSpeed"
                 data-cy="windSpeed"
                 type="text"
               />
               <ValidatedField
-                label={translate('thermographyApiApp.thermographicInspectionRecord.phase')}
-                id="thermographic-inspection-record-phase"
+                label={translate('thermographyApiApp.ThermographicRecord.phase')}
+                id="thermographic-record-phase"
                 name="phase"
                 data-cy="phase"
                 type="select"
@@ -313,10 +310,10 @@ export const ThermographicInspectionRecordUpdate = () => {
                 ))}
               </ValidatedField>
               <ValidatedField
-                id="thermographic-inspection-record-plant"
+                id="thermographic-record-plant"
                 name="plant"
                 data-cy="plant"
-                label={translate('thermographyApiApp.thermographicInspectionRecord.plant')}
+                label={translate('thermographyApiApp.ThermographicRecord.plant')}
                 type="select"
                 required
               >
@@ -333,10 +330,10 @@ export const ThermographicInspectionRecordUpdate = () => {
                 <Translate contentKey="entity.validation.required">This field is required.</Translate>
               </FormText>
               <ValidatedField
-                id="thermographic-inspection-record-route"
+                id="thermographic-record-route"
                 name="route"
                 data-cy="route"
-                label={translate('thermographyApiApp.thermographicInspectionRecord.route')}
+                label={translate('thermographyApiApp.ThermographicRecord.route')}
                 type="select"
               >
                 <option value="" key="0" />
@@ -349,10 +346,10 @@ export const ThermographicInspectionRecordUpdate = () => {
                   : null}
               </ValidatedField>
               <ValidatedField
-                id="thermographic-inspection-record-equipment"
+                id="thermographic-record-equipment"
                 name="equipment"
                 data-cy="equipment"
-                label={translate('thermographyApiApp.thermographicInspectionRecord.equipment')}
+                label={translate('thermographyApiApp.ThermographicRecord.equipment')}
                 type="select"
                 required
               >
@@ -369,10 +366,10 @@ export const ThermographicInspectionRecordUpdate = () => {
                 <Translate contentKey="entity.validation.required">This field is required.</Translate>
               </FormText>
               <ValidatedField
-                id="thermographic-inspection-record-component"
+                id="thermographic-record-component"
                 name="component"
                 data-cy="component"
-                label={translate('thermographyApiApp.thermographicInspectionRecord.component')}
+                label={translate('thermographyApiApp.ThermographicRecord.component')}
                 type="select"
               >
                 <option value="" key="0" />
@@ -385,10 +382,10 @@ export const ThermographicInspectionRecordUpdate = () => {
                   : null}
               </ValidatedField>
               <ValidatedField
-                id="thermographic-inspection-record-createdBy"
+                id="thermographic-record-createdBy"
                 name="createdBy"
                 data-cy="createdBy"
-                label={translate('thermographyApiApp.thermographicInspectionRecord.createdBy')}
+                label={translate('thermographyApiApp.ThermographicRecord.createdBy')}
                 type="select"
                 required
               >
@@ -405,10 +402,10 @@ export const ThermographicInspectionRecordUpdate = () => {
                 <Translate contentKey="entity.validation.required">This field is required.</Translate>
               </FormText>
               <ValidatedField
-                id="thermographic-inspection-record-finishedBy"
+                id="thermographic-record-finishedBy"
                 name="finishedBy"
                 data-cy="finishedBy"
-                label={translate('thermographyApiApp.thermographicInspectionRecord.finishedBy')}
+                label={translate('thermographyApiApp.ThermographicRecord.finishedBy')}
                 type="select"
                 required
               >
@@ -425,10 +422,10 @@ export const ThermographicInspectionRecordUpdate = () => {
                 <Translate contentKey="entity.validation.required">This field is required.</Translate>
               </FormText>
               <ValidatedField
-                id="thermographic-inspection-record-thermogram"
+                id="thermographic-record-thermogram"
                 name="thermogram"
                 data-cy="thermogram"
-                label={translate('thermographyApiApp.thermographicInspectionRecord.thermogram')}
+                label={translate('thermographyApiApp.ThermographicRecord.thermogram')}
                 type="select"
                 required
               >
@@ -445,10 +442,10 @@ export const ThermographicInspectionRecordUpdate = () => {
                 <Translate contentKey="entity.validation.required">This field is required.</Translate>
               </FormText>
               <ValidatedField
-                id="thermographic-inspection-record-thermogramRef"
+                id="thermographic-record-thermogramRef"
                 name="thermogramRef"
                 data-cy="thermogramRef"
-                label={translate('thermographyApiApp.thermographicInspectionRecord.thermogramRef')}
+                label={translate('thermographyApiApp.ThermographicRecord.thermogramRef')}
                 type="select"
               >
                 <option value="" key="0" />
@@ -461,31 +458,22 @@ export const ThermographicInspectionRecordUpdate = () => {
                   : null}
               </ValidatedField>
               <ValidatedField
-                id="thermographic-inspection-record-parentRecord"
+                id="thermographic-record-parentRecord"
                 name="parentRecord"
                 data-cy="parentRecord"
-                label={translate('thermographyApiApp.thermographicInspectionRecord.parentRecord')}
+                label={translate('thermographyApiApp.ThermographicRecord.parentRecord')}
                 type="select"
               >
                 <option value="" key="0" />
-                {thermographicInspectionRecords
-                  ? thermographicInspectionRecords
-                      .filter(otherEntity => otherEntity.id !== thermographicInspectionRecordEntity?.id)
-                      .map(otherEntity => (
-                        <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.id}
-                        </option>
-                      ))
+                {ThermographicRecords
+                  ? ThermographicRecords.filter(otherEntity => otherEntity.id !== ThermographicRecordEntity?.id).map(otherEntity => (
+                      <option value={otherEntity.id} key={otherEntity.id}>
+                        {otherEntity.id}
+                      </option>
+                    ))
                   : null}
               </ValidatedField>
-              <Button
-                tag={Link}
-                id="cancel-save"
-                data-cy="entityCreateCancelButton"
-                to="/thermographic-inspection-record"
-                replace
-                color="info"
-              >
+              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/thermographic-record" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">
@@ -506,4 +494,4 @@ export const ThermographicInspectionRecordUpdate = () => {
   );
 };
 
-export default ThermographicInspectionRecordUpdate;
+export default ThermographicRecordUpdate;

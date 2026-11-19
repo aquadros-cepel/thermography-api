@@ -187,6 +187,9 @@ public class ThermogramResource {
                 if (thermogram.getLongitude() != null) {
                     existingThermogram.setLongitude(thermogram.getLongitude());
                 }
+                if (thermogram.getPhase() != null) {
+                    existingThermogram.setPhase(thermogram.getPhase());
+                }
 
                 return existingThermogram;
             })

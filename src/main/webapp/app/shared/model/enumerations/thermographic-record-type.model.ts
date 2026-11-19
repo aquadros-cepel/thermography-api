@@ -1,4 +1,4 @@
-export enum ThermographicInspectionRecordType {
+export enum ThermographicRecordType {
   NO_ANOMALY = 'NO_ANOMALY',
 
   ANOMALY_DETECTED = 'ANOMALY_DETECTED',

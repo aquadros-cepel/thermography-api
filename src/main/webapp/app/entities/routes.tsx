@@ -3,26 +3,26 @@ import { Route } from 'react-router'; // eslint-disable-line
 
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 
-import Company from './company';
-import Plant from './plant';
 import BusinessUnit from './business-unit';
+import Company from './company';
 import Equipment from './equipment';
-import EquipmentGroup from './equipment-group';
-import InspectionRoute from './inspection-route';
-import InspectionRouteGroup from './inspection-route-group';
-import EquipmentTypeTranslation from './equipment-type-translation';
 import EquipmentComponent from './equipment-component';
 import EquipmentComponentTemperatureLimits from './equipment-component-temperature-limits';
-import RiskPeriodicityDeadline from './risk-periodicity-deadline';
-import RiskRecommendationTranslation from './risk-recommendation-translation';
-import Thermogram from './thermogram';
-import ROI from './roi';
-import ThermographicInspectionRecord from './thermographic-inspection-record';
-import UserInfo from './user-info';
-import InspectionRouteGroupEquipment from './inspection-route-group-equipment';
+import EquipmentGroup from './equipment-group';
+import EquipmentTypeTranslation from './equipment-type-translation';
 import InspectionRecord from './inspection-record';
 import InspectionRecordGroup from './inspection-record-group';
 import InspectionRecordGroupEquipment from './inspection-record-group-equipment';
+import InspectionRoute from './inspection-route';
+import InspectionRouteGroup from './inspection-route-group';
+import InspectionRouteGroupEquipment from './inspection-route-group-equipment';
+import Plant from './plant';
+import RiskPeriodicityDeadline from './risk-periodicity-deadline';
+import RiskRecommendationTranslation from './risk-recommendation-translation';
+import ROI from './roi';
+import Thermogram from './thermogram';
+import ThermographicRecord from './thermographic-record';
+import UserInfo from './user-info';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 export default () => {
@@ -44,7 +44,7 @@ export default () => {
         <Route path="risk-recommendation-translation/*" element={<RiskRecommendationTranslation />} />
         <Route path="thermogram/*" element={<Thermogram />} />
         <Route path="roi/*" element={<ROI />} />
-        <Route path="thermographic-inspection-record/*" element={<ThermographicInspectionRecord />} />
+        <Route path="thermographic-record/*" element={<ThermographicRecord />} />
         <Route path="user-info/*" element={<UserInfo />} />
         <Route path="inspection-route-group-equipment/*" element={<InspectionRouteGroupEquipment />} />
         <Route path="inspection-record/*" element={<InspectionRecord />} />

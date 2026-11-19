@@ -2,9 +2,7 @@ package com.tech.thermography.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tech.thermography.domain.enumeration.ConditionType;
-import com.tech.thermography.domain.enumeration.PhaseType;
-import com.tech.thermography.domain.enumeration.ThermographicInspectionRecordType;
-import jakarta.persistence.CascadeType;
+import com.tech.thermography.domain.enumeration.ThermographicRecordType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -26,13 +24,13 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * A ThermographicInspectionRecord.
+ * A ThermographicRecord.
  */
 @Entity
-@Table(name = "thermographic_inspection_record")
+@Table(name = "thermographic_record")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class ThermographicInspectionRecord implements Serializable {
+public class ThermographicRecord implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -48,7 +46,7 @@ public class ThermographicInspectionRecord implements Serializable {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
-    private ThermographicInspectionRecordType type;
+    private ThermographicRecordType type;
 
     @Column(name = "service_order")
     private String serviceOrder;
@@ -96,17 +94,13 @@ public class ThermographicInspectionRecord implements Serializable {
     @Column(name = "wind_speed")
     private Double windSpeed;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "phase")
-    private PhaseType phase;
-
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = { "company", "businessUnit" }, allowSetters = true)
     private Plant plant;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "startedBy", "finishedBy" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "plant", "inspectionRoute", "createdBy", "startedBy", "finishedBy", "groups" }, allowSetters = true)
     private InspectionRecord route;
 
     @ManyToOne(optional = false)
@@ -128,13 +122,11 @@ public class ThermographicInspectionRecord implements Serializable {
     @JsonIgnoreProperties(value = { "user", "company" }, allowSetters = true)
     private UserInfo finishedBy;
 
-    @ManyToOne(optional = false, cascade = CascadeType.REMOVE)
+    @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "equipment", "createdBy" }, allowSetters = true)
     private Thermogram thermogram;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JsonIgnoreProperties(value = { "equipment", "createdBy" }, allowSetters = true)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Thermogram thermogramRef;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -153,7 +145,7 @@ public class ThermographicInspectionRecord implements Serializable {
         },
         allowSetters = true
     )
-    private ThermographicInspectionRecord parentRecord;
+    private ThermographicRecord parentRecord;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentRecord")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -172,7 +164,7 @@ public class ThermographicInspectionRecord implements Serializable {
         },
         allowSetters = true
     )
-    private Set<ThermographicInspectionRecord> childRecords = new HashSet<>();
+    private Set<ThermographicRecord> childRecords = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -180,7 +172,7 @@ public class ThermographicInspectionRecord implements Serializable {
         return this.id;
     }
 
-    public ThermographicInspectionRecord id(UUID id) {
+    public ThermographicRecord id(UUID id) {
         this.setId(id);
         return this;
     }
@@ -193,7 +185,7 @@ public class ThermographicInspectionRecord implements Serializable {
         return this.name;
     }
 
-    public ThermographicInspectionRecord name(String name) {
+    public ThermographicRecord name(String name) {
         this.setName(name);
         return this;
     }
@@ -202,16 +194,16 @@ public class ThermographicInspectionRecord implements Serializable {
         this.name = name;
     }
 
-    public ThermographicInspectionRecordType getType() {
+    public ThermographicRecordType getType() {
         return this.type;
     }
 
-    public ThermographicInspectionRecord type(ThermographicInspectionRecordType type) {
+    public ThermographicRecord type(ThermographicRecordType type) {
         this.setType(type);
         return this;
     }
 
-    public void setType(ThermographicInspectionRecordType type) {
+    public void setType(ThermographicRecordType type) {
         this.type = type;
     }
 
@@ -219,7 +211,7 @@ public class ThermographicInspectionRecord implements Serializable {
         return this.serviceOrder;
     }
 
-    public ThermographicInspectionRecord serviceOrder(String serviceOrder) {
+    public ThermographicRecord serviceOrder(String serviceOrder) {
         this.setServiceOrder(serviceOrder);
         return this;
     }
@@ -232,7 +224,7 @@ public class ThermographicInspectionRecord implements Serializable {
         return this.createdAt;
     }
 
-    public ThermographicInspectionRecord createdAt(Instant createdAt) {
+    public ThermographicRecord createdAt(Instant createdAt) {
         this.setCreatedAt(createdAt);
         return this;
     }
@@ -245,7 +237,7 @@ public class ThermographicInspectionRecord implements Serializable {
         return this.analysisDescription;
     }
 
-    public ThermographicInspectionRecord analysisDescription(String analysisDescription) {
+    public ThermographicRecord analysisDescription(String analysisDescription) {
         this.setAnalysisDescription(analysisDescription);
         return this;
     }
@@ -258,7 +250,7 @@ public class ThermographicInspectionRecord implements Serializable {
         return this.condition;
     }
 
-    public ThermographicInspectionRecord condition(ConditionType condition) {
+    public ThermographicRecord condition(ConditionType condition) {
         this.setCondition(condition);
         return this;
     }
@@ -271,7 +263,7 @@ public class ThermographicInspectionRecord implements Serializable {
         return this.deltaT;
     }
 
-    public ThermographicInspectionRecord deltaT(Double deltaT) {
+    public ThermographicRecord deltaT(Double deltaT) {
         this.setDeltaT(deltaT);
         return this;
     }
@@ -284,7 +276,7 @@ public class ThermographicInspectionRecord implements Serializable {
         return this.periodicity;
     }
 
-    public ThermographicInspectionRecord periodicity(Integer periodicity) {
+    public ThermographicRecord periodicity(Integer periodicity) {
         this.setPeriodicity(periodicity);
         return this;
     }
@@ -297,7 +289,7 @@ public class ThermographicInspectionRecord implements Serializable {
         return this.deadlineExecution;
     }
 
-    public ThermographicInspectionRecord deadlineExecution(LocalDate deadlineExecution) {
+    public ThermographicRecord deadlineExecution(LocalDate deadlineExecution) {
         this.setDeadlineExecution(deadlineExecution);
         return this;
     }
@@ -310,7 +302,7 @@ public class ThermographicInspectionRecord implements Serializable {
         return this.nextMonitoring;
     }
 
-    public ThermographicInspectionRecord nextMonitoring(LocalDate nextMonitoring) {
+    public ThermographicRecord nextMonitoring(LocalDate nextMonitoring) {
         this.setNextMonitoring(nextMonitoring);
         return this;
     }
@@ -323,7 +315,7 @@ public class ThermographicInspectionRecord implements Serializable {
         return this.recommendations;
     }
 
-    public ThermographicInspectionRecord recommendations(String recommendations) {
+    public ThermographicRecord recommendations(String recommendations) {
         this.setRecommendations(recommendations);
         return this;
     }
@@ -336,7 +328,7 @@ public class ThermographicInspectionRecord implements Serializable {
         return this.finished;
     }
 
-    public ThermographicInspectionRecord finished(Boolean finished) {
+    public ThermographicRecord finished(Boolean finished) {
         this.setFinished(finished);
         return this;
     }
@@ -349,7 +341,7 @@ public class ThermographicInspectionRecord implements Serializable {
         return this.finishedAt;
     }
 
-    public ThermographicInspectionRecord finishedAt(Instant finishedAt) {
+    public ThermographicRecord finishedAt(Instant finishedAt) {
         this.setFinishedAt(finishedAt);
         return this;
     }
@@ -362,7 +354,7 @@ public class ThermographicInspectionRecord implements Serializable {
         return this.current;
     }
 
-    public ThermographicInspectionRecord current(Double current) {
+    public ThermographicRecord current(Double current) {
         this.setCurrent(current);
         return this;
     }
@@ -375,7 +367,7 @@ public class ThermographicInspectionRecord implements Serializable {
         return this.voltage;
     }
 
-    public ThermographicInspectionRecord voltage(Double voltage) {
+    public ThermographicRecord voltage(Double voltage) {
         this.setVoltage(voltage);
         return this;
     }
@@ -388,26 +380,13 @@ public class ThermographicInspectionRecord implements Serializable {
         return this.windSpeed;
     }
 
-    public ThermographicInspectionRecord windSpeed(Double windSpeed) {
+    public ThermographicRecord windSpeed(Double windSpeed) {
         this.setWindSpeed(windSpeed);
         return this;
     }
 
     public void setWindSpeed(Double windSpeed) {
         this.windSpeed = windSpeed;
-    }
-
-    public PhaseType getPhase() {
-        return this.phase;
-    }
-
-    public ThermographicInspectionRecord phase(PhaseType phase) {
-        this.setPhase(phase);
-        return this;
-    }
-
-    public void setPhase(PhaseType phase) {
-        this.phase = phase;
     }
 
     public Plant getPlant() {
@@ -418,7 +397,7 @@ public class ThermographicInspectionRecord implements Serializable {
         this.plant = plant;
     }
 
-    public ThermographicInspectionRecord plant(Plant plant) {
+    public ThermographicRecord plant(Plant plant) {
         this.setPlant(plant);
         return this;
     }
@@ -431,7 +410,7 @@ public class ThermographicInspectionRecord implements Serializable {
         this.route = inspectionRecord;
     }
 
-    public ThermographicInspectionRecord route(InspectionRecord inspectionRecord) {
+    public ThermographicRecord route(InspectionRecord inspectionRecord) {
         this.setRoute(inspectionRecord);
         return this;
     }
@@ -444,7 +423,7 @@ public class ThermographicInspectionRecord implements Serializable {
         this.equipment = equipment;
     }
 
-    public ThermographicInspectionRecord equipment(Equipment equipment) {
+    public ThermographicRecord equipment(Equipment equipment) {
         this.setEquipment(equipment);
         return this;
     }
@@ -457,7 +436,7 @@ public class ThermographicInspectionRecord implements Serializable {
         this.component = equipmentComponent;
     }
 
-    public ThermographicInspectionRecord component(EquipmentComponent equipmentComponent) {
+    public ThermographicRecord component(EquipmentComponent equipmentComponent) {
         this.setComponent(equipmentComponent);
         return this;
     }
@@ -470,7 +449,7 @@ public class ThermographicInspectionRecord implements Serializable {
         this.createdBy = userInfo;
     }
 
-    public ThermographicInspectionRecord createdBy(UserInfo userInfo) {
+    public ThermographicRecord createdBy(UserInfo userInfo) {
         this.setCreatedBy(userInfo);
         return this;
     }
@@ -483,7 +462,7 @@ public class ThermographicInspectionRecord implements Serializable {
         this.finishedBy = userInfo;
     }
 
-    public ThermographicInspectionRecord finishedBy(UserInfo userInfo) {
+    public ThermographicRecord finishedBy(UserInfo userInfo) {
         this.setFinishedBy(userInfo);
         return this;
     }
@@ -496,7 +475,7 @@ public class ThermographicInspectionRecord implements Serializable {
         this.thermogram = thermogram;
     }
 
-    public ThermographicInspectionRecord thermogram(Thermogram thermogram) {
+    public ThermographicRecord thermogram(Thermogram thermogram) {
         this.setThermogram(thermogram);
         return this;
     }
@@ -509,66 +488,67 @@ public class ThermographicInspectionRecord implements Serializable {
         this.thermogramRef = thermogram;
     }
 
-    public ThermographicInspectionRecord thermogramRef(Thermogram thermogram) {
+    public ThermographicRecord thermogramRef(Thermogram thermogram) {
         this.setThermogramRef(thermogram);
         return this;
     }
 
-    public ThermographicInspectionRecord getParentRecord() {
+    public ThermographicRecord getParentRecord() {
         return this.parentRecord;
     }
 
-    public void setParentRecord(ThermographicInspectionRecord parentRecord) {
-        this.parentRecord = parentRecord;
+    public void setParentRecord(ThermographicRecord thermographicRecord) {
+        this.parentRecord = thermographicRecord;
     }
 
-    public ThermographicInspectionRecord parentRecord(ThermographicInspectionRecord parentRecord) {
-        this.setParentRecord(parentRecord);
+    public ThermographicRecord parentRecord(ThermographicRecord thermographicRecord) {
+        this.setParentRecord(thermographicRecord);
         return this;
     }
 
-    public Set<ThermographicInspectionRecord> getChildRecords() {
+    public Set<ThermographicRecord> getChildRecords() {
         return this.childRecords;
     }
 
-    public void setChildRecords(Set<ThermographicInspectionRecord> childRecords) {
+    public void setChildRecords(Set<ThermographicRecord> thermographicRecords) {
         if (this.childRecords != null) {
-            this.childRecords.forEach(child -> child.setParentRecord(null));
+            this.childRecords.forEach(i -> i.setParentRecord(null));
         }
-        if (childRecords != null) {
-            childRecords.forEach(child -> child.setParentRecord(this));
+        if (thermographicRecords != null) {
+            thermographicRecords.forEach(i -> i.setParentRecord(this));
         }
-        this.childRecords = childRecords;
+        this.childRecords = thermographicRecords;
     }
 
-    public ThermographicInspectionRecord childRecords(Set<ThermographicInspectionRecord> childRecords) {
-        this.setChildRecords(childRecords);
+    public ThermographicRecord childRecords(Set<ThermographicRecord> thermographicRecords) {
+        this.setChildRecords(thermographicRecords);
         return this;
     }
 
-    public ThermographicInspectionRecord addChildRecords(ThermographicInspectionRecord childRecord) {
-        this.childRecords.add(childRecord);
-        childRecord.setParentRecord(this);
+    public ThermographicRecord addChildRecords(ThermographicRecord thermographicRecord) {
+        this.childRecords.add(thermographicRecord);
+        thermographicRecord.setParentRecord(this);
         return this;
     }
 
-    public ThermographicInspectionRecord removeChildRecords(ThermographicInspectionRecord childRecord) {
-        this.childRecords.remove(childRecord);
-        childRecord.setParentRecord(null);
+    public ThermographicRecord removeChildRecords(ThermographicRecord thermographicRecord) {
+        this.childRecords.remove(thermographicRecord);
+        thermographicRecord.setParentRecord(null);
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof ThermographicInspectionRecord)) {
+        if (!(o instanceof ThermographicRecord)) {
             return false;
         }
-        return getId() != null && getId().equals(((ThermographicInspectionRecord) o).getId());
+        return getId() != null && getId().equals(((ThermographicRecord) o).getId());
     }
 
     @Override
@@ -581,7 +561,7 @@ public class ThermographicInspectionRecord implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        return "ThermographicInspectionRecord{" +
+        return "ThermographicRecord{" +
                 "id=" + getId() +
                 ", name='" + getName() + "'" +
                 ", type='" + getType() + "'" +
@@ -599,7 +579,6 @@ public class ThermographicInspectionRecord implements Serializable {
                 ", current=" + getCurrent() +
                 ", voltage=" + getVoltage() +
                 ", windSpeed=" + getWindSpeed() +
-                ", phase='" + getPhase() + "'" +
                 "}";
     }
 }

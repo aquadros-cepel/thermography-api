@@ -22,12 +22,13 @@
         "riskRecommendationTranslation": "Risk Recommendation Translation",
         "thermogram": "Thermogram",
         "roi": "ROI",
-        "thermographicInspectionRecord": "Thermographic Inspection Record",
+        "ThermographicRecord": "Thermographic Inspection Record",
         "userInfo": "User Info",
         "inspectionRouteGroupEquipment": "Inspection Route Group Equipment",
         "inspectionRecord": "Inspection Record",
         "inspectionRecordGroup": "Inspection Record Group",
-        "inspectionRecordGroupEquipment": "Inspection Record Group Equipment"
+        "inspectionRecordGroupEquipment": "Inspection Record Group Equipment",
+        "thermographicRecord": "Thermographic Record"
       },
       "account": {
         "main": "Conta",

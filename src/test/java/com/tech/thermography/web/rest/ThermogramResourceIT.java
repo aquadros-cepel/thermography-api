@@ -1,25 +1,18 @@
 package com.tech.thermography.web.rest;
 
-import static com.tech.thermography.domain.ThermogramAsserts.assertThermogramAllPropertiesEquals;
-import static com.tech.thermography.domain.ThermogramAsserts.assertThermogramAllUpdatablePropertiesEquals;
-import static com.tech.thermography.domain.ThermogramAsserts.assertThermogramUpdatableFieldsEquals;
+import static com.tech.thermography.domain.ThermogramAsserts.*;
 import static com.tech.thermography.web.rest.TestUtil.createUpdateProxyForBean;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tech.thermography.IntegrationTest;
 import com.tech.thermography.domain.Equipment;
 import com.tech.thermography.domain.Thermogram;
 import com.tech.thermography.domain.UserInfo;
+import com.tech.thermography.domain.enumeration.PhaseType;
 import com.tech.thermography.repository.ThermogramRepository;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
@@ -106,6 +99,9 @@ class ThermogramResourceIT {
     private static final Double DEFAULT_LONGITUDE = 1D;
     private static final Double UPDATED_LONGITUDE = 2D;
 
+    private static final PhaseType DEFAULT_PHASE = PhaseType.PHASE_A;
+    private static final PhaseType UPDATED_PHASE = PhaseType.PHASE_B;
+
     private static final String ENTITY_API_URL = "/api/thermograms";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -144,6 +140,8 @@ class ThermogramResourceIT {
             .atmosphericTemp(DEFAULT_ATMOSPHERIC_TEMP)
             .reflectedTemp(DEFAULT_REFLECTED_TEMP)
             .relativeHumidity(DEFAULT_RELATIVE_HUMIDITY)
+            .extOpticsTemp(DEFAULT_EXT_OPTICS_TEMP)
+            .extOpticsTrans(DEFAULT_EXT_OPTICS_TRANS)
             .cameraLens(DEFAULT_CAMERA_LENS)
             .cameraModel(DEFAULT_CAMERA_MODEL)
             .imageResolution(DEFAULT_IMAGE_RESOLUTION)
@@ -151,7 +149,8 @@ class ThermogramResourceIT {
             .maxTempRoi(DEFAULT_MAX_TEMP_ROI)
             .createdAt(DEFAULT_CREATED_AT)
             .latitude(DEFAULT_LATITUDE)
-            .longitude(DEFAULT_LONGITUDE);
+            .longitude(DEFAULT_LONGITUDE)
+            .phase(DEFAULT_PHASE);
         // Add required entity
         Equipment equipment;
         if (TestUtil.findAll(em, Equipment.class).isEmpty()) {
@@ -194,6 +193,8 @@ class ThermogramResourceIT {
             .atmosphericTemp(UPDATED_ATMOSPHERIC_TEMP)
             .reflectedTemp(UPDATED_REFLECTED_TEMP)
             .relativeHumidity(UPDATED_RELATIVE_HUMIDITY)
+            .extOpticsTemp(UPDATED_EXT_OPTICS_TEMP)
+            .extOpticsTrans(UPDATED_EXT_OPTICS_TRANS)
             .cameraLens(UPDATED_CAMERA_LENS)
             .cameraModel(UPDATED_CAMERA_MODEL)
             .imageResolution(UPDATED_IMAGE_RESOLUTION)
@@ -201,7 +202,8 @@ class ThermogramResourceIT {
             .maxTempRoi(UPDATED_MAX_TEMP_ROI)
             .createdAt(UPDATED_CREATED_AT)
             .latitude(UPDATED_LATITUDE)
-            .longitude(UPDATED_LONGITUDE);
+            .longitude(UPDATED_LONGITUDE)
+            .phase(UPDATED_PHASE);
         // Add required entity
         Equipment equipment;
         if (TestUtil.findAll(em, Equipment.class).isEmpty()) {
@@ -332,6 +334,8 @@ class ThermogramResourceIT {
             .andExpect(jsonPath("$.[*].atmosphericTemp").value(hasItem(DEFAULT_ATMOSPHERIC_TEMP)))
             .andExpect(jsonPath("$.[*].reflectedTemp").value(hasItem(DEFAULT_REFLECTED_TEMP)))
             .andExpect(jsonPath("$.[*].relativeHumidity").value(hasItem(DEFAULT_RELATIVE_HUMIDITY)))
+            .andExpect(jsonPath("$.[*].extOpticsTemp").value(hasItem(DEFAULT_EXT_OPTICS_TEMP)))
+            .andExpect(jsonPath("$.[*].extOpticsTrans").value(hasItem(DEFAULT_EXT_OPTICS_TRANS)))
             .andExpect(jsonPath("$.[*].cameraLens").value(hasItem(DEFAULT_CAMERA_LENS)))
             .andExpect(jsonPath("$.[*].cameraModel").value(hasItem(DEFAULT_CAMERA_MODEL)))
             .andExpect(jsonPath("$.[*].imageResolution").value(hasItem(DEFAULT_IMAGE_RESOLUTION)))
@@ -339,7 +343,8 @@ class ThermogramResourceIT {
             .andExpect(jsonPath("$.[*].maxTempRoi").value(hasItem(DEFAULT_MAX_TEMP_ROI)))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())))
             .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE)))
-            .andExpect(jsonPath("$.[*].longitude").value(hasItem(DEFAULT_LONGITUDE)));
+            .andExpect(jsonPath("$.[*].longitude").value(hasItem(DEFAULT_LONGITUDE)))
+            .andExpect(jsonPath("$.[*].phase").value(hasItem(DEFAULT_PHASE.toString())));
     }
 
     @Test
@@ -365,6 +370,8 @@ class ThermogramResourceIT {
             .andExpect(jsonPath("$.atmosphericTemp").value(DEFAULT_ATMOSPHERIC_TEMP))
             .andExpect(jsonPath("$.reflectedTemp").value(DEFAULT_REFLECTED_TEMP))
             .andExpect(jsonPath("$.relativeHumidity").value(DEFAULT_RELATIVE_HUMIDITY))
+            .andExpect(jsonPath("$.extOpticsTemp").value(DEFAULT_EXT_OPTICS_TEMP))
+            .andExpect(jsonPath("$.extOpticsTrans").value(DEFAULT_EXT_OPTICS_TRANS))
             .andExpect(jsonPath("$.cameraLens").value(DEFAULT_CAMERA_LENS))
             .andExpect(jsonPath("$.cameraModel").value(DEFAULT_CAMERA_MODEL))
             .andExpect(jsonPath("$.imageResolution").value(DEFAULT_IMAGE_RESOLUTION))
@@ -372,7 +379,8 @@ class ThermogramResourceIT {
             .andExpect(jsonPath("$.maxTempRoi").value(DEFAULT_MAX_TEMP_ROI))
             .andExpect(jsonPath("$.createdAt").value(DEFAULT_CREATED_AT.toString()))
             .andExpect(jsonPath("$.latitude").value(DEFAULT_LATITUDE))
-            .andExpect(jsonPath("$.longitude").value(DEFAULT_LONGITUDE));
+            .andExpect(jsonPath("$.longitude").value(DEFAULT_LONGITUDE))
+            .andExpect(jsonPath("$.phase").value(DEFAULT_PHASE.toString()));
     }
 
     @Test
@@ -392,8 +400,7 @@ class ThermogramResourceIT {
 
         // Update the thermogram
         Thermogram updatedThermogram = thermogramRepository.findById(thermogram.getId()).orElseThrow();
-        // Disconnect from session so that the updates on updatedThermogram are not
-        // directly saved in db
+        // Disconnect from session so that the updates on updatedThermogram are not directly saved in db
         em.detach(updatedThermogram);
         updatedThermogram
             .imagePath(UPDATED_IMAGE_PATH)
@@ -407,6 +414,8 @@ class ThermogramResourceIT {
             .atmosphericTemp(UPDATED_ATMOSPHERIC_TEMP)
             .reflectedTemp(UPDATED_REFLECTED_TEMP)
             .relativeHumidity(UPDATED_RELATIVE_HUMIDITY)
+            .extOpticsTemp(UPDATED_EXT_OPTICS_TEMP)
+            .extOpticsTrans(UPDATED_EXT_OPTICS_TRANS)
             .cameraLens(UPDATED_CAMERA_LENS)
             .cameraModel(UPDATED_CAMERA_MODEL)
             .imageResolution(UPDATED_IMAGE_RESOLUTION)
@@ -414,7 +423,8 @@ class ThermogramResourceIT {
             .maxTempRoi(UPDATED_MAX_TEMP_ROI)
             .createdAt(UPDATED_CREATED_AT)
             .latitude(UPDATED_LATITUDE)
-            .longitude(UPDATED_LONGITUDE);
+            .longitude(UPDATED_LONGITUDE)
+            .phase(UPDATED_PHASE);
 
         restThermogramMockMvc
             .perform(
@@ -491,16 +501,20 @@ class ThermogramResourceIT {
         partialUpdatedThermogram.setId(thermogram.getId());
 
         partialUpdatedThermogram
+            .imagePath(UPDATED_IMAGE_PATH)
             .audioPath(UPDATED_AUDIO_PATH)
+            .imageRefPath(UPDATED_IMAGE_REF_PATH)
             .minTemp(UPDATED_MIN_TEMP)
-            .avgTemp(UPDATED_AVG_TEMP)
+            .maxTemp(UPDATED_MAX_TEMP)
+            .subjectDistance(UPDATED_SUBJECT_DISTANCE)
             .atmosphericTemp(UPDATED_ATMOSPHERIC_TEMP)
-            .relativeHumidity(UPDATED_RELATIVE_HUMIDITY)
-            .cameraLens(UPDATED_CAMERA_LENS)
+            .extOpticsTrans(UPDATED_EXT_OPTICS_TRANS)
+            .cameraModel(UPDATED_CAMERA_MODEL)
+            .imageResolution(UPDATED_IMAGE_RESOLUTION)
             .selectedRoiId(UPDATED_SELECTED_ROI_ID)
             .maxTempRoi(UPDATED_MAX_TEMP_ROI)
-            .createdAt(UPDATED_CREATED_AT)
-            .latitude(UPDATED_LATITUDE);
+            .longitude(UPDATED_LONGITUDE)
+            .phase(UPDATED_PHASE);
 
         restThermogramMockMvc
             .perform(
@@ -543,6 +557,8 @@ class ThermogramResourceIT {
             .atmosphericTemp(UPDATED_ATMOSPHERIC_TEMP)
             .reflectedTemp(UPDATED_REFLECTED_TEMP)
             .relativeHumidity(UPDATED_RELATIVE_HUMIDITY)
+            .extOpticsTemp(UPDATED_EXT_OPTICS_TEMP)
+            .extOpticsTrans(UPDATED_EXT_OPTICS_TRANS)
             .cameraLens(UPDATED_CAMERA_LENS)
             .cameraModel(UPDATED_CAMERA_MODEL)
             .imageResolution(UPDATED_IMAGE_RESOLUTION)
@@ -550,7 +566,8 @@ class ThermogramResourceIT {
             .maxTempRoi(UPDATED_MAX_TEMP_ROI)
             .createdAt(UPDATED_CREATED_AT)
             .latitude(UPDATED_LATITUDE)
-            .longitude(UPDATED_LONGITUDE);
+            .longitude(UPDATED_LONGITUDE)
+            .phase(UPDATED_PHASE);
 
         restThermogramMockMvc
             .perform(

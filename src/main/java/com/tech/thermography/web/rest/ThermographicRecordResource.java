@@ -4,8 +4,9 @@ import com.tech.thermography.domain.Equipment;
 import com.tech.thermography.domain.EquipmentComponent;
 import com.tech.thermography.domain.InspectionRecord;
 import com.tech.thermography.domain.Plant;
+import com.tech.thermography.domain.ROI;
 import com.tech.thermography.domain.Thermogram;
-import com.tech.thermography.domain.ThermographicInspectionRecord;
+import com.tech.thermography.domain.ThermographicRecord;
 import com.tech.thermography.domain.UserInfo;
 import com.tech.thermography.repository.EquipmentComponentRepository;
 import com.tech.thermography.repository.EquipmentRepository;
@@ -13,7 +14,7 @@ import com.tech.thermography.repository.InspectionRecordRepository;
 import com.tech.thermography.repository.PlantRepository;
 import com.tech.thermography.repository.ROIRepository;
 import com.tech.thermography.repository.ThermogramRepository;
-import com.tech.thermography.repository.ThermographicInspectionRecordRepository;
+import com.tech.thermography.repository.ThermographicRecordRepository;
 import com.tech.thermography.repository.UserInfoRepository;
 import com.tech.thermography.web.rest.errors.BadRequestAlertException;
 import jakarta.persistence.EntityManager;
@@ -25,7 +26,9 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,21 +48,21 @@ import tech.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing
- * {@link com.tech.thermography.domain.ThermographicInspectionRecord}.
+ * {@link com.tech.thermography.domain.ThermographicRecord}.
  */
 @RestController
-@RequestMapping("/api/thermographic-inspection-records")
+@RequestMapping("/api/thermographic-records")
 @Transactional
-public class ThermographicInspectionRecordResource {
+public class ThermographicRecordResource {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ThermographicInspectionRecordResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ThermographicRecordResource.class);
 
-    private static final String ENTITY_NAME = "thermographicInspectionRecord";
+    private static final String ENTITY_NAME = "thermographicRecord";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ThermographicInspectionRecordRepository thermographicInspectionRecordRepository;
+    private final ThermographicRecordRepository thermographicRecordRepository;
     private final ThermogramRepository thermogramRepository;
     private final ROIRepository roiRepository;
     private final EquipmentRepository equipmentRepository;
@@ -70,8 +73,8 @@ public class ThermographicInspectionRecordResource {
 
     private final EntityManager entityManager;
 
-    public ThermographicInspectionRecordResource(
-        ThermographicInspectionRecordRepository thermographicInspectionRecordRepository,
+    public ThermographicRecordResource(
+        ThermographicRecordRepository thermographicRecordRepository,
         ThermogramRepository thermogramRepository,
         ROIRepository roiRepository,
         EquipmentRepository equipmentRepository,
@@ -82,7 +85,7 @@ public class ThermographicInspectionRecordResource {
         EntityManager entityManager
     ) {
         this.entityManager = entityManager;
-        this.thermographicInspectionRecordRepository = thermographicInspectionRecordRepository;
+        this.thermographicRecordRepository = thermographicRecordRepository;
         this.thermogramRepository = thermogramRepository;
         this.roiRepository = roiRepository;
         this.equipmentRepository = equipmentRepository;
@@ -93,240 +96,217 @@ public class ThermographicInspectionRecordResource {
     }
 
     /**
-     * {@code POST  /thermographic-inspection-records} : Create a new
-     * thermographicInspectionRecord.
+     * {@code POST  /thermographic-records} : Create a new thermographicRecord.
      *
-     * @param thermographicInspectionRecord the thermographicInspectionRecord to
-     *                                      create.
+     * @param thermographicRecord the thermographicRecord to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
-     *         body the new thermographicInspectionRecord, or with status
-     *         {@code 400 (Bad Request)} if the thermographicInspectionRecord has
-     *         already an ID.
+     *         body the new thermographicRecord, or with status
+     *         {@code 400 (Bad Request)} if the thermographicRecord has already an
+     *         ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    public ResponseEntity<ThermographicInspectionRecord> createThermographicInspectionRecord(
-        @Valid @RequestBody ThermographicInspectionRecord thermographicInspectionRecord
-    ) throws URISyntaxException {
-        LOG.debug("REST request to save ThermographicInspectionRecord : {}", thermographicInspectionRecord);
-        if (thermographicInspectionRecord.getId() != null) {
-            throw new BadRequestAlertException("A new thermographicInspectionRecord cannot already have an ID", ENTITY_NAME, "idexists");
+    public ResponseEntity<ThermographicRecord> createThermographicRecord(@Valid @RequestBody ThermographicRecord thermographicRecord)
+        throws URISyntaxException {
+        LOG.debug("REST request to save ThermographicRecord : {}", thermographicRecord);
+        if (thermographicRecord.getId() != null) {
+            throw new BadRequestAlertException("A new thermographicRecord cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        thermographicInspectionRecord = thermographicInspectionRecordRepository.save(thermographicInspectionRecord);
-        return ResponseEntity.created(new URI("/api/thermographic-inspection-records/" + thermographicInspectionRecord.getId()))
-            .headers(
-                HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, thermographicInspectionRecord.getId().toString())
-            )
-            .body(thermographicInspectionRecord);
+        thermographicRecord = thermographicRecordRepository.save(thermographicRecord);
+        return ResponseEntity.created(new URI("/api/thermographic-records/" + thermographicRecord.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, thermographicRecord.getId().toString()))
+            .body(thermographicRecord);
     }
 
     /**
-     * {@code PUT  /thermographic-inspection-records/:id} : Updates an existing
-     * thermographicInspectionRecord.
+     * {@code PUT  /thermographic-records/:id} : Updates an existing
+     * thermographicRecord.
      *
-     * @param id                            the id of the
-     *                                      thermographicInspectionRecord to save.
-     * @param thermographicInspectionRecord the thermographicInspectionRecord to
-     *                                      update.
+     * @param id                  the id of the thermographicRecord to save.
+     * @param thermographicRecord the thermographicRecord to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
-     *         the updated thermographicInspectionRecord,
-     *         or with status {@code 400 (Bad Request)} if the
-     *         thermographicInspectionRecord is not valid,
+     *         the updated thermographicRecord,
+     *         or with status {@code 400 (Bad Request)} if the thermographicRecord
+     *         is not valid,
      *         or with status {@code 500 (Internal Server Error)} if the
-     *         thermographicInspectionRecord couldn't be updated.
+     *         thermographicRecord couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<ThermographicInspectionRecord> updateThermographicInspectionRecord(
+    public ResponseEntity<ThermographicRecord> updateThermographicRecord(
         @PathVariable(value = "id", required = false) final UUID id,
-        @Valid @RequestBody ThermographicInspectionRecord thermographicInspectionRecord
+        @Valid @RequestBody ThermographicRecord thermographicRecord
     ) throws URISyntaxException {
-        LOG.debug("REST request to update ThermographicInspectionRecord : {}, {}", id, thermographicInspectionRecord);
-        if (thermographicInspectionRecord.getId() == null) {
+        LOG.debug("REST request to update ThermographicRecord : {}, {}", id, thermographicRecord);
+        if (thermographicRecord.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, thermographicInspectionRecord.getId())) {
+        if (!Objects.equals(id, thermographicRecord.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
-        if (thermographicInspectionRecord.getParentRecord() != null && id.equals(thermographicInspectionRecord.getParentRecord().getId())) {
-            throw new BadRequestAlertException("Um registro não pode ser pai de si mesmo", ENTITY_NAME, "parentself");
-        }
 
-        if (!thermographicInspectionRecordRepository.existsById(id)) {
+        if (!thermographicRecordRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        thermographicInspectionRecord = thermographicInspectionRecordRepository.save(thermographicInspectionRecord);
+        thermographicRecord = thermographicRecordRepository.save(thermographicRecord);
         return ResponseEntity.ok()
-            .headers(
-                HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, thermographicInspectionRecord.getId().toString())
-            )
-            .body(thermographicInspectionRecord);
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, thermographicRecord.getId().toString()))
+            .body(thermographicRecord);
     }
 
     /**
-     * {@code PATCH  /thermographic-inspection-records/:id} : Partial updates given
-     * fields of an existing thermographicInspectionRecord, field will ignore if it
-     * is null
+     * {@code PATCH  /thermographic-records/:id} : Partial updates given fields of
+     * an existing thermographicRecord, field will ignore if it is null
      *
-     * @param id                            the id of the
-     *                                      thermographicInspectionRecord to save.
-     * @param thermographicInspectionRecord the thermographicInspectionRecord to
-     *                                      update.
+     * @param id                  the id of the thermographicRecord to save.
+     * @param thermographicRecord the thermographicRecord to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
-     *         the updated thermographicInspectionRecord,
-     *         or with status {@code 400 (Bad Request)} if the
-     *         thermographicInspectionRecord is not valid,
-     *         or with status {@code 404 (Not Found)} if the
-     *         thermographicInspectionRecord is not found,
+     *         the updated thermographicRecord,
+     *         or with status {@code 400 (Bad Request)} if the thermographicRecord
+     *         is not valid,
+     *         or with status {@code 404 (Not Found)} if the thermographicRecord is
+     *         not found,
      *         or with status {@code 500 (Internal Server Error)} if the
-     *         thermographicInspectionRecord couldn't be updated.
+     *         thermographicRecord couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<ThermographicInspectionRecord> partialUpdateThermographicInspectionRecord(
+    public ResponseEntity<ThermographicRecord> partialUpdateThermographicRecord(
         @PathVariable(value = "id", required = false) final UUID id,
-        @NotNull @RequestBody ThermographicInspectionRecord thermographicInspectionRecord
+        @NotNull @RequestBody ThermographicRecord thermographicRecord
     ) throws URISyntaxException {
-        LOG.debug("REST request to partial update ThermographicInspectionRecord partially : {}, {}", id, thermographicInspectionRecord);
-        if (thermographicInspectionRecord.getId() == null) {
+        LOG.debug("REST request to partial update ThermographicRecord partially : {}, {}", id, thermographicRecord);
+        if (thermographicRecord.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, thermographicInspectionRecord.getId())) {
+        if (!Objects.equals(id, thermographicRecord.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        if (!thermographicInspectionRecordRepository.existsById(id)) {
+        if (!thermographicRecordRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<ThermographicInspectionRecord> result = thermographicInspectionRecordRepository
-            .findById(thermographicInspectionRecord.getId())
-            .map(existingThermographicInspectionRecord -> {
-                if (thermographicInspectionRecord.getName() != null) {
-                    existingThermographicInspectionRecord.setName(thermographicInspectionRecord.getName());
+        Optional<ThermographicRecord> result = thermographicRecordRepository
+            .findById(thermographicRecord.getId())
+            .map(existingThermographicRecord -> {
+                if (thermographicRecord.getName() != null) {
+                    existingThermographicRecord.setName(thermographicRecord.getName());
                 }
-                if (thermographicInspectionRecord.getType() != null) {
-                    existingThermographicInspectionRecord.setType(thermographicInspectionRecord.getType());
+                if (thermographicRecord.getType() != null) {
+                    existingThermographicRecord.setType(thermographicRecord.getType());
                 }
-                if (thermographicInspectionRecord.getServiceOrder() != null) {
-                    existingThermographicInspectionRecord.setServiceOrder(thermographicInspectionRecord.getServiceOrder());
+                if (thermographicRecord.getServiceOrder() != null) {
+                    existingThermographicRecord.setServiceOrder(thermographicRecord.getServiceOrder());
                 }
-                if (thermographicInspectionRecord.getCreatedAt() != null) {
-                    existingThermographicInspectionRecord.setCreatedAt(thermographicInspectionRecord.getCreatedAt());
+                if (thermographicRecord.getCreatedAt() != null) {
+                    existingThermographicRecord.setCreatedAt(thermographicRecord.getCreatedAt());
                 }
-                if (thermographicInspectionRecord.getAnalysisDescription() != null) {
-                    existingThermographicInspectionRecord.setAnalysisDescription(thermographicInspectionRecord.getAnalysisDescription());
+                if (thermographicRecord.getAnalysisDescription() != null) {
+                    existingThermographicRecord.setAnalysisDescription(thermographicRecord.getAnalysisDescription());
                 }
-                if (thermographicInspectionRecord.getCondition() != null) {
-                    existingThermographicInspectionRecord.setCondition(thermographicInspectionRecord.getCondition());
+                if (thermographicRecord.getCondition() != null) {
+                    existingThermographicRecord.setCondition(thermographicRecord.getCondition());
                 }
-                if (thermographicInspectionRecord.getDeltaT() != null) {
-                    existingThermographicInspectionRecord.setDeltaT(thermographicInspectionRecord.getDeltaT());
+                if (thermographicRecord.getDeltaT() != null) {
+                    existingThermographicRecord.setDeltaT(thermographicRecord.getDeltaT());
                 }
-                if (thermographicInspectionRecord.getPeriodicity() != null) {
-                    existingThermographicInspectionRecord.setPeriodicity(thermographicInspectionRecord.getPeriodicity());
+                if (thermographicRecord.getPeriodicity() != null) {
+                    existingThermographicRecord.setPeriodicity(thermographicRecord.getPeriodicity());
                 }
-                if (thermographicInspectionRecord.getDeadlineExecution() != null) {
-                    existingThermographicInspectionRecord.setDeadlineExecution(thermographicInspectionRecord.getDeadlineExecution());
+                if (thermographicRecord.getDeadlineExecution() != null) {
+                    existingThermographicRecord.setDeadlineExecution(thermographicRecord.getDeadlineExecution());
                 }
-                if (thermographicInspectionRecord.getNextMonitoring() != null) {
-                    existingThermographicInspectionRecord.setNextMonitoring(thermographicInspectionRecord.getNextMonitoring());
+                if (thermographicRecord.getNextMonitoring() != null) {
+                    existingThermographicRecord.setNextMonitoring(thermographicRecord.getNextMonitoring());
                 }
-                if (thermographicInspectionRecord.getRecommendations() != null) {
-                    existingThermographicInspectionRecord.setRecommendations(thermographicInspectionRecord.getRecommendations());
+                if (thermographicRecord.getRecommendations() != null) {
+                    existingThermographicRecord.setRecommendations(thermographicRecord.getRecommendations());
                 }
-                if (thermographicInspectionRecord.getFinished() != null) {
-                    existingThermographicInspectionRecord.setFinished(thermographicInspectionRecord.getFinished());
+                if (thermographicRecord.getFinished() != null) {
+                    existingThermographicRecord.setFinished(thermographicRecord.getFinished());
                 }
-                if (thermographicInspectionRecord.getFinishedAt() != null) {
-                    existingThermographicInspectionRecord.setFinishedAt(thermographicInspectionRecord.getFinishedAt());
+                if (thermographicRecord.getFinishedAt() != null) {
+                    existingThermographicRecord.setFinishedAt(thermographicRecord.getFinishedAt());
                 }
-                if (thermographicInspectionRecord.getCurrent() != null) {
-                    existingThermographicInspectionRecord.setCurrent(thermographicInspectionRecord.getCurrent());
+                if (thermographicRecord.getCurrent() != null) {
+                    existingThermographicRecord.setCurrent(thermographicRecord.getCurrent());
                 }
-                if (thermographicInspectionRecord.getVoltage() != null) {
-                    existingThermographicInspectionRecord.setVoltage(thermographicInspectionRecord.getVoltage());
+                if (thermographicRecord.getVoltage() != null) {
+                    existingThermographicRecord.setVoltage(thermographicRecord.getVoltage());
                 }
-                if (thermographicInspectionRecord.getWindSpeed() != null) {
-                    existingThermographicInspectionRecord.setWindSpeed(thermographicInspectionRecord.getWindSpeed());
+                if (thermographicRecord.getWindSpeed() != null) {
+                    existingThermographicRecord.setWindSpeed(thermographicRecord.getWindSpeed());
                 }
-                if (thermographicInspectionRecord.getPhase() != null) {
-                    existingThermographicInspectionRecord.setPhase(thermographicInspectionRecord.getPhase());
-                }
-                if (
-                    thermographicInspectionRecord.getParentRecord() != null &&
-                    thermographicInspectionRecord.getParentRecord().getId() != null
-                ) {
-                    if (id.equals(thermographicInspectionRecord.getParentRecord().getId())) {
-                        throw new BadRequestAlertException("Um registro não pode ser pai de si mesmo", ENTITY_NAME, "parentself");
-                    }
-                    existingThermographicInspectionRecord.setParentRecord(
-                        thermographicInspectionRecordRepository
-                            .findById(thermographicInspectionRecord.getParentRecord().getId())
+                if (thermographicRecord.getParentRecord() != null && thermographicRecord.getParentRecord().getId() != null) {
+                    existingThermographicRecord.setParentRecord(
+                        thermographicRecordRepository
+                            .findById(thermographicRecord.getParentRecord().getId())
                             .orElseThrow(() ->
-                                new BadRequestAlertException("Registro relacionado não encontrado", ENTITY_NAME, "parentnotfound")
+                                new BadRequestAlertException(
+                                    "Parent record not found Registro relacionado não encontrado",
+                                    ENTITY_NAME,
+                                    "parentnotfound"
+                                )
                             )
                     );
                 }
 
-                return existingThermographicInspectionRecord;
+                return existingThermographicRecord;
             })
-            .map(thermographicInspectionRecordRepository::save);
+            .map(thermographicRecordRepository::save);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, thermographicInspectionRecord.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, thermographicRecord.getId().toString())
         );
     }
 
     /**
-     * {@code GET  /thermographic-inspection-records} : get all the
-     * thermographicInspectionRecords.
+     * {@code GET  /thermographic-records} : get all the thermographicRecords.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
-     *         of thermographicInspectionRecords in body.
+     *         of thermographicRecords in body.
      */
     @GetMapping("")
-    public List<ThermographicInspectionRecord> getAllThermographicInspectionRecords() {
-        LOG.debug("REST request to get all ThermographicInspectionRecords");
-        List<ThermographicInspectionRecord> records = thermographicInspectionRecordRepository.findAllWithRelationships();
+    public List<ThermographicRecord> getAllThermographicRecords() {
+        LOG.debug("REST request to get all ThermographicRecords");
+        List<ThermographicRecord> records = thermographicRecordRepository.findAllWithRelationships();
 
         // Segunda query para carregar thermogramRef (quando existe) e seus ROIs
         if (!records.isEmpty()) {
-            records = thermographicInspectionRecordRepository.findWithThermogramRef(records);
+            records = thermographicRecordRepository.findWithThermogramRef(records);
         }
 
         return records;
     }
 
     /**
-     * {@code GET  /thermographic-inspection-records/:id} : get the "id"
-     * thermographicInspectionRecord.
+     * {@code GET  /thermographic-records/:id} : get the "id" thermographicRecord.
      *
-     * @param id the id of the thermographicInspectionRecord to retrieve.
+     * @param id the id of the thermographicRecord to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
-     *         the thermographicInspectionRecord, or with status
-     *         {@code 404 (Not Found)}.
+     *         the thermographicRecord, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ThermographicInspectionRecord> getThermographicInspectionRecord(@PathVariable("id") UUID id) {
-        LOG.debug("REST request to get ThermographicInspectionRecord : {}", id);
-        Optional<ThermographicInspectionRecord> thermographicInspectionRecord = thermographicInspectionRecordRepository.findById(id);
-        return ResponseUtil.wrapOrNotFound(thermographicInspectionRecord);
+    public ResponseEntity<ThermographicRecord> getThermographicRecord(@PathVariable("id") UUID id) {
+        LOG.debug("REST request to get ThermographicRecord : {}", id);
+        Optional<ThermographicRecord> thermographicRecord = thermographicRecordRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(thermographicRecord);
     }
 
     /**
-     * {@code DELETE  /thermographic-inspection-records/:id} : delete the "id"
-     * thermographicInspectionRecord.
+     * {@code DELETE  /thermographic-records/:id} : delete the "id"
+     * thermographicRecord.
      *
-     * @param id the id of the thermographicInspectionRecord to delete.
+     * @param id the id of the thermographicRecord to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteThermographicInspectionRecord(@PathVariable("id") UUID id) {
-        LOG.debug("REST request to delete ThermographicInspectionRecord : {}", id);
-        thermographicInspectionRecordRepository.deleteById(id);
+    public ResponseEntity<Void> deleteThermographicRecord(@PathVariable("id") UUID id) {
+        LOG.debug("REST request to delete ThermographicRecord : {}", id);
+        thermographicRecordRepository.deleteById(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
@@ -334,19 +314,18 @@ public class ThermographicInspectionRecordResource {
 
     /**
      * {@code POST  /thermographic-inspection-records/actions/create} : Create a new
-     * thermographicInspectionRecord from payload.
+     * thermographicRecord from payload.
      *
-     * @param payload the thermographicInspectionRecord to create.
+     * @param payload the thermographicRecord to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
-     *         body the new thermographicInspectionRecord, or with status
+     *         body the new thermographicRecord, or with status
      *         {@code 400 (Bad Request)} if the payload is invalid.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/actions/create")
-    public ResponseEntity<ThermographicInspectionRecord> createThermographicInspectionRecordFromPayload(
-        @RequestBody ThermographicInspectionRecord payload
-    ) throws URISyntaxException {
-        LOG.debug("REST request to create ThermographicInspectionRecord from payload");
+    public ResponseEntity<ThermographicRecord> createThermographicRecordFromPayload(@RequestBody ThermographicRecord payload)
+        throws URISyntaxException {
+        LOG.debug("REST request to create ThermographicRecord from payload");
 
         if (payload == null) {
             throw new BadRequestAlertException("Payload inválido", ENTITY_NAME, "payloadnull");
@@ -431,7 +410,7 @@ public class ThermographicInspectionRecordResource {
             }
         }
 
-        ThermographicInspectionRecord record = new ThermographicInspectionRecord();
+        ThermographicRecord record = new ThermographicRecord();
         record.setId(null);
         record.setName(payload.getName());
         record.setType(payload.getType());
@@ -448,10 +427,9 @@ public class ThermographicInspectionRecordResource {
         record.setCurrent(payload.getCurrent());
         record.setVoltage(payload.getVoltage());
         record.setWindSpeed(payload.getWindSpeed());
-        record.setPhase(payload.getPhase());
         if (payload.getParentRecord() != null && payload.getParentRecord().getId() != null) {
             record.setParentRecord(
-                thermographicInspectionRecordRepository
+                thermographicRecordRepository
                     .findById(payload.getParentRecord().getId())
                     .orElseThrow(() -> new BadRequestAlertException("Registro relacionado não encontrado", ENTITY_NAME, "parentnotfound"))
             );
@@ -465,7 +443,7 @@ public class ThermographicInspectionRecordResource {
         record.setThermogram(thermogram);
         record.setThermogramRef(thermogramRef);
 
-        record = thermographicInspectionRecordRepository.save(record);
+        record = thermographicRecordRepository.save(record);
 
         return ResponseEntity.created(new URI("/api/thermographic-inspection-records/" + record.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, record.getId().toString()))
@@ -475,34 +453,33 @@ public class ThermographicInspectionRecordResource {
     /**
      * {@code POST  /thermographic-inspection-records/actions/edit} : Edit an
      * existing
-     * thermographicInspectionRecord from payload.
+     * thermographicRecord from payload.
      *
      * Rules:
-     * 1 - ThermographicInspectionRecord data can be directly edited
+     * 1 - ThermographicRecord data can be directly edited
      * 2 - Check if thermogram ID and reference thermogram ID changed:
      * - If ID changed (different thermogram): delete old thermogram and ROIs,
      * create new
      * - If ID is the same: just edit thermogram data (ROIs are not changed in edit)
      * 3 - Creating new thermogram/ROIs follows the same code as the create endpoint
      *
-     * @param payload the thermographicInspectionRecord to edit.
+     * @param payload the thermographicRecord to edit.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
-     *         body the updated thermographicInspectionRecord, or with status
+     *         body the updated thermographicRecord, or with status
      *         {@code 400 (Bad Request)} if the payload is invalid.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/actions/update")
-    public ResponseEntity<ThermographicInspectionRecord> updateThermographicInspectionRecordFromPayload(
-        @RequestBody ThermographicInspectionRecord payload
-    ) throws URISyntaxException {
-        LOG.debug("REST request to edit ThermographicInspectionRecord from payload");
+    public ResponseEntity<ThermographicRecord> updateThermographicRecordFromPayload(@RequestBody ThermographicRecord payload)
+        throws URISyntaxException {
+        LOG.debug("REST request to edit ThermographicRecord from payload");
 
         if (payload == null || payload.getId() == null) {
             throw new BadRequestAlertException("Payload inválido ou ID não fornecido", ENTITY_NAME, "payloadnull");
         }
 
         // Get existing record
-        ThermographicInspectionRecord existingRecord = thermographicInspectionRecordRepository
+        ThermographicRecord existingRecord = thermographicRecordRepository
             .findById(payload.getId())
             .orElseThrow(() -> new BadRequestAlertException("Registro não encontrado", ENTITY_NAME, "recordnotfound"));
 
@@ -583,7 +560,6 @@ public class ThermographicInspectionRecordResource {
                 }
             }
         } else {
-            // Same thermogram ID - just update thermogram data (ROIs not changed)
             if (existingThermogram != null && newThermogram != null) {
                 existingThermogram.setImagePath(newThermogram.getImagePath());
                 existingThermogram.setAudioPath(newThermogram.getAudioPath());
@@ -596,6 +572,8 @@ public class ThermographicInspectionRecordResource {
                 existingThermogram.setAtmosphericTemp(newThermogram.getAtmosphericTemp());
                 existingThermogram.setReflectedTemp(newThermogram.getReflectedTemp());
                 existingThermogram.setRelativeHumidity(newThermogram.getRelativeHumidity());
+                existingThermogram.setExtOpticsTemp(newThermogram.getExtOpticsTemp());
+                existingThermogram.setExtOpticsTrans(newThermogram.getExtOpticsTrans());
                 existingThermogram.setCameraLens(newThermogram.getCameraLens());
                 existingThermogram.setCameraModel(newThermogram.getCameraModel());
                 existingThermogram.setImageResolution(newThermogram.getImageResolution());
@@ -603,6 +581,11 @@ public class ThermographicInspectionRecordResource {
                 existingThermogram.setMaxTempRoi(newThermogram.getMaxTempRoi());
                 existingThermogram.setLatitude(newThermogram.getLatitude());
                 existingThermogram.setLongitude(newThermogram.getLongitude());
+                existingThermogram.setPhase(newThermogram.getPhase());
+                existingThermogram.setEquipment(newThermogram.getEquipment());
+                existingThermogram.setCreatedBy(newThermogram.getCreatedBy());
+                existingThermogram.setCreatedAt(newThermogram.getCreatedAt());
+                syncRois(existingThermogram, newThermogram.getRois());
                 thermogramRepository.save(existingThermogram);
             }
         }
@@ -643,6 +626,8 @@ public class ThermographicInspectionRecordResource {
                 existingThermogramRef.setAtmosphericTemp(newThermogramRef.getAtmosphericTemp());
                 existingThermogramRef.setReflectedTemp(newThermogramRef.getReflectedTemp());
                 existingThermogramRef.setRelativeHumidity(newThermogramRef.getRelativeHumidity());
+                existingThermogramRef.setExtOpticsTemp(newThermogramRef.getExtOpticsTemp());
+                existingThermogramRef.setExtOpticsTrans(newThermogramRef.getExtOpticsTrans());
                 existingThermogramRef.setCameraLens(newThermogramRef.getCameraLens());
                 existingThermogramRef.setCameraModel(newThermogramRef.getCameraModel());
                 existingThermogramRef.setImageResolution(newThermogramRef.getImageResolution());
@@ -650,11 +635,16 @@ public class ThermographicInspectionRecordResource {
                 existingThermogramRef.setMaxTempRoi(newThermogramRef.getMaxTempRoi());
                 existingThermogramRef.setLatitude(newThermogramRef.getLatitude());
                 existingThermogramRef.setLongitude(newThermogramRef.getLongitude());
+                existingThermogramRef.setPhase(newThermogramRef.getPhase());
+                existingThermogramRef.setEquipment(newThermogramRef.getEquipment());
+                existingThermogramRef.setCreatedBy(newThermogramRef.getCreatedBy());
+                existingThermogramRef.setCreatedAt(newThermogramRef.getCreatedAt());
+                syncRois(existingThermogramRef, newThermogramRef.getRois());
                 thermogramRepository.save(existingThermogramRef);
             }
         }
 
-        // Update ThermographicInspectionRecord data
+        // Update ThermographicRecord data
         existingRecord.setName(payload.getName());
         existingRecord.setType(payload.getType());
         existingRecord.setServiceOrder(payload.getServiceOrder());
@@ -670,13 +660,13 @@ public class ThermographicInspectionRecordResource {
         existingRecord.setCurrent(payload.getCurrent());
         existingRecord.setVoltage(payload.getVoltage());
         existingRecord.setWindSpeed(payload.getWindSpeed());
-        existingRecord.setPhase(payload.getPhase());
+
         if (payload.getParentRecord() != null && payload.getParentRecord().getId() != null) {
             if (payload.getId().equals(payload.getParentRecord().getId())) {
                 throw new BadRequestAlertException("Um registro não pode ser pai de si mesmo", ENTITY_NAME, "parentself");
             }
             existingRecord.setParentRecord(
-                thermographicInspectionRecordRepository
+                thermographicRecordRepository
                     .findById(payload.getParentRecord().getId())
                     .orElseThrow(() -> new BadRequestAlertException("Registro relacionado não encontrado", ENTITY_NAME, "parentnotfound"))
             );
@@ -707,10 +697,33 @@ public class ThermographicInspectionRecordResource {
             existingRecord.setThermogramRef(existingThermogramRef);
         }
 
-        ThermographicInspectionRecord updatedRecord = thermographicInspectionRecordRepository.save(existingRecord);
+        ThermographicRecord updatedRecord = thermographicRecordRepository.save(existingRecord);
 
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, updatedRecord.getId().toString()))
             .body(updatedRecord);
+    }
+
+    // Atualiza a coleção gerenciada in-place; substituir a instância viola
+    // orphanRemoval.
+    private void syncRois(Thermogram target, List<ROI> incoming) {
+        List<ROI> managed = target.getRois();
+        if (incoming == null) {
+            return;
+        }
+        Set<UUID> incomingIds = incoming.stream().map(ROI::getId).filter(Objects::nonNull).collect(Collectors.toSet());
+        managed.removeIf(roi -> !incomingIds.contains(roi.getId()));
+
+        for (ROI roi : incoming) {
+            ROI existing = managed.stream().filter(m -> m.getId() != null && m.getId().equals(roi.getId())).findFirst().orElse(null);
+            if (existing != null) {
+                existing.setType(roi.getType());
+                existing.setLabel(roi.getLabel());
+                existing.setMaxTemp(roi.getMaxTemp());
+            } else {
+                roi.setThermogram(target);
+                managed.add(roiRepository.save(roi));
+            }
+        }
     }
 }

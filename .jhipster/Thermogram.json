@@ -94,6 +94,11 @@
     {
       "fieldName": "longitude",
       "fieldType": "Double"
+    },
+    {
+      "fieldName": "phase",
+      "fieldType": "PhaseType",
+      "fieldValues": "PHASE_A,PHASE_B,PHASE_C,NEUTRAL,GROUND,THREE_PHASE"
     }
   ],
   "name": "Thermogram",

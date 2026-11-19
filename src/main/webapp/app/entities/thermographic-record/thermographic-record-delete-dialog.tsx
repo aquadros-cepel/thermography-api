@@ -5,9 +5,9 @@ import { Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { deleteEntity, getEntity } from './thermographic-inspection-record.reducer';
+import { deleteEntity, getEntity } from './thermographic-record.reducer';
 
-export const ThermographicInspectionRecordDeleteDialog = () => {
+export const ThermographicRecordDeleteDialog = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { id } = useParams<'id'>();
@@ -19,11 +19,11 @@ export const ThermographicInspectionRecordDeleteDialog = () => {
     setLoadModal(true);
   }, []);
 
-  const thermographicInspectionRecordEntity = useAppSelector(state => state.thermographicInspectionRecord.entity);
-  const updateSuccess = useAppSelector(state => state.thermographicInspectionRecord.updateSuccess);
+  const thermographicRecordEntity = useAppSelector(state => state.thermographicRecord.entity);
+  const updateSuccess = useAppSelector(state => state.thermographicRecord.updateSuccess);
 
   const handleClose = () => {
-    navigate('/thermographic-inspection-record');
+    navigate('/thermographic-record');
   };
 
   useEffect(() => {
@@ -34,20 +34,17 @@ export const ThermographicInspectionRecordDeleteDialog = () => {
   }, [updateSuccess]);
 
   const confirmDelete = () => {
-    dispatch(deleteEntity(thermographicInspectionRecordEntity.id));
+    dispatch(deleteEntity(thermographicRecordEntity.id));
   };
 
   return (
     <Modal isOpen toggle={handleClose}>
-      <ModalHeader toggle={handleClose} data-cy="thermographicInspectionRecordDeleteDialogHeading">
+      <ModalHeader toggle={handleClose} data-cy="thermographicRecordDeleteDialogHeading">
         <Translate contentKey="entity.delete.title">Confirm delete operation</Translate>
       </ModalHeader>
-      <ModalBody id="thermographyApiApp.thermographicInspectionRecord.delete.question">
-        <Translate
-          contentKey="thermographyApiApp.thermographicInspectionRecord.delete.question"
-          interpolate={{ id: thermographicInspectionRecordEntity.id }}
-        >
-          Are you sure you want to delete this ThermographicInspectionRecord?
+      <ModalBody id="thermographyApiApp.thermographicRecord.delete.question">
+        <Translate contentKey="thermographyApiApp.thermographicRecord.delete.question" interpolate={{ id: thermographicRecordEntity.id }}>
+          Are you sure you want to delete this ThermographicRecord?
         </Translate>
       </ModalBody>
       <ModalFooter>
@@ -56,12 +53,7 @@ export const ThermographicInspectionRecordDeleteDialog = () => {
           &nbsp;
           <Translate contentKey="entity.action.cancel">Cancel</Translate>
         </Button>
-        <Button
-          id="jhi-confirm-delete-thermographicInspectionRecord"
-          data-cy="entityConfirmDeleteButton"
-          color="danger"
-          onClick={confirmDelete}
-        >
+        <Button id="jhi-confirm-delete-thermographicRecord" data-cy="entityConfirmDeleteButton" color="danger" onClick={confirmDelete}>
           <FontAwesomeIcon icon="trash" />
           &nbsp;
           <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -71,4 +63,4 @@ export const ThermographicInspectionRecordDeleteDialog = () => {
   );
 };
 
-export default ThermographicInspectionRecordDeleteDialog;
+export default ThermographicRecordDeleteDialog;

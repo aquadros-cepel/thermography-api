@@ -11,7 +11,8 @@ import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.info.GitProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import tech.jhipster.config.JHipsterProperties;
 import tech.jhipster.config.cache.PrefixedKeyGenerator;
 
@@ -66,7 +67,7 @@ public class CacheConfiguration {
             createCache(cm, com.tech.thermography.domain.RiskRecommendationTranslation.class.getName());
             createCache(cm, com.tech.thermography.domain.Thermogram.class.getName());
             createCache(cm, com.tech.thermography.domain.ROI.class.getName());
-            createCache(cm, com.tech.thermography.domain.ThermographicInspectionRecord.class.getName());
+            createCache(cm, com.tech.thermography.domain.ThermographicRecord.class.getName());
             createCache(cm, com.tech.thermography.domain.UserInfo.class.getName());
             createCache(cm, com.tech.thermography.domain.InspectionRouteGroupEquipment.class.getName());
             createCache(cm, com.tech.thermography.domain.InspectionRecord.class.getName());
@@ -79,6 +80,7 @@ public class CacheConfiguration {
             createCache(cm, com.tech.thermography.domain.InspectionRecord.class.getName() + ".groups");
             createCache(cm, com.tech.thermography.domain.InspectionRecordGroup.class.getName() + ".subGroups");
             createCache(cm, com.tech.thermography.domain.InspectionRecordGroup.class.getName() + ".equipments");
+            createCache(cm, com.tech.thermography.domain.ThermographicRecord.class.getName() + ".childRecords");
             // jhipster-needle-caffeine-add-entry
         };
     }

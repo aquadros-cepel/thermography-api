@@ -4,7 +4,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import sinon from 'sinon';
 
 import { EntityState } from 'app/shared/reducers/reducer.utils';
-import { IThermographicInspectionRecord, defaultValue } from 'app/shared/model/thermographic-inspection-record.model';
+import { IThermographicRecord, defaultValue } from 'app/shared/model/thermographic-record.model';
 import reducer, {
   createEntity,
   deleteEntity,
@@ -13,7 +13,7 @@ import reducer, {
   partialUpdateEntity,
   reset,
   updateEntity,
-} from './thermographic-inspection-record.reducer';
+} from './thermographic-record.reducer';
 
 describe('Entities reducer tests', () => {
   function isEmpty(element): boolean {
@@ -23,7 +23,7 @@ describe('Entities reducer tests', () => {
     return Object.keys(element).length === 0;
   }
 
-  const initialState: EntityState<IThermographicInspectionRecord> = {
+  const initialState: EntityState<IThermographicRecord> = {
     loading: false,
     errorMessage: null,
     entities: [],
@@ -188,7 +188,7 @@ describe('Entities reducer tests', () => {
       axios.delete = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
 
-    it('dispatches FETCH_THERMOGRAPHICINSPECTIONRECORD_LIST actions', async () => {
+    it('dispatches FETCH_THERMOGRAPHICRECORD_LIST actions', async () => {
       const arg = {};
 
       const result = await getEntities(arg)(dispatch, getState, extra);
@@ -198,7 +198,7 @@ describe('Entities reducer tests', () => {
       expect(getEntities.fulfilled.match(result)).toBe(true);
     });
 
-    it('dispatches FETCH_THERMOGRAPHICINSPECTIONRECORD actions', async () => {
+    it('dispatches FETCH_THERMOGRAPHICRECORD actions', async () => {
       const arg = 42666;
 
       const result = await getEntity(arg)(dispatch, getState, extra);
@@ -208,8 +208,8 @@ describe('Entities reducer tests', () => {
       expect(getEntity.fulfilled.match(result)).toBe(true);
     });
 
-    it('dispatches CREATE_THERMOGRAPHICINSPECTIONRECORD actions', async () => {
-      const arg = { id: '2ad36616-5594-446a-b5c4-6fbbdca527fe' };
+    it('dispatches CREATE_THERMOGRAPHICRECORD actions', async () => {
+      const arg = { id: 'ccc850ed-2b22-4933-b872-1198e016d18f' };
 
       const result = await createEntity(arg)(dispatch, getState, extra);
 
@@ -218,8 +218,8 @@ describe('Entities reducer tests', () => {
       expect(createEntity.fulfilled.match(result)).toBe(true);
     });
 
-    it('dispatches UPDATE_THERMOGRAPHICINSPECTIONRECORD actions', async () => {
-      const arg = { id: '2ad36616-5594-446a-b5c4-6fbbdca527fe' };
+    it('dispatches UPDATE_THERMOGRAPHICRECORD actions', async () => {
+      const arg = { id: 'ccc850ed-2b22-4933-b872-1198e016d18f' };
 
       const result = await updateEntity(arg)(dispatch, getState, extra);
 
@@ -228,7 +228,7 @@ describe('Entities reducer tests', () => {
       expect(updateEntity.fulfilled.match(result)).toBe(true);
     });
 
-    it('dispatches PARTIAL_UPDATE_THERMOGRAPHICINSPECTIONRECORD actions', async () => {
+    it('dispatches PARTIAL_UPDATE_THERMOGRAPHICRECORD actions', async () => {
       const arg = { id: '9fec3727-3421-4967-b213-ba36557ca194' };
 
       const result = await partialUpdateEntity(arg)(dispatch, getState, extra);
@@ -238,7 +238,7 @@ describe('Entities reducer tests', () => {
       expect(partialUpdateEntity.fulfilled.match(result)).toBe(true);
     });
 
-    it('dispatches DELETE_THERMOGRAPHICINSPECTIONRECORD actions', async () => {
+    it('dispatches DELETE_THERMOGRAPHICRECORD actions', async () => {
       const arg = 42666;
 
       const result = await deleteEntity(arg)(dispatch, getState, extra);

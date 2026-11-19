@@ -175,6 +175,8 @@ entity Thermogram {
     
     latitude Double
   	longitude Double
+
+    phase PhaseType
 }
 entity ROI {
     id UUID required
@@ -182,10 +184,10 @@ entity ROI {
   	label String required
   	maxTemp Double required
 }
-entity ThermographicInspectionRecord {
+entity ThermographicRecord {
     id UUID required
     name String required
-  	type ThermographicInspectionRecordType required
+  	type ThermographicRecordType required
   	serviceOrder String
     
     createdAt Instant required
@@ -206,7 +208,6 @@ entity ThermographicInspectionRecord {
     current Double
     voltage Double
     windSpeed Double
-    phase PhaseType
 }
 
 enum Periodicity {
@@ -221,7 +222,7 @@ enum EquipmentType {
 enum DatetimeUnit {
     HOUR, DAY, WEEK, MONTH, YEAR
 }
-enum ThermographicInspectionRecordType {
+enum ThermographicRecordType {
     NO_ANOMALY
     ANOMALY_DETECTED
     ANOMALY_MONITORING
@@ -279,15 +280,15 @@ relationship ManyToOne {
     Thermogram {createdBy required } to UserInfo
     ROI {thermogram required } to Thermogram
     
-    ThermographicInspectionRecord {plant required } to Plant
-    ThermographicInspectionRecord {route } to InspectionRecord			//FK optional
-    ThermographicInspectionRecord {equipment required } to Equipment
-    ThermographicInspectionRecord {component } to EquipmentComponent	//FK optional
-    ThermographicInspectionRecord {createdBy required } to UserInfo
-    ThermographicInspectionRecord {finishedBy required } to UserInfo
-    ThermographicInspectionRecord {thermogram required} to Thermogram
-  	ThermographicInspectionRecord {thermogramRef} to Thermogram			//FK optional
-    ThermographicInspectionRecord {parentRecord} to ThermographicInspectionRecord{childRecords} //FK Optional
+    ThermographicRecord {plant required } to Plant
+    ThermographicRecord {route } to InspectionRecord			//FK optional
+    ThermographicRecord {equipment required } to Equipment
+    ThermographicRecord {component } to EquipmentComponent	//FK optional
+    ThermographicRecord {createdBy required } to UserInfo
+    ThermographicRecord {finishedBy required } to UserInfo
+    ThermographicRecord {thermogram required} to Thermogram
+  	ThermographicRecord {thermogramRef} to Thermogram			//FK optional
+    ThermographicRecord {parentRecord} to ThermographicRecord{childRecords} //FK Optional
     
     UserInfo {company} to Company			//FK optional
     BusinessUnit {company} to Company		//FK optional

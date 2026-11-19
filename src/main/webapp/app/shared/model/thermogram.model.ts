@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import { IEquipment } from 'app/shared/model/equipment.model';
 import { IUserInfo } from 'app/shared/model/user-info.model';
+import { PhaseType } from 'app/shared/model/enumerations/phase-type.model';
 
 export interface IThermogram {
   id?: string;
@@ -25,6 +26,7 @@ export interface IThermogram {
   createdAt?: dayjs.Dayjs | null;
   latitude?: number | null;
   longitude?: number | null;
+  phase?: keyof typeof PhaseType | null;
   equipment?: IEquipment;
   createdBy?: IUserInfo;
 }
